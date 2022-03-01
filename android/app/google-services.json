@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "111374008674-simneaaffpee3qvgj7gff2kilt8hbqig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dursikshya.hotel_booking_app",
+            "certificate_hash": "c684cb135464ec530e90df9b1940b1888de36be5"
+          }
+        },
+        {
           "client_id": "111374008674-bef41254o03u6q571uj2ripok2beiukm.apps.googleusercontent.com",
           "client_type": 3
         }
