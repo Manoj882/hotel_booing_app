@@ -16,3 +16,11 @@ const bodyTextStyle = TextStyle(
   color: Colors.black,
 );
 
+class ImageConstant{
+  static const googleImageUrl = "https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png";
+}
+
+class HotelConstant{
+  static const hotel = "hotels";
+}
+

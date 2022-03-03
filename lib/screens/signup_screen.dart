@@ -28,7 +28,7 @@ class SignUpScreen extends StatelessWidget {
               padding: basePadding,
               child: Column(
                 children: [
-                  LottieAnimation("Create an Account"),
+                  const LottieAnimation("Create an Account"),
                   Form(
                     key: formKey,
                     child: Column(
@@ -41,7 +41,7 @@ class SignUpScreen extends StatelessWidget {
                           controller: emailController,
                           prefixIcon: const Icon(
                             Icons.email_outlined,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                           validate: (value) {
                             if (value!.trim().isEmpty) {
@@ -60,7 +60,7 @@ class SignUpScreen extends StatelessWidget {
                           controller: passwordController,
                           prefixIcon: const Icon(
                             Icons.lock_outlined,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                           validate: (value) {
                             if (value!.trim().isEmpty) {
