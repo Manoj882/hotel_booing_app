@@ -43,10 +43,10 @@ class _InputTextFieldState extends State<InputTextField> {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(18),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 15),
+        contentPadding: const EdgeInsets.symmetric(vertical: 15),
         prefixIcon: widget.prefixIcon,
         hintText: widget.title,
-        hintStyle: bodyTextStyle,
+        hintStyle: Theme.of(context).textTheme.headline6,
         
       ),
       validator: widget.validate,

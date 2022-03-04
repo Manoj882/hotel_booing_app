@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hotel_booking_app/screens/add_hotel_screen.dart';
+import '/screens/add_hotel_screen.dart';
 import '/screens/home_screen.dart';
 import '/screens/signup_screen.dart';
 import '/utils/lottie_animation.dart';

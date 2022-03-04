@@ -40,11 +40,22 @@ dependencies:
   google_sign_in: ^5.2.4
   lottie: ^1.2.2
   cached_network_image: ^3.2.0
+  shared_preferences: ^2.0.13
+  
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^2.0.5
+
+flutter_native_splash:
+  background_image: "assets/images/welcome.png"
+  android: true
+  ios: true
+  android_gravity: center
+  ios_content_mode: center
+  fullscreen: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

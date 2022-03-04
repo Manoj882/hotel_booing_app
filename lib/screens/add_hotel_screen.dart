@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hotel_booking_app/constants/constant.dart';
-import 'package:hotel_booking_app/models/hotel_model.dart';
+import '/constants/constant.dart';
+import '/models/hotel_model.dart';
 
 class AddHotel extends StatelessWidget {
   const AddHotel({Key? key}) : super(key: key);

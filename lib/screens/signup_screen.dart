@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hotel_booking_app/utils/lottie_animation.dart';
-import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
+import '/utils/lottie_animation.dart';
+import '/widgets/general_alert_dialog.dart';
 import '/constants/constant.dart';
 import '/screens/login_screen.dart';
-import '/utils/background_image.dart';
 import '/utils/choose_account_button.dart';
 import '/utils/submit_button.dart';
 import '/utils/text_form_field.dart';
