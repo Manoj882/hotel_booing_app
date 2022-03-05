@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_booking_app/constants/constant.dart';
+import '/utils/size_config.dart';
 import 'package:lottie/lottie.dart';
 
 class LottieAnimation extends StatefulWidget {
@@ -15,7 +15,7 @@ class _LottieAnimationState extends State<LottieAnimation> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
+      padding: EdgeInsets.only(top: SizeConfig.height * 2.5,),
       child: Column(
         children: [
           Center(
@@ -24,8 +24,8 @@ class _LottieAnimationState extends State<LottieAnimation> {
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: SizeConfig.height * 1.5,
           ),
           Center(
             child: Lottie.asset(

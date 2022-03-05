@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hotel_booking_app/utils/size_config.dart';
 import '/Theme/theme_data.dart';
 import '/screens/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,10 +29,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ligthTheme(context),
-      home: seenOnBoard == true ? SignUpScreen(): OnBoardingScreen(),
+    
+    return LayoutBuilder(
+      builder: (context, boxConstraint) {
+        SizeConfig().init(boxConstraint);
+        return MaterialApp(
+          
+          title: 'Flutter Demo',
+          theme: ligthTheme(context),
+          home: seenOnBoard == true ? SignUpScreen(): OnBoardingScreen(),
+        );
+      }
     );
   }
 }

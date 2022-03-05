@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-
-import '/constants/constant.dart';
-
-
-
-
-
-class InputTextField extends StatefulWidget{
-  const InputTextField({
-    required this.title,
-    required this.textInputType,
-    required this.textInputAction,
-    required this.controller,
-    required this.prefixIcon,
-    required this.validate,
-    
-    Key? key}) : super(key: key);
+import 'package:hotel_booking_app/utils/size_config.dart';
+class InputTextField extends StatefulWidget {
+  const InputTextField(
+      {required this.title,
+      required this.textInputType,
+      required this.textInputAction,
+      required this.controller,
+      required this.prefixIcon,
+      required this.validate,
+      Key? key})
+      : super(key: key);
 
   final String title;
   final TextInputType textInputType;
@@ -31,22 +25,19 @@ class _InputTextFieldState extends State<InputTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      
       keyboardType: widget.textInputType,
       textInputAction: widget.textInputAction,
       controller: widget.controller,
       decoration: InputDecoration(
-        fillColor: Colors.grey.shade200,
-        filled: true,
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(
+            SizeConfig.height * 2,
+          ),
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 15),
         prefixIcon: widget.prefixIcon,
         hintText: widget.title,
-        hintStyle: Theme.of(context).textTheme.headline6,
-        
+        hintStyle: Theme.of(context).textTheme.subtitle1,
       ),
       validator: widget.validate,
     );

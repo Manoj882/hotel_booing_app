@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/utils/size_config.dart';
 
 class GeneralAlertDialog {
   customAlertDialog(BuildContext context, String message) {
@@ -19,19 +20,20 @@ class GeneralAlertDialog {
     );
   }
 
-  customLoadingDialog(BuildContext context){
-    showDialog(context: context, builder: (_) => AlertDialog(
-      content: Row(
-        children: const [
-          CircularProgressIndicator(),
-          SizedBox(width: 10,),
-          Text("Loading"),
-
-        ],
+  customLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        content: Row(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(
+              width: SizeConfig.width * 3,
+            ),
+            Text("Loading"),
+          ],
+        ),
       ),
-
-
-    ),
     );
   }
 }

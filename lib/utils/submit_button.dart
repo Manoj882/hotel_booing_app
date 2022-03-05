@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '/constants/constant.dart';
-
+import 'package:hotel_booking_app/utils/size_config.dart';
 class GeneralSubmitButton extends StatefulWidget {
   const GeneralSubmitButton(
       {required this.bottonTitle, required this.onPressed, Key? key})
@@ -17,8 +16,11 @@ class _GeneralSubmitButtonState extends State<GeneralSubmitButton> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
-        color: Color(0xffff2d55),
+        borderRadius: BorderRadius.circular(
+          SizeConfig.height * 2,
+        ),
+        // color: Color(0xffff2d55),
+        color: Color(0xff087f23),
       ),
       child: Center(
         child: FlatButton(

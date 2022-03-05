@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/constants/constant.dart';
+import 'package:hotel_booking_app/utils/size_config.dart';
 
 class GeneralTextButton extends StatelessWidget {
   const GeneralTextButton({
@@ -12,14 +13,12 @@ class GeneralTextButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color bgColor;
 
- 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: basePadding,
       child: SizedBox(
-        height: 50,
+        height: SizeConfig.height * 6,
         width: MediaQuery.of(context).size.width,
         child: TextButton(
           onPressed: () {},

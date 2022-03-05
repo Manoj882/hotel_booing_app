@@ -32,7 +32,7 @@ class _GeneralChooseAccountPageState extends State<GeneralChooseAccountPage> {
           child: Text(
             widget.accountTitle,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                  color: Colors.blue,
+                  color: Color(0xff4caf50),
                   fontWeight: FontWeight.bold,
                 ),
           ),

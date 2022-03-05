@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hotel_booking_app/utils/buttons/social_media_login_button.dart';
+import 'package:hotel_booking_app/utils/size_config.dart';
 import '/screens/add_hotel_screen.dart';
 import '/screens/home_screen.dart';
 import '/screens/signup_screen.dart';
@@ -31,8 +33,8 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 children: [
                   const LottieAnimation("Welcome Back"),
-                  const SizedBox(
-                    height: 10,
+                  SizedBox(
+                    height: SizeConfig.height * 1.5,
                   ),
                   Form(
                     key: formKey,
@@ -55,8 +57,8 @@ class LoginScreen extends StatelessWidget {
                             return null;
                           },
                         ),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: SizeConfig.height * 1.5,
                         ),
                         InputTextField(
                           title: "Password",
@@ -74,19 +76,21 @@ class LoginScreen extends StatelessWidget {
                             return null;
                           },
                         ),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: SizeConfig.height * 1.5,
                         ),
-                        const Text(
+                        Text(
                           'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    color: Colors.blue,
+                                  ),
                         ),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: SizeConfig.height * 1.5,
                         ),
                         GeneralSubmitButton(
+                          bottonTitle: "Login",
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
                               GeneralAlertDialog().customLoadingDialog(context);
@@ -127,13 +131,12 @@ class LoginScreen extends StatelessWidget {
                               }
                             }
                           },
-                          bottonTitle: "Login",
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  SizedBox(
+                    height: SizeConfig.height * 1.5,
                   ),
                   Row(
                     children: const [
@@ -152,56 +155,103 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10,),
-                  FlatButton(
-                    color: Colors.grey.shade300,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    onPressed: () async {
-                      final googleSignin = GoogleSignIn();
-                      final user = await googleSignin.signIn();
-                      if (user != null) {
-                        final authenticateduser = await user.authentication;
-                        final authProvider = GoogleAuthProvider.credential(
-                          idToken: authenticateduser.idToken,
-                          accessToken: authenticateduser.accessToken,
-                        );
-
-                        await FirebaseAuth.instance
-                            .signInWithCredential(authProvider);
-
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (_) => HomeScreen(),
-                          ),
-                        );
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: ImageConstant.googleImageUrl,
-                            width: 40,
-                            placeholder: (_, __) => const SizedBox(
-                              width: 40,
-                              height: 40,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Login with Google",
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ],
-                      ),
-                    ),
+                  SizedBox(
+                    height: SizeConfig.height * 1.5,
                   ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SocialMediaLogin(
+                          socialMediaName: "Google",
+                          onPressed: () async {
+                            final googleSignin = GoogleSignIn();
+                            final user = await googleSignin.signIn();
+                            if (user != null) {
+                              final authenticateduser = await user.authentication;
+                              final authProvider = GoogleAuthProvider.credential(
+                                idToken: authenticateduser.idToken,
+                                accessToken: authenticateduser.accessToken,
+                              );
+
+                              await FirebaseAuth.instance
+                                  .signInWithCredential(authProvider);
+
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => HomeScreen(),
+                                ),
+                              );
+                            }
+                          },
+                          imageUrl: ImageConstant.googleImageUrl,
+                        ),
+                      ),
+                      SizedBox(
+                        width: SizeConfig.width * 5,
+                      ),
+                      Expanded(
+                        child: SocialMediaLogin(
+                          socialMediaName: "Facebook",
+                          onPressed: () {},
+                          imageUrl: ImageConstant.facebookImageUrl,
+                        ),
+                      ),
+                    ],
+                  ),
+ 
+
+                  // FlatButton(
+                  //   color: Colors.grey.shade300,
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius:
+                  //         BorderRadius.circular(SizeConfig.height * 2),
+                  //   ),
+                  //   onPressed: () async {
+                  //     final googleSignin = GoogleSignIn();
+                  //     final user = await googleSignin.signIn();
+                  //     if (user != null) {
+                  //       final authenticateduser = await user.authentication;
+                  //       final authProvider = GoogleAuthProvider.credential(
+                  //         idToken: authenticateduser.idToken,
+                  //         accessToken: authenticateduser.accessToken,
+                  //       );
+
+                  //       await FirebaseAuth.instance
+                  //           .signInWithCredential(authProvider);
+
+                  //       Navigator.of(context).pushReplacement(
+                  //         MaterialPageRoute(
+                  //           builder: (_) => HomeScreen(),
+                  //         ),
+                  //       );
+                  //     }
+                  //   },
+                  //   child: Padding(
+                  //     padding: EdgeInsets.all(5.0),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         CachedNetworkImage(
+                  //           imageUrl: ImageConstant.googleImageUrl,
+                  //           width: SizeConfig.width * 10,
+                  //           placeholder: (_, __) => SizedBox(
+                  //             width: SizeConfig.width * 10,
+                  //             height: SizeConfig.height * 5,
+                  //           ),
+                  //         ),
+                  //         SizedBox(
+                  //           width: SizeConfig.width * 3,
+                  //         ),
+                  //         Text(
+                  //           "Login with Google",
+                  //           style: Theme.of(context).textTheme.headline6,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+
+                  //Account link
                   GeneralChooseAccountPage(
                     onPressed: () {
                       Navigator.of(context).push(

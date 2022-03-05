@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/utils/size_config.dart';
 import '../models/onboard_data.dart';
 import '../widgets/onboard_navigation_button.dart';
 import '/constants/constant.dart';
@@ -82,17 +83,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     return Column(
                       children: [
                         SizedBox(
-                          height: 50,
+                          height: SizeConfig.height * 6,
                         ),
                         Container(
-                          height: 300,
+                          height: SizeConfig.height * 40,
                           child: Image.asset(
                             onboardingDataList[index].image,
                             fit: BoxFit.cover,
                           ),
                         ),
                         SizedBox(
-                          height: 50,
+                          height: SizeConfig.height * 6,
                         ),
                         Text(
                           onboardingDataList[index].title,
@@ -103,7 +104,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(
-                          height: 30,
+                          height: SizeConfig.height * 4,
                         ),
                         Text(
                           onboardingDataList[index].subtitle,
@@ -111,7 +112,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(
-                          height: 30,
+                          height: SizeConfig.height * 4,
                         ),
                       ],
                     );
