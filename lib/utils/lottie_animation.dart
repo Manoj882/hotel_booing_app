@@ -3,7 +3,7 @@ import 'package:hotel_booking_app/constants/constant.dart';
 import 'package:lottie/lottie.dart';
 
 class LottieAnimation extends StatefulWidget {
-  const LottieAnimation(this.title,{ Key? key }) : super(key: key);
+  const LottieAnimation(this.title, {Key? key}) : super(key: key);
 
   final String title;
 
@@ -17,22 +17,23 @@ class _LottieAnimationState extends State<LottieAnimation> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Column(
-              children: [
-                Center(
-                  child: Text(
-                    widget.title,
-                    style: headingStyle,
-                  ),
-                  
-                ),
-                const SizedBox(height: 10,),
-                  Center(
-                    child: Lottie.asset(
-                "assets/animations/purple-hotel.json",
-                ),
-                  ),
-              ],
+        children: [
+          Center(
+            child: Text(
+              widget.title,
+              style: Theme.of(context).textTheme.headline5,
             ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Lottie.asset(
+              "assets/animations/purple-hotel.json",
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

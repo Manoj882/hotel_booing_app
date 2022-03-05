@@ -6,14 +6,15 @@ import '/screens/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen(
+  const OnBoardingScreen({Key? key}) : super(key: key);
 
-    {Key? key}) : super(key: key);
-
-
-
-  skipPage(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_)=> SignUpScreen(),),);
+  skipPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SignUpScreen(),
+      ),
+    );
   }
 
   @override
@@ -21,28 +22,27 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-
   final PageController pageController = PageController();
   int currentPage = 0;
   bool lastPage = false;
-  
- 
+
   AnimatedContainer dotIndicator(int page) {
     return AnimatedContainer(
-      margin: EdgeInsets.symmetric(horizontal: 5,),
+      margin: EdgeInsets.symmetric(
+        horizontal: 5,
+      ),
       //
       duration: Duration(microseconds: 400),
-      height: page == currentPage ? 12:6,
-      width: page == currentPage ? 12:6,
+      height: page == currentPage ? 12 : 6,
+      width: page == currentPage ? 12 : 6,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: page == currentPage ? Colors.blue : Colors.grey,
       ),
-      
     );
   }
 
-  setSeenBoard() async{
+  setSeenBoard() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     //It will set seenOnBoard to true when running onboard page for first time.
     final seenOnBoard = preferences.setBool("seenOnBoard", true);
@@ -52,10 +52,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   void initState() {
     super.initState();
     setSeenBoard();
-    
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,17 +67,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 flex: 9,
                 child: PageView.builder(
                   controller: pageController,
-                  
                   onPageChanged: (page) {
                     setState(() {
                       currentPage = page;
-                      if(currentPage == onboardingDataList.length-1){
+                      if (currentPage == onboardingDataList.length - 1) {
                         lastPage = true;
-                      }
-                      else{
+                      } else {
                         lastPage = false;
                       }
-                    
                     });
                   },
                   itemCount: onboardingDataList.length,
@@ -90,7 +84,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         SizedBox(
                           height: 50,
                         ),
-                       
                         Container(
                           height: 300,
                           child: Image.asset(
@@ -101,23 +94,22 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         SizedBox(
                           height: 50,
                         ),
-                         Text(
+                        Text(
                           onboardingDataList[index].title,
-                          style: Theme.of(context).textTheme.headline6,
+                          style:
+                              Theme.of(context).textTheme.headline5!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
-                        
                         SizedBox(
                           height: 30,
                         ),
-                         Text(
+                        Text(
                           onboardingDataList[index].subtitle,
                           style: Theme.of(context).textTheme.bodyText1,
                           textAlign: TextAlign.center,
                         ),
-                        
-                        
-                       
                         SizedBox(
                           height: 30,
                         ),
@@ -130,41 +122,34 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 flex: 1,
                 child: Column(
                   children: [
-                   
-                         Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              OnBoardNavigationButton(
-                                name: lastPage ? "": "Skip",
-                                onPressed: () {
-                                  lastPage ? null
-                                  :widget.skipPage(context);
-                                  
-                                
-                                },
-                              ),
-                              Row(
-                                children: List.generate(
-                                  onboardingDataList.length,
-                                  (index) => dotIndicator(index),
-                                ),
-                              ),
-                              OnBoardNavigationButton(
-                                name: lastPage ? "Done" : "Next",
-                               
-                                onPressed: () {
-                                  lastPage ? widget.skipPage(context)
-                                  
-                                  
-                                  : pageController.nextPage(
-
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        OnBoardNavigationButton(
+                          name: lastPage ? "" : "Skip",
+                          onPressed: () {
+                            lastPage ? null : widget.skipPage(context);
+                          },
+                        ),
+                        Row(
+                          children: List.generate(
+                            onboardingDataList.length,
+                            (index) => dotIndicator(index),
+                          ),
+                        ),
+                        OnBoardNavigationButton(
+                          name: lastPage ? "Done" : "Next",
+                          onPressed: () {
+                            lastPage
+                                ? widget.skipPage(context)
+                                : pageController.nextPage(
                                     duration: Duration(milliseconds: 400),
                                     curve: Curves.bounceInOut,
                                   );
-                                },
-                              ),
-                            ],
-                          ),
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

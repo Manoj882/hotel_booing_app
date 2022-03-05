@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class OnBoardNavigationButton extends StatelessWidget {
   const OnBoardNavigationButton(
-      {required this.name, required this.onPressed, Key? key})
+      {
+        required this.name, 
+        required this.onPressed, 
+        Key? key})
       : super(key: key);
   final String name;
   final VoidCallback onPressed;

@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hotel_booking_app/screens/signup_screen.dart';
+import '/Theme/theme_data.dart';
+import '/screens/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '/screens/login_screen.dart';
+
 import '/screens/onboarding_screen.dart';
 
 bool? seenOnBoard;
@@ -29,10 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-       
-        primarySwatch: Colors.blue,
-      ),
+      theme: ligthTheme(context),
       home: seenOnBoard == true ? SignUpScreen(): OnBoardingScreen(),
     );
   }

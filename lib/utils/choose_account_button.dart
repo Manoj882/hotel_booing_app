@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class GeneralChooseAccountPage extends StatefulWidget {
-  const GeneralChooseAccountPage({
-    
-    required this.onPressed,
-    required this.text,
-    required this.accountTitle,
-
-    Key? key}) : super(key: key);
+  const GeneralChooseAccountPage(
+      {required this.onPressed,
+      required this.text,
+      required this.accountTitle,
+      Key? key})
+      : super(key: key);
 
   final String text;
   final String accountTitle;
@@ -26,19 +25,16 @@ class _GeneralChooseAccountPageState extends State<GeneralChooseAccountPage> {
       children: [
         Text(
           widget.text,
-          style: TextStyle(
-            fontSize: 15,
-            color: Colors.black,
-          ),
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         TextButton(
           onPressed: widget.onPressed,
           child: Text(
             widget.accountTitle,
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ),
       ],

@@ -35,7 +35,6 @@ class _InputTextFieldState extends State<InputTextField> {
       keyboardType: widget.textInputType,
       textInputAction: widget.textInputAction,
       controller: widget.controller,
-      style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
         fillColor: Colors.grey.shade200,
         filled: true,
