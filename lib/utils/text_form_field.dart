@@ -7,10 +7,10 @@ class InputTextField extends StatefulWidget {
       required this.textInputType,
       required this.textInputAction,
       required this.controller,
-      required this.prefixIcon,
+      this.prefixIcon,
       required this.validate,
       this.isObscure = false,
-      this.onFieldSubmitted,
+      required this.onFieldSubmitted,
       Key? key})
       : super(key: key);
 
@@ -19,7 +19,7 @@ class InputTextField extends StatefulWidget {
   final TextInputAction textInputAction;
   final TextEditingController controller;
   final bool isObscure;
-  final Icon prefixIcon;
+  final Icon? prefixIcon;
   final String? Function(String?)? validate;
   final Function(String)? onFieldSubmitted;
   @override

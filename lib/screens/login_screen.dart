@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hotel_booking_app/models/firebase_user.dart';
 import 'package:hotel_booking_app/utils/validation_mixin.dart';
 import 'package:lottie/lottie.dart';
 import '/utils/buttons/social_media_login_button.dart';
@@ -25,6 +26,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF7F7F7),
       body: SafeArea(
         child: Padding(
           padding: basePadding,
@@ -39,24 +41,21 @@ class LoginScreen extends StatelessWidget {
                   Text(
                     "Welcome Back",
                     style: Theme.of(context).textTheme.headline5!.copyWith(
-                      color: Color(0xff4caf50),
-                      
-                    ),
+                          color: Color(0xff4caf50),
+                        ),
                   ),
-                  
+
                   // SizedBox(
                   //   height: SizeConfig.height * 1.5,
                   // ),
                   Container(
                     child: Lottie.asset(
                       AnimationConstants.hotel_lottie,
-                       height: 250,
-                       animate: true,
-
-                       
-                       ),
+                      height: 250,
+                      animate: true,
                     ),
-                    SizedBox(
+                  ),
+                  SizedBox(
                     height: SizeConfig.height * 1.5,
                   ),
 
@@ -74,7 +73,9 @@ class LoginScreen extends StatelessWidget {
                             Icons.email_outlined,
                             color: Colors.black,
                           ),
-                          validate: (value) => ValidationMixin().validateEmail(value!),
+                          validate: (value) =>
+                              ValidationMixin().validateEmail(value!),
+                          onFieldSubmitted: (_){},
                         ),
                         SizedBox(
                           height: SizeConfig.height * 1.5,
@@ -89,7 +90,11 @@ class LoginScreen extends StatelessWidget {
                             Icons.lock_outlined,
                             color: Colors.black,
                           ),
-                          validate: (value) => ValidationMixin().validatePassword(value!),
+                          validate: (value) =>
+                              ValidationMixin().validatePassword(value!),
+                          onFieldSubmitted: (value){
+                            submit(context);
+                          },
                         ),
                         SizedBox(
                           height: SizeConfig.height * 1.5,
@@ -107,44 +112,7 @@ class LoginScreen extends StatelessWidget {
                         GeneralSubmitButton(
                           bottonTitle: "Login",
                           onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              GeneralAlertDialog().customLoadingDialog(context);
-                              final email = emailController.text;
-                              final password = passwordController.text;
-
-                              try {
-                                final user = await FirebaseAuth.instance
-                                    .signInWithEmailAndPassword(
-                                  email: email,
-                                  password: password,
-                                );
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (_) => AddHotel(),
-                                  ),
-                                );
-                              } on FirebaseAuthException catch (e) {
-                                String message = "";
-                                if (e.code == "user-not-found") {
-                                  message = "The user does not exist";
-                                } else if (e.code == "invalid-email") {
-                                  message = "The email address is invalid";
-                                } else if (e.code == "wrong-password") {
-                                  message = "Incorrect password";
-                                } else if (e.code == "too-many-requests") {
-                                  message =
-                                      "Your account is locked. Please try again later";
-                                }
-
-                                Navigator.of(context).pop();
-                                GeneralAlertDialog()
-                                    .customAlertDialog(context, message);
-                              } catch (ex) {
-                                Navigator.of(context).pop();
-                                GeneralAlertDialog()
-                                    .customAlertDialog(context, ex.toString());
-                              }
-                            }
+                            submit(context);
                           },
                         ),
                       ],
@@ -162,25 +130,25 @@ class LoginScreen extends StatelessWidget {
                       SocialMediaLoginButton(
                         socialMediaName: "Continue with Google",
                         onPressed: () async {
-                            final googleSignin = GoogleSignIn();
-                            final user = await googleSignin.signIn();
-                            if (user != null) {
-                              final authenticateduser = await user.authentication;
-                              final authProvider = GoogleAuthProvider.credential(
-                                idToken: authenticateduser.idToken,
-                                accessToken: authenticateduser.accessToken,
-                              );
+                          final googleSignin = GoogleSignIn();
+                          final user = await googleSignin.signIn();
+                          if (user != null) {
+                            final authenticateduser = await user.authentication;
+                            final authProvider = GoogleAuthProvider.credential(
+                              idToken: authenticateduser.idToken,
+                              accessToken: authenticateduser.accessToken,
+                            );
 
-                              await FirebaseAuth.instance
-                                  .signInWithCredential(authProvider);
+                            await FirebaseAuth.instance
+                                .signInWithCredential(authProvider);
 
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (_) => HomeScreen(),
-                                ),
-                              );
-                            }
-                          },
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => HomeScreen(),
+                              ),
+                            );
+                          }
+                        },
                         imageUrl: ImageConstant.googleImageUrl,
                       ),
                       SizedBox(
@@ -191,10 +159,9 @@ class LoginScreen extends StatelessWidget {
                         onPressed: () {},
                         imageUrl: ImageConstant.facebookImageUrl,
                       ),
-
                     ],
                   ),
-                  
+
                   //Account link
                   GeneralChooseAccountPage(
                     onPressed: () {
@@ -214,5 +181,54 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  submit(context) async {
+    try {
+      if (formKey.currentState!.validate()) {
+        GeneralAlertDialog().customLoadingDialog(context);
+        final email = emailController.text;
+        final password = passwordController.text;
+
+        final userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        final user = userCredential.user;
+
+        if (user != null) {
+          Firebaseuser(
+            displayName: user.displayName ?? "",
+            email: user.email ?? "",
+            photoUrl: user.photoURL ?? "",
+            uid: user.uid,
+          );
+        }
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => HomeScreen(),
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String message = "";
+      if (e.code == "user-not-found") {
+        message = "The user does not exist.";
+      } else if (e.code == "invalid-email") {
+        message = "The email address is invalid.";
+      } else if (e.code == "wrong-password") {
+        message = "Incorrect password.";
+      } else if (e.code == "too-many-requests") {
+        message = "Your account is locked. Please try again later.";
+      }
+
+      Navigator.of(context).pop();
+      await GeneralAlertDialog().customAlertDialog(context, message);
+    } catch (ex) {
+      Navigator.of(context).pop();
+      await GeneralAlertDialog().customAlertDialog(context, ex.toString());
+    }
   }
 }

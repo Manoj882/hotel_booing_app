@@ -23,7 +23,7 @@ class _GeneralSubmitButtonState extends State<GeneralSubmitButton> {
         color: Color(0xff087f23),
       ),
       child: Center(
-        child: FlatButton(
+        child: TextButton(
           onPressed: widget.onPressed,
           child: Text(
             widget.bottonTitle,

@@ -3,14 +3,16 @@ import '/utils/size_config.dart';
 
 ThemeData ligthTheme(BuildContext context) {
   return ThemeData(
-    primaryColor: Colors.blue,
+    primaryColor: Color(0xff4caf50),
     // isLightMode ? Color(0xFFF7F7F7)( : Color(0xFF1A1A1A);
     // scaffoldBackgroundColor: Color(0xffFFF3E9),
-    scaffoldBackgroundColor: Color(0xFFF7F7F7),
+    scaffoldBackgroundColor: Color(0xff4caf50),
     appBarTheme: AppBarTheme(
-      backgroundColor: Color(0xFFF7F7F7),
+      backgroundColor: Color(0xff4caf50),
+      elevation: 0,
+      centerTitle: true,
       titleTextStyle: TextStyle(
-        color: Colors.black,
+        color: Colors.white,
         fontSize: SizeConfig.width * 4,
       ),
     ),
@@ -59,6 +61,7 @@ ThemeData ligthTheme(BuildContext context) {
             SizeConfig.height * 2,
           ),
         ),
+      iconColor: Color(0xff4caf50),
     ),
   );
 }

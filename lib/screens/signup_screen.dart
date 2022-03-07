@@ -26,6 +26,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF7F7F7),
       body: SafeArea(
         child: Padding(
           padding: basePadding,
@@ -68,6 +69,7 @@ class SignUpScreen extends StatelessWidget {
                             color: Colors.black,
                           ),
                           validate: (value) => ValidationMixin().validateEmail(value!),
+                          onFieldSubmitted: (_){},
                         ),
                         SizedBox(
                           height: SizeConfig.height * 2.5,
@@ -83,6 +85,7 @@ class SignUpScreen extends StatelessWidget {
                             color: Colors.black,
                           ),
                           validate: (value) => ValidationMixin().validatePassword(value!),
+                          onFieldSubmitted: (_){},
                         ),
                         SizedBox(
                           height: SizeConfig.height * 2.5,
@@ -102,50 +105,16 @@ class SignUpScreen extends StatelessWidget {
                             isConfirmed: true,
                             confrimValue: value!,
                           ),
-                          onFieldSubmitted: (value){},
+                          onFieldSubmitted: (value){
+                            submit(context);
+                          },
                         ),
                         SizedBox(
                           height: SizeConfig.height * 2,
                         ),
                         GeneralSubmitButton(
                           onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              GeneralAlertDialog().customLoadingDialog(context);
-                              final email = emailController.text;
-                              final password = passwordController.text;
-                              try {
-                                final user = await FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
-                                  email: email,
-                                  password: password,
-                                );
-                                Navigator.of(context).pop();
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => LoginScreen(),
-                                  ),
-                                );
-                              } on FirebaseAuthException catch (e) {
-                                String message = "";
-                                if (e.code == "email-already-in-use") {
-                                  message = "The email address is already used";
-                                } else if (e.code == "invalid-email") {
-                                  message = "The email address is invalid";
-                                } else if (e.code == "weak-password") {
-                                  message =
-                                      "Your password is too weak, try adding alphaneumeric characters";
-                                }
-
-                                Navigator.of(context).pop();
-                                GeneralAlertDialog()
-                                    .customAlertDialog(context, message);
-                              } catch (ex) {
-                                Navigator.of(context).pop();
-                                GeneralAlertDialog()
-                                    .customAlertDialog(context, ex.toString());
-                                // print("The error is: ${ex.toString()}");
-                              }
-                            }
+                            submit(context);  
                           },
                           bottonTitle: "Register",
                         ),
@@ -222,5 +191,46 @@ class SignUpScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  submit(context) async{
+     try {
+    if (formKey.currentState!.validate()) {
+        GeneralAlertDialog().customLoadingDialog(context);
+        final email = emailController.text;
+        final password = passwordController.text;
+       
+          final user = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+          Navigator.of(context).pop();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => LoginScreen(),
+            ),
+          );
+        }
+        } on FirebaseAuthException catch (e) {
+          String message = "";
+          if (e.code == "email-already-in-use") {
+            message = "The email address is already used.";
+          } else if (e.code == "invalid-email") {
+            message = "The email address is invalid.";
+          } else if (e.code == "weak-password") {
+            message =
+                "Your password is too weak, try adding alphaneumeric characters.";
+          }
+
+          Navigator.of(context).pop();
+          GeneralAlertDialog()
+              .customAlertDialog(context, message);
+        } catch (ex) {
+          Navigator.of(context).pop();
+          GeneralAlertDialog()
+              .customAlertDialog(context, ex.toString());
+          
+        }
   }
 }
