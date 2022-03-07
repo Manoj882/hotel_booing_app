@@ -8,7 +8,7 @@ ThemeData ligthTheme(BuildContext context) {
     // scaffoldBackgroundColor: Color(0xffFFF3E9),
     scaffoldBackgroundColor: Color(0xFFF7F7F7),
     appBarTheme: AppBarTheme(
-      backgroundColor: Color(0xffFFF3E9),
+      backgroundColor: Color(0xFFF7F7F7),
       titleTextStyle: TextStyle(
         color: Colors.black,
         fontSize: SizeConfig.width * 4,
@@ -53,6 +53,12 @@ ThemeData ligthTheme(BuildContext context) {
         vertical: SizeConfig.height * 2,
         horizontal: SizeConfig.width * 2,
       ),
+      border: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(
+            SizeConfig.height * 2,
+          ),
+        ),
     ),
   );
 }

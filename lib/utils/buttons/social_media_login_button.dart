@@ -1,14 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-import '../../constants/constant.dart';
-import '../../screens/home_screen.dart';
 import '../size_config.dart';
 
-class SocialMediaLogin extends StatefulWidget {
-  const SocialMediaLogin(
+class SocialMediaLoginButton extends StatefulWidget {
+  const SocialMediaLoginButton(
     {
       required this.socialMediaName, 
       required this.onPressed, 
@@ -21,10 +16,10 @@ class SocialMediaLogin extends StatefulWidget {
   final String imageUrl;
 
   @override
-  State<SocialMediaLogin> createState() => _SocialMediaLoginState();
+  State<SocialMediaLoginButton> createState() => _SocialMediaLoginButtonState();
 }
 
-class _SocialMediaLoginState extends State<SocialMediaLogin> {
+class _SocialMediaLoginButtonState extends State<SocialMediaLoginButton> {
   @override
   Widget build(BuildContext context) {
     return FlatButton(

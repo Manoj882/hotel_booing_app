@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/utils/size_config.dart';
 
-const basePadding = EdgeInsets.symmetric(
-    vertical: 8,
-    horizontal: 16,
+final basePadding = EdgeInsets.symmetric(
+    vertical: SizeConfig.height * 1,
+    horizontal: SizeConfig.width * 4,
   );
 
 class ImageConstant{
@@ -14,5 +15,12 @@ class ImageConstant{
 class LocalFileConstants{
   static const baseImagePath = "assets/images";
   static const logo = "$baseImagePath/hotel.png";
+  
 }
+class AnimationConstants{
+  static const baseAnimationPath = "assets/animations";
+  static const hotel_lottie = "$baseAnimationPath/hotel-icon.json";
+}
+
+
 

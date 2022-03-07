@@ -1,13 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hotel_booking_app/utils/buttons/social_media_login_button.dart';
-import 'package:hotel_booking_app/utils/size_config.dart';
+import 'package:hotel_booking_app/utils/validation_mixin.dart';
+import 'package:lottie/lottie.dart';
+import '/utils/buttons/social_media_login_button.dart';
+import '/utils/general_divider.dart';
+import '/utils/size_config.dart';
 import '/screens/add_hotel_screen.dart';
 import '/screens/home_screen.dart';
 import '/screens/signup_screen.dart';
-import '/utils/lottie_animation.dart';
 import '/widgets/general_alert_dialog.dart';
 import '/utils/choose_account_button.dart';
 import '/utils/submit_button.dart';
@@ -32,10 +33,33 @@ class LoginScreen extends StatelessWidget {
               padding: basePadding,
               child: Column(
                 children: [
-                  const LottieAnimation("Welcome Back"),
                   SizedBox(
+                    height: SizeConfig.height * 5,
+                  ),
+                  Text(
+                    "Welcome Back",
+                    style: Theme.of(context).textTheme.headline5!.copyWith(
+                      color: Color(0xff4caf50),
+                      
+                    ),
+                  ),
+                  
+                  // SizedBox(
+                  //   height: SizeConfig.height * 1.5,
+                  // ),
+                  Container(
+                    child: Lottie.asset(
+                      AnimationConstants.hotel_lottie,
+                       height: 250,
+                       animate: true,
+
+                       
+                       ),
+                    ),
+                    SizedBox(
                     height: SizeConfig.height * 1.5,
                   ),
+
                   Form(
                     key: formKey,
                     child: Column(
@@ -50,12 +74,7 @@ class LoginScreen extends StatelessWidget {
                             Icons.email_outlined,
                             color: Colors.black,
                           ),
-                          validate: (value) {
-                            if (value!.trim().isEmpty) {
-                              return "Please enter your username";
-                            }
-                            return null;
-                          },
+                          validate: (value) => ValidationMixin().validateEmail(value!),
                         ),
                         SizedBox(
                           height: SizeConfig.height * 1.5,
@@ -65,16 +84,12 @@ class LoginScreen extends StatelessWidget {
                           textInputType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           controller: passwordController,
+                          isObscure: true,
                           prefixIcon: const Icon(
                             Icons.lock_outlined,
                             color: Colors.black,
                           ),
-                          validate: (value) {
-                            if (value!.trim().isEmpty) {
-                              return "Please enter your password";
-                            }
-                            return null;
-                          },
+                          validate: (value) => ValidationMixin().validatePassword(value!),
                         ),
                         SizedBox(
                           height: SizeConfig.height * 1.5,
@@ -83,7 +98,7 @@ class LoginScreen extends StatelessWidget {
                           'Forgot Password?',
                           style:
                               Theme.of(context).textTheme.bodyText1!.copyWith(
-                                    color: Colors.blue,
+                                    color: Color(0xff087f23),
                                   ),
                         ),
                         SizedBox(
@@ -138,32 +153,15 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: SizeConfig.height * 1.5,
                   ),
-                  Row(
-                    children: const [
-                      Expanded(
-                        child: Divider(
-                          thickness: 2,
-                          endIndent: 5,
-                        ),
-                      ),
-                      Text("OR"),
-                      Expanded(
-                        child: Divider(
-                          thickness: 2,
-                          indent: 5,
-                        ),
-                      ),
-                    ],
-                  ),
+                  GeneralDivider("Or"),
                   SizedBox(
                     height: SizeConfig.height * 1.5,
                   ),
-                  Row(
+                  Column(
                     children: [
-                      Expanded(
-                        child: SocialMediaLogin(
-                          socialMediaName: "Google",
-                          onPressed: () async {
+                      SocialMediaLoginButton(
+                        socialMediaName: "Continue with Google",
+                        onPressed: () async {
                             final googleSignin = GoogleSignIn();
                             final user = await googleSignin.signIn();
                             if (user != null) {
@@ -183,74 +181,20 @@ class LoginScreen extends StatelessWidget {
                               );
                             }
                           },
-                          imageUrl: ImageConstant.googleImageUrl,
-                        ),
+                        imageUrl: ImageConstant.googleImageUrl,
                       ),
                       SizedBox(
-                        width: SizeConfig.width * 5,
+                        height: SizeConfig.height * 1.5,
                       ),
-                      Expanded(
-                        child: SocialMediaLogin(
-                          socialMediaName: "Facebook",
-                          onPressed: () {},
-                          imageUrl: ImageConstant.facebookImageUrl,
-                        ),
+                      SocialMediaLoginButton(
+                        socialMediaName: "Continue with Facebook",
+                        onPressed: () {},
+                        imageUrl: ImageConstant.facebookImageUrl,
                       ),
+
                     ],
                   ),
- 
-
-                  // FlatButton(
-                  //   color: Colors.grey.shade300,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius:
-                  //         BorderRadius.circular(SizeConfig.height * 2),
-                  //   ),
-                  //   onPressed: () async {
-                  //     final googleSignin = GoogleSignIn();
-                  //     final user = await googleSignin.signIn();
-                  //     if (user != null) {
-                  //       final authenticateduser = await user.authentication;
-                  //       final authProvider = GoogleAuthProvider.credential(
-                  //         idToken: authenticateduser.idToken,
-                  //         accessToken: authenticateduser.accessToken,
-                  //       );
-
-                  //       await FirebaseAuth.instance
-                  //           .signInWithCredential(authProvider);
-
-                  //       Navigator.of(context).pushReplacement(
-                  //         MaterialPageRoute(
-                  //           builder: (_) => HomeScreen(),
-                  //         ),
-                  //       );
-                  //     }
-                  //   },
-                  //   child: Padding(
-                  //     padding: EdgeInsets.all(5.0),
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: [
-                  //         CachedNetworkImage(
-                  //           imageUrl: ImageConstant.googleImageUrl,
-                  //           width: SizeConfig.width * 10,
-                  //           placeholder: (_, __) => SizedBox(
-                  //             width: SizeConfig.width * 10,
-                  //             height: SizeConfig.height * 5,
-                  //           ),
-                  //         ),
-                  //         SizedBox(
-                  //           width: SizeConfig.width * 3,
-                  //         ),
-                  //         Text(
-                  //           "Login with Google",
-                  //           style: Theme.of(context).textTheme.headline6,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-
+                  
                   //Account link
                   GeneralChooseAccountPage(
                     onPressed: () {

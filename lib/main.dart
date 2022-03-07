@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:hotel_booking_app/screens/login_screen.dart';
+
 import 'package:hotel_booking_app/utils/size_config.dart';
 import '/Theme/theme_data.dart';
 import '/screens/signup_screen.dart';
@@ -15,10 +16,12 @@ bool? seenOnBoard;
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   //to show status bar
-  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom,SystemUiOverlay.top]);
+  // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom,SystemUiOverlay.top]);
+
+
   //to load splash screen for the first time only
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  seenOnBoard = preferences.getBool("seenOnNoard") ?? false;
+  seenOnBoard = preferences.getBool("seenOnBoard") ?? false;
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -35,9 +38,10 @@ class MyApp extends StatelessWidget {
         SizeConfig().init(boxConstraint);
         return MaterialApp(
           
-          title: 'Flutter Demo',
+          title: 'hotel booking app',
           theme: ligthTheme(context),
-          home: seenOnBoard == true ? SignUpScreen(): OnBoardingScreen(),
+          home: seenOnBoard == true ? LoginScreen(): OnBoardingScreen(),
+          // home: SignUpScreen(),
         );
       }
     );

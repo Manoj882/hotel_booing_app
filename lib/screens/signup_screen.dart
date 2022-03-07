@@ -1,5 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hotel_booking_app/utils/buttons/social_media_login_button.dart';
+import 'package:hotel_booking_app/utils/general_divider.dart';
+import 'package:hotel_booking_app/utils/validation_mixin.dart';
+
 import '/utils/size_config.dart';
 import '/widgets/general_alert_dialog.dart';
 import '/constants/constant.dart';
@@ -7,6 +12,7 @@ import '/screens/login_screen.dart';
 import '/utils/choose_account_button.dart';
 import '/utils/submit_button.dart';
 import '/utils/text_form_field.dart';
+import 'home_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -14,7 +20,7 @@ class SignUpScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -23,9 +29,9 @@ class SignUpScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: basePadding,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: basePadding,
+          child: Padding(
+            padding: basePadding,
+            child: SingleChildScrollView(
               child: Column(
                 children: [
                   SizedBox(
@@ -61,12 +67,7 @@ class SignUpScreen extends StatelessWidget {
                             Icons.email_outlined,
                             color: Colors.black,
                           ),
-                          validate: (value) {
-                            if (value!.trim().isEmpty) {
-                              return "Please enter your email";
-                            }
-                            return null;
-                          },
+                          validate: (value) => ValidationMixin().validateEmail(value!),
                         ),
                         SizedBox(
                           height: SizeConfig.height * 2.5,
@@ -76,16 +77,12 @@ class SignUpScreen extends StatelessWidget {
                           textInputType: TextInputType.text,
                           textInputAction: TextInputAction.next,
                           controller: passwordController,
+                          isObscure: true,
                           prefixIcon: const Icon(
                             Icons.lock_outlined,
                             color: Colors.black,
                           ),
-                          validate: (value) {
-                            if (value!.trim().isEmpty) {
-                              return "Please enter your password";
-                            }
-                            return null;
-                          },
+                          validate: (value) => ValidationMixin().validatePassword(value!),
                         ),
                         SizedBox(
                           height: SizeConfig.height * 2.5,
@@ -95,16 +92,17 @@ class SignUpScreen extends StatelessWidget {
                           textInputType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           controller: confirmPasswordController,
+                          isObscure: true,
                           prefixIcon: const Icon(
                             Icons.lock_outlined,
                             color: Colors.black,
                           ),
-                          validate: (value) {
-                            if (value!.trim().isEmpty) {
-                              return "Please enter your confrim password";
-                            }
-                            return null;
-                          },
+                          validate: (value) => ValidationMixin().validatePassword(
+                            passwordController.text,
+                            isConfirmed: true,
+                            confrimValue: value!,
+                          ),
+                          onFieldSubmitted: (value){},
                         ),
                         SizedBox(
                           height: SizeConfig.height * 2,
@@ -122,7 +120,11 @@ class SignUpScreen extends StatelessWidget {
                                   password: password,
                                 );
                                 Navigator.of(context).pop();
-                                Navigator.of(context).pop();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginScreen(),
+                                  ),
+                                );
                               } on FirebaseAuthException catch (e) {
                                 String message = "";
                                 if (e.code == "email-already-in-use") {
@@ -149,6 +151,58 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.height * 1.5,
+                  ),
+                  GeneralDivider("Or sign in with"),
+                  SizedBox(
+                    height: SizeConfig.height * 1.5,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SocialMediaLoginButton(
+                          socialMediaName: "Google",
+                          onPressed: () async {
+                            final googleSignin = GoogleSignIn();
+                            final user = await googleSignin.signIn();
+                            if (user != null) {
+                              final authenticateduser =
+                                  await user.authentication;
+                              final authProvider =
+                                  GoogleAuthProvider.credential(
+                                idToken: authenticateduser.idToken,
+                                accessToken: authenticateduser.accessToken,
+                              );
+
+                              await FirebaseAuth.instance
+                                  .signInWithCredential(authProvider);
+
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => HomeScreen(),
+                                ),
+                              );
+                            }
+                          },
+                          imageUrl: ImageConstant.googleImageUrl,
+                        ),
+                      ),
+                      SizedBox(
+                        width: SizeConfig.width * 5,
+                      ),
+                      Expanded(
+                        child: SocialMediaLoginButton(
+                          socialMediaName: "Facebook",
+                          onPressed: () {},
+                          imageUrl: ImageConstant.facebookImageUrl,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: SizeConfig.height * 1.5,
                   ),
                   GeneralChooseAccountPage(
                     onPressed: () {
