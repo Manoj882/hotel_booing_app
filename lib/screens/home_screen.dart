@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
@@ -10,7 +12,7 @@ import '../profile/profile_screen.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  final image = "https://resize.indiatvnews.com/en/resize/newbucket/715_-/2020/08/buddha-1596979292.jpg";
+  final image = "assets/images/profile.png";
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +30,23 @@ class HomeScreen extends StatelessWidget {
                   accountEmail: Text(data.user.email ?? "No Email"),
                   currentAccountPicture: Hero(
                     tag: "image-url",
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(data.user.image ?? image),
-                    ),
+                    child: SizedBox(
+                          height: SizeConfig.height * 16,
+                          width: SizeConfig.height * 16,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(SizeConfig.height * 8),
+                            child: data.user.image == null
+                                ? Image.asset(
+                                    image,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.memory(
+                                    base64Decode(data.user.image!),
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
+                    
                   ),
                 );
               }

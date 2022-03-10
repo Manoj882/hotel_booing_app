@@ -13,18 +13,26 @@ class UserProvider extends ChangeNotifier {
 
   User get user => _user;
 
-  Map <String, dynamic> updateUser(
+  Map<String, dynamic> updateUser(
       {required String name, required String address, required int age}) {
     _user = User(
       uuid: _user.uuid,
       name: name,
       email: _user.email,
-      image: null,
+      image: _user.image,
       photoUrl: null,
       address: address,
       age: age,
     );
+    notifyListeners();
     return _user.toJson();
   }
-  
+
+  updateUserImage(String image) {
+    _user.image = image;
+    notifyListeners();
+    // return {
+    //   "image": _user.image,
+    // };
+  }
 }

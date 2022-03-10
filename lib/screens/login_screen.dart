@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -77,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                           validate: (value) =>
                               ValidationMixin().validateEmail(value!),
-                          onFieldSubmitted: (_){},
+                          onFieldSubmitted: (_) {},
                         ),
                         SizedBox(
                           height: SizeConfig.height * 1.5,
@@ -94,7 +95,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                           validate: (value) =>
                               ValidationMixin().validatePassword(value!),
-                          onFieldSubmitted: (value){
+                          onFieldSubmitted: (value) {
                             submit(context);
                           },
                         ),
@@ -200,13 +201,25 @@ class LoginScreen extends StatelessWidget {
         final user = userCredential.user;
 
         if (user != null) {
-          Provider.of<UserProvider>(context, listen:false).setUser(
-          Firebaseuser(
-            displayName: user.displayName,
-            email: user.email,
-            photoUrl: user.photoURL,
-            uuid: user.uid,
-          ).toJson());
+          final firestore = FirebaseFirestore.instance;
+          final data = await firestore
+              .collection(UserConstants.userCollection)
+              .where(UserConstants.userId, isEqualTo: user.uid)
+              .get();
+              var map ={};
+              if(data.docs.isEmpty){
+                  map = Firebaseuser(
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoUrl: user.photoURL,
+                    uuid: user.uid,
+                  ).toJson();
+              }
+              else{
+                map = data.docs.first.data();
+              }
+              print(map);
+              Provider.of<UserProvider>(context, listen: false).setUser(map);
         }
         Navigator.pop(context);
         Navigator.of(context).pushReplacement(
