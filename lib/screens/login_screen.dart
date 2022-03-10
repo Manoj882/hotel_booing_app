@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotel_booking_app/models/firebase_user.dart';
+import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/utils/validation_mixin.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import '/utils/buttons/social_media_login_button.dart';
 import '/utils/general_divider.dart';
 import '/utils/size_config.dart';
@@ -198,14 +200,15 @@ class LoginScreen extends StatelessWidget {
         final user = userCredential.user;
 
         if (user != null) {
+          Provider.of<UserProvider>(context, listen:false).setUser(
           Firebaseuser(
-            displayName: user.displayName ?? "",
-            email: user.email ?? "",
-            photoUrl: user.photoURL ?? "",
-            uid: user.uid,
-          );
+            displayName: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL,
+            uuid: user.uid,
+          ).toJson());
         }
-
+        Navigator.pop(context);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => HomeScreen(),

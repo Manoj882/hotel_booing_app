@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/constants/constant.dart';
+import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
 import 'package:hotel_booking_app/utils/text_form_field.dart';
 import 'package:hotel_booking_app/utils/validation_mixin.dart';
+import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({required this.imageUrl, Key? key}) : super(key: key);
@@ -49,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
                   controller: nameController,
                   validate: (value) =>
                       ValidationMixin().validate(value!, "name"),
-                  onFieldSubmitted: (_){},
+                  onFieldSubmitted: (_) {},
                 ),
                 SizedBox(
                   height: SizeConfig.height * 1.5,
@@ -61,7 +66,7 @@ class ProfileScreen extends StatelessWidget {
                   controller: addressController,
                   validate: (value) =>
                       ValidationMixin().validate(value!, "address"),
-                  onFieldSubmitted: (_){},
+                  onFieldSubmitted: (_) {},
                 ),
                 SizedBox(
                   height: SizeConfig.height * 1.5,
@@ -72,14 +77,34 @@ class ProfileScreen extends StatelessWidget {
                   textInputAction: TextInputAction.done,
                   controller: ageController,
                   validate: (value) => ValidationMixin().validateAge(value!),
-                  onFieldSubmitted: (_){},
+                  onFieldSubmitted: (_) {},
                 ),
                 SizedBox(
                   height: SizeConfig.height * 3,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {}
+                  onPressed: () async{
+                    if (formKey.currentState!.validate()) {
+                      try{
+                      GeneralAlertDialog().customLoadingDialog(context);
+
+                      final map = Provider.of<UserProvider>(context, listen: false)
+                          .updateUser(
+                        name: nameController.text,
+                        address: addressController.text,
+                        age: int.parse(ageController.text),
+                      );
+                      // print(map);
+                      final firestore = FirebaseFirestore.instance;
+                      await firestore.collection(UserConstants.userCollection).add(map);
+
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      }catch(ex){
+                        Navigator.pop(context);
+                        print(ex.toString());
+                      }
+                    }
                   },
                   child: Text("Save"),
                 ),

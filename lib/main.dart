@@ -1,23 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 
 import 'package:hotel_booking_app/utils/size_config.dart';
+import 'package:provider/provider.dart';
 import '/Theme/theme_data.dart';
 import '/screens/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 import '/screens/onboarding_screen.dart';
 
 bool? seenOnBoard;
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //to show status bar
   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom,SystemUiOverlay.top]);
-
 
   //to load splash screen for the first time only
   SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -32,21 +31,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
-    return LayoutBuilder(
-      builder: (context, boxConstraint) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+        ),
+      ],
+      child: LayoutBuilder(builder: (context, boxConstraint) {
         SizeConfig().init(boxConstraint);
         return MaterialApp(
-          
           title: 'hotel booking app',
           theme: ligthTheme(context),
-          home: seenOnBoard == true ? LoginScreen(): OnBoardingScreen(),
+          home: seenOnBoard == true ? LoginScreen() : OnBoardingScreen(),
           // home: SignUpScreen(),
         );
-      }
+      }),
     );
   }
 }
-
-
-

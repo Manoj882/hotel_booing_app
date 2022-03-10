@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/navigate.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
+import 'package:provider/provider.dart';
 
 import '../profile/profile_screen.dart';
 
@@ -19,15 +21,19 @@ class HomeScreen extends StatelessWidget {
       drawer: Drawer(
         child: Column(
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text("Manoj BK"),
-              accountEmail: Text("manojbk488@gmail.com"),
-              currentAccountPicture: Hero(
-                tag: "image-url",
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(image),
-                ),
-              ),
+            Consumer<UserProvider>(
+              builder: (_,data, __) {
+                return UserAccountsDrawerHeader(
+                  accountName: Text(data.user.name ?? "No Name"),
+                  accountEmail: Text(data.user.email ?? "No Email"),
+                  currentAccountPicture: Hero(
+                    tag: "image-url",
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(data.user.image ?? image),
+                    ),
+                  ),
+                );
+              }
             ),
             ListTile(
               leading: Icon(

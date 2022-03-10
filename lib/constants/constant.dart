@@ -22,5 +22,9 @@ class AnimationConstants{
   static const hotel_lottie = "$baseAnimationPath/hotel-icon.json";
 }
 
+class UserConstants{
+  static const userCollection = "user";
+}
+
 
 
