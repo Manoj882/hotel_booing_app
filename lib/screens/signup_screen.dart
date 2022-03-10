@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hotel_booking_app/utils/buttons/social_media_login_button.dart';
-import 'package:hotel_booking_app/utils/general_divider.dart';
-import 'package:hotel_booking_app/utils/validation_mixin.dart';
-
+import '/utils/buttons/social_media_login_button.dart';
+import '/utils/general_divider.dart';
+import '/utils/validation_mixin.dart';
 import '/utils/size_config.dart';
 import '/widgets/general_alert_dialog.dart';
 import '/constants/constant.dart';

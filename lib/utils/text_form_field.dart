@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_booking_app/utils/size_config.dart';
+
 
 class InputTextField extends StatefulWidget {
   const InputTextField(
@@ -7,10 +7,12 @@ class InputTextField extends StatefulWidget {
       required this.textInputType,
       required this.textInputAction,
       required this.controller,
-      this.prefixIcon,
       required this.validate,
       this.isObscure = false,
       required this.onFieldSubmitted,
+       this.prefixIcon,
+       this.iconData,
+       
       Key? key})
       : super(key: key);
 
@@ -20,6 +22,7 @@ class InputTextField extends StatefulWidget {
   final TextEditingController controller;
   final bool isObscure;
   final Icon? prefixIcon;
+  final IconData? iconData;
   final String? Function(String?)? validate;
   final Function(String)? onFieldSubmitted;
   @override
@@ -44,6 +47,7 @@ class _InputTextFieldState extends State<InputTextField> {
       obscureText: toHide,
       decoration: InputDecoration(
         prefixIcon: widget.prefixIcon,
+        
         hintText: widget.title,
         hintStyle: Theme.of(context).textTheme.subtitle1,
         suffixIcon: widget.isObscure

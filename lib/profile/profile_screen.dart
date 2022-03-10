@@ -1,14 +1,13 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hotel_booking_app/constants/constant.dart';
-import 'package:hotel_booking_app/providers/user_provider.dart';
-import 'package:hotel_booking_app/utils/curved_body_widget.dart';
-import 'package:hotel_booking_app/utils/size_config.dart';
-import 'package:hotel_booking_app/utils/text_form_field.dart';
-import 'package:hotel_booking_app/utils/validation_mixin.dart';
-import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
+import '/constants/constant.dart';
+import '/providers/user_provider.dart';
+import '/utils/curved_body_widget.dart';
+import '/utils/firebase_helper.dart';
+import '/utils/size_config.dart';
+import '/utils/text_form_field.dart';
+import '/utils/validation_mixin.dart';
+import '/widgets/general_alert_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +47,8 @@ class ProfileScreen extends StatelessWidget {
                           height: SizeConfig.height * 16,
                           width: SizeConfig.height * 16,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(SizeConfig.height * 8),
+                            borderRadius:
+                                BorderRadius.circular(SizeConfig.height * 8),
                             child: profileData.image == null
                                 ? Image.asset(
                                     imageUrl,
@@ -72,9 +72,8 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             shape: CircleBorder(),
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            onPressed: () async{
+                            onPressed: () async {
                               await showBottomSheet(context);
-                             
                             },
                           ),
                         ),
@@ -130,8 +129,6 @@ class ProfileScreen extends StatelessWidget {
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         try {
-                          GeneralAlertDialog().customLoadingDialog(context);
-
                           final map =
                               Provider.of<UserProvider>(context, listen: false)
                                   .updateUser(
@@ -139,27 +136,19 @@ class ProfileScreen extends StatelessWidget {
                             address: addressController.text,
                             age: int.parse(ageController.text),
                           );
-                          // print(map);
-                          final firestore = FirebaseFirestore.instance;
-                          final data = await firestore
-                              .collection(UserConstants.userCollection)
-                              .where(UserConstants.userId,
-                                  isEqualTo: profileData.uuid)
-                              .get();
-                          if (data.docs.isEmpty) {
-                            await firestore
-                                .collection(UserConstants.userCollection)
-                                .add(map);
-                          } else {
-                            data.docs.first.reference.update(map);
-                          }
-
+                          await FirebaseHelper().addOrUpdateFirebaseContent(
+                            context,
+                            collectionId: UserConstants.userCollection,
+                            whereId: UserConstants.userId,
+                            whereValue: profileData.uuid,
+                            map: map,
+                          );
                           Navigator.pop(context);
+                        } catch(ex){
                           Navigator.pop(context);
-                        } catch (ex) {
-                          Navigator.pop(context);
-                          print(ex.toString());
+                          GeneralAlertDialog().customAlertDialog(context, ex.toString());
                         }
+                      
                       }
                     },
                     child: Text("Save"),
@@ -173,9 +162,9 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Future<void> showBottomSheet(BuildContext context) async{
+  Future<void> showBottomSheet(BuildContext context) async {
     final imagePicker = ImagePicker();
-  
+
     await showModalBottomSheet(
         context: context,
         builder: (_) => Padding(
@@ -200,7 +189,8 @@ class ProfileScreen extends StatelessWidget {
                               source: ImageSource.camera);
                           if (xFile != null) {
                             final uint8List = await xFile.readAsBytes();
-                            final map = Provider.of<UserProvider>(context, listen: false)
+                            final map = Provider.of<UserProvider>(context,
+                                    listen: false)
                                 .updateUserImage(base64Encode(uint8List));
                           }
                         },
@@ -226,7 +216,6 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ));
-  
   }
 
   Column buildPhotoChooseOption(

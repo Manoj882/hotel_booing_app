@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import '/utils/buttons/social_media_login_button.dart';
 import '/utils/general_divider.dart';
 import '/utils/size_config.dart';
-import '/screens/add_hotel_screen.dart';
 import '/screens/home_screen.dart';
 import '/screens/signup_screen.dart';
 import '/widgets/general_alert_dialog.dart';
@@ -218,7 +217,7 @@ class LoginScreen extends StatelessWidget {
               else{
                 map = data.docs.first.data();
               }
-              print(map);
+              // print(map);
               Provider.of<UserProvider>(context, listen: false).setUser(map);
         }
         Navigator.pop(context);
