@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/providers/hotel_provider.dart';
 import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AddHotelProvider(),
         ),
       ],
       child: LayoutBuilder(builder: (context, boxConstraint) {

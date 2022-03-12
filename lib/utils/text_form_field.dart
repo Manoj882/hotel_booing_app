@@ -31,7 +31,7 @@ class InputTextField extends StatefulWidget {
 
 class _InputTextFieldState extends State<InputTextField> {
   late bool toHide;
-  @override
+
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -47,7 +47,6 @@ class _InputTextFieldState extends State<InputTextField> {
       obscureText: toHide,
       decoration: InputDecoration(
         prefixIcon: widget.prefixIcon,
-        
         hintText: widget.title,
         hintStyle: Theme.of(context).textTheme.subtitle1,
         suffixIcon: widget.isObscure

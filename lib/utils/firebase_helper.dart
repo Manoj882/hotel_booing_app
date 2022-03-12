@@ -12,13 +12,17 @@ class FirebaseHelper {
   }) async {
     try {
       GeneralAlertDialog().customLoadingDialog(context);
-      final firestore = FirebaseFirestore.instance;
-      final data = await firestore
-          .collection(collectionId)
-          .where(whereId, isEqualTo: whereValue)
-          .get();
+
+      final data = await getData(
+        context,
+        collectionId: collectionId,
+        whereId: whereId,
+        whereValue: whereValue,
+        toShowLoading: false,
+      );
+
       if (data.docs.isEmpty) {
-        await firestore.collection(collectionId).add(map);
+        await FirebaseFirestore.instance.collection(collectionId).add(map);
       } else {
         data.docs.first.reference.update(map);
       }
@@ -29,5 +33,29 @@ class FirebaseHelper {
       Navigator.pop(context);
       throw ex.toString();
     }
+  }
+
+  Future <QuerySnapshot<Map<String, dynamic>>> getData(
+    BuildContext context,
+    {
+    required String collectionId,
+    required String whereId,
+    required String whereValue,
+    bool toShowLoading = true,
+  }) async {
+    try{
+
+    final firestore = FirebaseFirestore.instance;
+    final data = await firestore
+        .collection(collectionId)
+        .where(whereId, isEqualTo: whereValue)
+        .get();
+    
+    return data;
+    }
+    catch (ex){
+      throw ex.toString();
+    }
+    
   }
 }

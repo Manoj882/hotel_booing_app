@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/models/user.dart';
 import '/constants/constant.dart';
 import '/providers/user_provider.dart';
 import '/utils/curved_body_widget.dart';
@@ -12,21 +13,28 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({required this.imageUrl, Key? key}) : super(key: key);
+  ProfileScreen({required this.imageUrl,Key? key}) : super(key: key);
 
   final String imageUrl;
   final nameController = TextEditingController();
   final addressController = TextEditingController();
   final ageController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
+
+  
+
+  bool _isAdmin = false;
 
   @override
   Widget build(BuildContext context) {
+    print("Hello guys");
     final profileData = Provider.of<UserProvider>(context).user;
     nameController.text = profileData.name ?? "";
     addressController.text = profileData.address ?? "";
     ageController.text =
         profileData.age != null ? profileData.age.toString() : "";
+    _isAdmin = profileData.isAdmin;
     return Scaffold(
       appBar: AppBar(
         title: Text("Profile"),
@@ -61,15 +69,19 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          bottom: 0,
+                          bottom: 1,
                           right: -20,
                           child: RawMaterialButton(
-                            elevation: 2,
-                            child: Icon(
-                              Icons.add_a_photo_outlined,
-                              color: Colors.grey,
-                              size: 55,
+                            elevation: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.add_a_photo_outlined,
+                                color: Colors.black38,
+                                size: 40,
+                              ),
                             ),
+                            fillColor: Colors.grey.shade200,
                             shape: CircleBorder(),
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             onPressed: () async {
@@ -128,6 +140,7 @@ class ProfileScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
+                        
                         try {
                           final map =
                               Provider.of<UserProvider>(context, listen: false)
@@ -135,7 +148,10 @@ class ProfileScreen extends StatelessWidget {
                             name: nameController.text,
                             address: addressController.text,
                             age: int.parse(ageController.text),
+   
                           );
+                        
+                          
                           await FirebaseHelper().addOrUpdateFirebaseContent(
                             context,
                             collectionId: UserConstants.userCollection,

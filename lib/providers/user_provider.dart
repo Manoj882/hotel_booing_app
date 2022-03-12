@@ -9,9 +9,11 @@ class UserProvider extends ChangeNotifier {
     _user = User.fromJson(obj);
     print(obj);
     notifyListeners();
+    
   }
 
   User get user => _user;
+  
 
   Map<String, dynamic> updateUser(
       {required String name, required String address, required int age}) {
@@ -20,9 +22,10 @@ class UserProvider extends ChangeNotifier {
       name: name,
       email: _user.email,
       image: _user.image,
-      photoUrl: null,
+      photoUrl: _user.photoUrl,
       address: address,
       age: age,
+      
     );
     notifyListeners();
     return _user.toJson();

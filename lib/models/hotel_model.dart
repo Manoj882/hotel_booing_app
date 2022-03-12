@@ -1,13 +1,32 @@
 import 'package:flutter/material.dart';
 
-class HotelModel{
-  late String name;
-  late String city;
-  late String address;
+class AddHotel{
+  late String hotelName;
+  late String hotelCity;
+  late String hotelAddress;
+  late String uuid;
 
-  HotelModel.fromJson(Map obj){
-    name = obj["name"];
-    city = obj["city"];
-    address = obj["address"];
+  AddHotel({
+    required this.hotelName,
+    required this.hotelCity,
+    required this.hotelAddress,
+    required this.uuid,
+
+  });
+
+  AddHotel.fromJson(Map obj){
+    hotelName = obj["hotelName"];
+    hotelCity = obj["hotelCity"];
+    hotelAddress = obj["hotelAddress"];
+    uuid = obj["uuid"];
+  }
+
+  Map<String, dynamic> toJson(){
+    final map = <String, dynamic>{};
+    map["hotelName"] = hotelName;
+    map["hotelCity"] = hotelCity;
+    map["hotelAddress"] = hotelAddress;
+    map["uuid"] = uuid;
+    return map;
   }
 }

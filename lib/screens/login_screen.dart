@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotel_booking_app/models/firebase_user.dart';
 import 'package:hotel_booking_app/providers/user_provider.dart';
+import 'package:hotel_booking_app/screens/hotel_screen/view_hotels_screen.dart.dart';
 import 'package:hotel_booking_app/utils/validation_mixin.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -133,22 +134,30 @@ class LoginScreen extends StatelessWidget {
                         socialMediaName: "Continue with Google",
                         onPressed: () async {
                           final googleSignin = GoogleSignIn();
-                          final user = await googleSignin.signIn();
-                          if (user != null) {
-                            final authenticateduser = await user.authentication;
-                            final authProvider = GoogleAuthProvider.credential(
+                          final googleSignInAccountUser = await googleSignin.signIn();
+                          if (googleSignInAccountUser != null) {
+                            final authenticateduser = await googleSignInAccountUser.authentication;
+                            final authCredential = GoogleAuthProvider.credential(
                               idToken: authenticateduser.idToken,
                               accessToken: authenticateduser.accessToken,
                             );
 
-                            await FirebaseAuth.instance
-                                .signInWithCredential(authProvider);
+                            final authResult = await FirebaseAuth.instance
+                                .signInWithCredential(authCredential);
+
+                            
+                            //added line
+                            final User user = authResult.user!;
+
+                            
 
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (_) => HomeScreen(),
+                                
                               ),
                             );
+                            
                           }
                         },
                         imageUrl: ImageConstant.googleImageUrl,
@@ -224,6 +233,7 @@ class LoginScreen extends StatelessWidget {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => HomeScreen(),
+            // builder: (_) => ViewHotelScreen(),
           ),
         );
       }

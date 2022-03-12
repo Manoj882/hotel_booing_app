@@ -20,6 +20,8 @@ class SignUpScreen extends StatelessWidget {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -198,11 +200,13 @@ class SignUpScreen extends StatelessWidget {
         GeneralAlertDialog().customLoadingDialog(context);
         final email = emailController.text;
         final password = passwordController.text;
+        
        
           final user = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
             email: email,
             password: password,
+            
           );
           Navigator.of(context).pop();
           Navigator.of(context).push(

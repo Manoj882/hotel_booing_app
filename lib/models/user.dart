@@ -6,10 +6,10 @@ class User{
   late String? photoUrl;
   late String? address;
   late int? age;
-  
+  bool isAdmin = false;
+ 
 
   
-
   User({
     required this.uuid,
     required this.name,
@@ -18,6 +18,8 @@ class User{
     required this.photoUrl,
     required this.address,
     required this.age,
+ 
+    
   });
 
   User.fromJson(Map obj){
@@ -28,6 +30,7 @@ class User{
     photoUrl = obj["photoUrl"];
     address = obj["address"];
     age = obj["age"];
+   
   }
 
   Map <String, dynamic> toJson(){
@@ -38,6 +41,8 @@ class User{
     map["image"] = image;
     map["address"] = address;
     map["age"] = age;
+    map["isAdmin"] = isAdmin;
+    
     return map;
   }
 
