@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           create: (_) => UserProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => AddHotelProvider(),
+          create: (_) => HotelProvider(),
         ),
       ],
       child: LayoutBuilder(builder: (context, boxConstraint) {

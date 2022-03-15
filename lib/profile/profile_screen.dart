@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:hotel_booking_app/models/user.dart';
 import '/constants/constant.dart';
 import '/providers/user_provider.dart';
 import '/utils/curved_body_widget.dart';
@@ -22,19 +21,20 @@ class ProfileScreen extends StatelessWidget {
 
   final formKey = GlobalKey<FormState>();
 
-  
-
   bool _isAdmin = false;
 
   @override
   Widget build(BuildContext context) {
-    print("Hello guys");
+    
+   
     final profileData = Provider.of<UserProvider>(context).user;
     nameController.text = profileData.name ?? "";
     addressController.text = profileData.address ?? "";
     ageController.text =
         profileData.age != null ? profileData.age.toString() : "";
+
     _isAdmin = profileData.isAdmin;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text("Profile"),
@@ -148,8 +148,10 @@ class ProfileScreen extends StatelessWidget {
                             name: nameController.text,
                             address: addressController.text,
                             age: int.parse(ageController.text),
+                            isAdmin: _isAdmin,
    
                           );
+                          
                         
                           
                           await FirebaseHelper().addOrUpdateFirebaseContent(

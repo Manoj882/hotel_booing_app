@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/models/hotel_model.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
+import 'package:hotel_booking_app/utils/image_bottom_sheet.dart';
 import '/utils/curved_body_widget.dart';
 import '/utils/firebase_helper.dart';
 import '/utils/size_config.dart';
@@ -13,16 +14,17 @@ import '/providers/user_provider.dart';
 import '/widgets/general_alert_dialog.dart';
 
 class AddHotelsScreen extends StatelessWidget {
-  AddHotelsScreen({Key? key}) : super(key: key);
+  AddHotelsScreen({required this.hotelImageUrl, Key? key}) : super(key: key);
 
   final hotelNameController = TextEditingController();
   final hotelAddressController = TextEditingController();
   final hotelCityController = TextEditingController();
+  final String hotelImageUrl;
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final future = Provider.of<AddHotelProvider>(context, listen: false)
+    final future = Provider.of<HotelProvider>(context, listen: false)
         .fetchHotelData(context);
     return Scaffold(
       appBar: AppBar(
@@ -38,14 +40,14 @@ class AddHotelsScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
-                final addHotelProvider =
-                    Provider.of<AddHotelProvider>(context, listen: false)
-                        .addHotel;
-                if (addHotelProvider != null) {
-                  hotelNameController.text = addHotelProvider.hotelName;
-                  hotelCityController.text = addHotelProvider.hotelCity;
-                  hotelAddressController.text = addHotelProvider.hotelAddress;
-                }
+                // final hotelProvider =
+                //     Provider.of<HotelProvider>(context, listen: false)
+                //         .addHotel;
+                // if (hotelProvider != null) {
+                //   hotelNameController.text = hotelProvider.hotelName;
+                //   hotelCityController.text = hotelProvider.hotelCity;
+                //   hotelAddressController.text = hotelProvider.hotelAddress;
+                // }
                 return Form(
                   key: formKey,
                   child: Column(
@@ -77,7 +79,7 @@ class AddHotelsScreen extends StatelessWidget {
                       SizedBox(
                         height: SizeConfig.height * 2,
                       ),
-                       Text(
+                      Text(
                         "Address",
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
@@ -96,7 +98,7 @@ class AddHotelsScreen extends StatelessWidget {
                       SizedBox(
                         height: SizeConfig.height * 2,
                       ),
-                       Text(
+                      Text(
                         "City",
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
@@ -113,6 +115,15 @@ class AddHotelsScreen extends StatelessWidget {
                         onFieldSubmitted: (_) {
                           submit(context);
                         },
+                      ),
+                      SizedBox(
+                        height: SizeConfig.height * 2,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          showBottomImageSheet().showBottomSheet(context);
+                        },
+                        child: Text("Upload Image"),
                       ),
                       SizedBox(
                         height: SizeConfig.height * 2,
@@ -135,23 +146,31 @@ class AddHotelsScreen extends StatelessWidget {
   submit(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       try {
-        final uid = Provider.of<UserProvider>(context, listen: false).user.uuid;
-        final map = AddHotel(
+        GeneralAlertDialog().customLoadingDialog(context);
+        // final uid = Provider.of<UserProvider>(context, listen: false).user.uuid;
+        final map = Hotel(
           hotelName: hotelNameController.text,
           hotelCity: hotelCityController.text,
           hotelAddress: hotelAddressController.text,
-          uuid: uid,
+       
+          // uuid: uid,
         ).toJson();
 
-        await FirebaseHelper().addOrUpdateFirebaseContent(
+        Navigator.pop(context);
+        Navigator.pop(context);
+
+        // await FirebaseHelper().addData(context, map: map, collectionId: HotelConstant.hotelCollection);
+        //add hotel data from HotelProvider
+
+        await Provider.of<HotelProvider>(context, listen: false).addHotelData(
           context,
-          collectionId: HotelConstant.hotelCollection,
-          whereId: UserConstants.userId,
-          whereValue: uid,
-          map: map,
+          hotelNameController.text,
+          hotelCityController.text,
+          hotelAddressController.text,
+         
         );
       } catch (ex) {
-        GeneralAlertDialog().customAlertDialog(context, ex.toString());
+        print(ex.toString());
       }
     }
   }

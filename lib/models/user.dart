@@ -18,6 +18,7 @@ class User{
     required this.photoUrl,
     required this.address,
     required this.age,
+    required this.isAdmin,
  
     
   });
@@ -30,6 +31,9 @@ class User{
     photoUrl = obj["photoUrl"];
     address = obj["address"];
     age = obj["age"];
+    isAdmin = obj["isAdmin"] ?? false;
+    
+    
    
   }
 
@@ -42,9 +46,10 @@ class User{
     map["address"] = address;
     map["age"] = age;
     map["isAdmin"] = isAdmin;
-    
     return map;
+  
   }
+  
 
   
 

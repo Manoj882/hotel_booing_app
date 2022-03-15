@@ -18,7 +18,6 @@ class FirebaseHelper {
         collectionId: collectionId,
         whereId: whereId,
         whereValue: whereValue,
-        toShowLoading: false,
       );
 
       if (data.docs.isEmpty) {
@@ -34,28 +33,53 @@ class FirebaseHelper {
       throw ex.toString();
     }
   }
+  Future<QuerySnapshot<Map<String, dynamic>>> getAllData(
+    BuildContext context, {
+    required String collectionId,
+    
+  }) async {
+    try {
+      final firestore = FirebaseFirestore.instance;
+      final data = await firestore
+          .collection(collectionId).get();
 
-  Future <QuerySnapshot<Map<String, dynamic>>> getData(
-    BuildContext context,
-    {
+      return data;
+    } catch (ex) {
+      throw ex.toString();
+    }
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getData(
+    BuildContext context, {
     required String collectionId,
     required String whereId,
     required String whereValue,
-    bool toShowLoading = true,
   }) async {
-    try{
+    try {
+      final firestore = FirebaseFirestore.instance;
+      final data = await firestore
+          .collection(collectionId)
+          .where(whereId, isEqualTo: whereValue)
+          .get();
 
-    final firestore = FirebaseFirestore.instance;
-    final data = await firestore
-        .collection(collectionId)
-        .where(whereId, isEqualTo: whereValue)
-        .get();
-    
-    return data;
-    }
-    catch (ex){
+      return data;
+    } catch (ex) {
       throw ex.toString();
     }
-    
+  }
+
+  addData(
+    BuildContext context, {
+    required Map<String, dynamic> map,
+    required String collectionId,
+  }) async {
+    try {
+      
+
+      await FirebaseFirestore.instance.collection(collectionId).add(map);
+      
+    } catch (ex) {
+      print(ex.toString());
+    }
   }
 }

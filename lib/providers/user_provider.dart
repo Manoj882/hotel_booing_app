@@ -8,15 +8,16 @@ class UserProvider extends ChangeNotifier {
   setUser(Map obj) {
     _user = User.fromJson(obj);
     print(obj);
+    
     notifyListeners();
     
   }
-
   User get user => _user;
   
 
   Map<String, dynamic> updateUser(
-      {required String name, required String address, required int age}) {
+    
+      {required String name, required String address, required int age, required bool isAdmin}) {
     _user = User(
       uuid: _user.uuid,
       name: name,
@@ -25,17 +26,18 @@ class UserProvider extends ChangeNotifier {
       photoUrl: _user.photoUrl,
       address: address,
       age: age,
+      isAdmin: isAdmin,
       
     );
+    
     notifyListeners();
     return _user.toJson();
+    
   }
 
   updateUserImage(String image) {
     _user.image = image;
     notifyListeners();
-    // return {
-    //   "image": _user.image,
-    // };
+    
   }
 }
