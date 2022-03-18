@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:hotel_booking_app/constants/constant.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
 import '/providers/user_provider.dart';
 import '/screens/hotel_screen/add_hotels_screen.dart';
@@ -11,13 +10,16 @@ import '/utils/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../profile/profile_screen.dart';
+import 'hotel_screen/hotel_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({ Key? key}) : super(key: key);
 
   final image = "assets/images/profile.png";
   final String imageOfHotel =
       "https://www.nepal-travel-guide.com/wp-content/uploads/2020/05/image-156.png";
+  
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,11 @@ class HomeScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => AddHotelsScreen(hotelImageUrl: imageOfHotel,),
+                            builder: (_) => AddHotelsScreen(
+                              hotelImageUrl: imageOfHotel,
+                            
+                             
+                            ),
                           ),
                         );
                       },
@@ -85,14 +91,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               }),
-              (Provider.of<UserProvider>(context).user.isAdmin)
-                  ? buildListTile(
-                      context,
-                      iconData: Icons.hotel_outlined,
-                      label: "Add Hotel",
-                      widget: AddHotelsScreen(hotelImageUrl: imageOfHotel,),
-                    )
-                  : buildListTile(
+              buildListTile(
                       context,
                       iconData: Icons.person_outlined,
                       label: "Profile",
@@ -121,9 +120,16 @@ class HomeScreen extends StatelessWidget {
                     )
                   : SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Available Hotels",
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: SizeConfig.width * 3,
+                            ),
+                            child: Text(
+                              "Available Hotels",
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
                           ),
                           SizedBox(
                             height: SizeConfig.height * 1.5,
@@ -132,41 +138,21 @@ class HomeScreen extends StatelessWidget {
                             scrollDirection: Axis.vertical,
                             itemCount: listOfHotel.length,
                             itemBuilder: (context, index) {
-                              return hotelCard(
-                                context,
-                                hotelName: listOfHotel[index].hotelName,
-                                hotelAddress: listOfHotel[index].hotelAddress,
-                                hotelCity: listOfHotel[index].hotelCity,
-                                imageUrl: imageOfHotel,
+                              return InkWell(
+                                onTap: () => navigate(
+                                  context,
+                                  HotelDetailsScreen(
+                                    hotel: listOfHotel[index],
+                                  ),
+                                ),
+                                child: hotelCard(
+                                  context,
+                                  hotelName: listOfHotel[index].hotelName,
+                                  hotelAddress: listOfHotel[index].hotelAddress,
+                                  hotelCity: listOfHotel[index].hotelCity,
+                                  imageUrl: imageOfHotel,
+                                ),
                               );
-
-                              // return Card(
-                              //   elevation: 3,
-                              //   child: Column(
-                              //     children: [
-                              //       Container(
-                              //         height: 150,
-                              //         // color: Colors.redAccent,
-                              //         // child: Center(
-                              //         //   child: Text(listOfHotel[index].hotelName,
-                              //         //   style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              //         //     fontWeight: FontWeight.bold,
-                              //         //     color: Colors.white,
-                              //         //   ),
-                              //         //   ),
-                              //         // ),
-                              //         decoration: BoxDecoration(
-                              //           image: DecorationImage(
-                              //             image: NetworkImage(imageOfHotel),
-                              //             fit: BoxFit.cover,
-                              //           ),
-                              //         ),
-                              //       ),
-                              //       Text(listOfHotel[index].hotelAddress),
-                              //       Text(listOfHotel[index].hotelCity),
-                              //     ],
-                              //   ),
-                              // );
                             },
                             separatorBuilder: (context, index) {
                               return SizedBox(
@@ -174,6 +160,7 @@ class HomeScreen extends StatelessWidget {
                               );
                             },
                             shrinkWrap: true,
+                            primary:  false,
                           ),
                         ],
                       ),
@@ -201,7 +188,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  hotelCard(
+  Card hotelCard(
     BuildContext context, {
     required String hotelName,
     required String hotelAddress,
@@ -211,71 +198,70 @@ class HomeScreen extends StatelessWidget {
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(
+          SizeConfig.height * 2,
+        ),
       ),
-      child: InkWell(
-        onTap: () {},
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            
-                 Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: NetworkImage(imageUrl),
-                      fit: BoxFit.cover,
-                      scale: 2,
-                    ),
-                  ),
+      child: Padding(
+        padding: EdgeInsets.all(
+          SizeConfig.height,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: SizeConfig.height * 12,
+              width: SizeConfig.height * 12,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  image: NetworkImage(imageUrl),
+                  fit: BoxFit.cover,
+                  scale: 2,
                 ),
-                
-              
-              SizedBox(
-                width: SizeConfig.width * 4,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    hotelName,
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(height: SizeConfig.height),
-
-                  Row(
-                    children: [
-                      Icon(Icons.place_outlined,
-                      color: Colors.black38,       
+            ),
+            SizedBox(
+              width: SizeConfig.width * 4,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  hotelName,
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        hotelAddress,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color: Colors.black38,
-                        ),
-                      ),
-                      Text(", "),
-                      Text(
-                        hotelCity,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color: Colors.black38,
-                        ),
-                      ),
-                    ],
-                  ),
-                 
-                ],
-              ),
-            ],
-          ),
+                ),
+                SizedBox(height: SizeConfig.height),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.place_outlined,
+                      color: Colors.black38,
+                    ),
+                    Text(
+                      hotelAddress,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            color: Colors.black38,
+                          ),
+                    ),
+                    Text(", "),
+                    Text(
+                      hotelCity,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            color: Colors.black38,
+                          ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

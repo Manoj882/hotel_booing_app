@@ -9,52 +9,45 @@ import '/utils/validation_mixin.dart';
 import 'package:provider/provider.dart';
 import '/widgets/general_alert_dialog.dart';
 
-class AddHotelsScreen extends StatelessWidget {
-  AddHotelsScreen({required this.hotelImageUrl, Key? key}) : super(key: key);
+class EditHotelScreen extends StatelessWidget {
+  EditHotelScreen({required this.model, required this.hotelImageUrl, Key? key})
+      : super(key: key);
 
   final hotelNameController = TextEditingController();
   final hotelAddressController = TextEditingController();
   final hotelCityController = TextEditingController();
   final String hotelImageUrl;
   final formKey = GlobalKey<FormState>();
-
- 
-
-  
+  final Hotel model;
 
   @override
   Widget build(BuildContext context) {
-    final future = Provider.of<HotelProvider>(context, listen: false)
-        .fetchHotelData(context);
+    // final future = Provider.of<HotelProvider>(context, listen: false)
+    //     .fetchIndiviudalHotelData(
+    //   hotelId: model.id!,
+    //   hotelName: hotelNameController.text,
+    //   hotelAddress: hotelAddressController.text,
+    //   hotelCity: hotelCityController.text,
+    // );
+                  hotelNameController.text = model.hotelName;
+                  hotelCityController.text = model.hotelCity;
+                  hotelAddressController.text = model.hotelAddress;
+                
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Hotel"),
+        title: Text("Edit Hotel"),
       ),
       body: CurvedBodyWidget(
         widget: SingleChildScrollView(
-          child: FutureBuilder(
-              future: future,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                // final hotelProvider =
-                //     Provider.of<HotelProvider>(context, listen: false)
-                //         .addHotel;
-                // if (hotelProvider != null) {
-                //   hotelNameController.text = hotelProvider.hotelName;
-                //   hotelCityController.text = hotelProvider.hotelCity;
-                //   hotelAddressController.text = hotelProvider.hotelAddress;
-                // }
-                return Form(
+          child: 
+                
+                       Form(
                   key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Add hotels with detail informations",
+                        "Edit hotels with detail informations",
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       SizedBox(
@@ -136,10 +129,10 @@ class AddHotelsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                );
-              }),
+                )
+              ),
         ),
-      ),
+      
     );
   }
 
@@ -147,30 +140,29 @@ class AddHotelsScreen extends StatelessWidget {
     if (formKey.currentState!.validate()) {
       try {
         GeneralAlertDialog().customLoadingDialog(context);
-        
+
         // final uid = Provider.of<UserProvider>(context, listen: false).user.uuid;
-        final map = Hotel(
+        final hotel = Hotel(
           hotelName: hotelNameController.text,
           hotelCity: hotelCityController.text,
           hotelAddress: hotelAddressController.text,
 
           // uuid: uid,
-        ).toJson();
+        );
 
+        Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pop(context);
 
         // await FirebaseHelper().addData(context, map: map, collectionId: HotelConstant.hotelCollection);
         //add hotel data from HotelProvider
 
-       
-          await Provider.of<HotelProvider>(context, listen: false).addHotelData(
-            context,
-            hotelNameController.text,
-            hotelCityController.text,
-            hotelAddressController.text,
-          );
-       
+        await Provider.of<HotelProvider>(context, listen: false)
+            .updateHotelData(
+          context,
+          docId: model.id!,
+          hotel: hotel
+        );
       } catch (ex) {
         print(ex.toString());
       }

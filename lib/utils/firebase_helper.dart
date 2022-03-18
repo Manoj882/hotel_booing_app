@@ -14,7 +14,7 @@ class FirebaseHelper {
       GeneralAlertDialog().customLoadingDialog(context);
 
       final data = await getData(
-        context,
+        
         collectionId: collectionId,
         whereId: whereId,
         whereValue: whereValue,
@@ -33,15 +33,40 @@ class FirebaseHelper {
       throw ex.toString();
     }
   }
+
+  updateFirebaseContent(
+    BuildContext context, {
+    required String collectionId,
+    required String whereId,
+    required String whereValue,
+    required Map<String, dynamic> map,
+  }) async {
+    try {
+      GeneralAlertDialog().customLoadingDialog(context);
+
+      final data = await getData(
+        
+        collectionId: collectionId,
+        whereId: whereId,
+        whereValue: whereValue,
+      );
+      data.docs.first.reference.update(map);
+
+      Navigator.pop(context);
+      Navigator.pop(context);
+    } catch (ex) {
+      Navigator.pop(context);
+      throw ex.toString();
+    }
+  }
+
   Future<QuerySnapshot<Map<String, dynamic>>> getAllData(
     BuildContext context, {
     required String collectionId,
-    
   }) async {
     try {
       final firestore = FirebaseFirestore.instance;
-      final data = await firestore
-          .collection(collectionId).get();
+      final data = await firestore.collection(collectionId).get();
 
       return data;
     } catch (ex) {
@@ -50,13 +75,16 @@ class FirebaseHelper {
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getData(
-    BuildContext context, {
+     {
     required String collectionId,
     required String whereId,
     required String whereValue,
+    // required String docId,
   }) async {
     try {
       final firestore = FirebaseFirestore.instance;
+      // firestore.collection(collectionId).doc(docId).update(data);
+
       final data = await firestore
           .collection(collectionId)
           .where(whereId, isEqualTo: whereValue)
@@ -74,10 +102,23 @@ class FirebaseHelper {
     required String collectionId,
   }) async {
     try {
-      
-
       await FirebaseFirestore.instance.collection(collectionId).add(map);
-      
+    } catch (ex) {
+      print(ex.toString());
+    }
+  }
+
+  updateData(
+    BuildContext context, {
+    required Map<String, dynamic> map,
+    required String collectionId,
+    required String docId,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(collectionId)
+          .doc(docId)
+          .update(map);
     } catch (ex) {
       print(ex.toString());
     }

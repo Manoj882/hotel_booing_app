@@ -27,7 +27,7 @@ class UserConstants{
 
 class HotelConstant{
   static const hotelCollection = "hotel";
-  static const hotelId = "hotelId";
+  static const hotelId = "id";
 }
 
 

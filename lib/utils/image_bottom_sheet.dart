@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/constant.dart';
+import '../providers/hotel_provider.dart';
 import '../providers/user_provider.dart';
 
 class showBottomImageSheet{
@@ -37,8 +38,8 @@ Future<void> showBottomSheet(BuildContext context) async {
                           if (xFile != null) {
                             final uint8List = await xFile.readAsBytes();
                             final map = Provider.of<UserProvider>(context,
-                                    listen: false)
-                                .updateUserImage(base64Encode(uint8List));
+                                    listen: false).
+                                updateUserImage(base64Encode(uint8List));
                           }
                         },
                         iconData: Icons.photo_camera_outlined,
