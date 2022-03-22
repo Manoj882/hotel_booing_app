@@ -45,5 +45,7 @@
 		<false/>
 		<key>UIStatusBarHidden</key>
 		<true/>
+		<key>NSLOcationAlwaysUsageDescription</key>
+		<string>This app needs access to location when in the backgrund.</string>
 	</dict>
 </plist>

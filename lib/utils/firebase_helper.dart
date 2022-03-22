@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../widgets/general_alert_dialog.dart';
@@ -102,7 +104,8 @@ class FirebaseHelper {
     required String collectionId,
   }) async {
     try {
-      await FirebaseFirestore.instance.collection(collectionId).add(map);
+      final docs = await FirebaseFirestore.instance.collection(collectionId).add(map);
+      return docs.id;
     } catch (ex) {
       print(ex.toString());
     }
@@ -119,6 +122,7 @@ class FirebaseHelper {
           .collection(collectionId)
           .doc(docId)
           .update(map);
+          print("object");
     } catch (ex) {
       print(ex.toString());
     }

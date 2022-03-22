@@ -2,10 +2,14 @@
     package="com.dursikshya.hotel_booking_app">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
         android:label="hotel_booking_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyBXt2bGk4j8YnOYbpVtZN2T8fsAwX3N2ew"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

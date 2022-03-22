@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
+import 'package:hotel_booking_app/utils/google_map.dart';
+import '../models/hotel_model.dart';
 import '/providers/user_provider.dart';
 import '/screens/hotel_screen/add_hotels_screen.dart';
 import '/utils/curved_body_widget.dart';
@@ -13,16 +15,17 @@ import '../profile/profile_screen.dart';
 import 'hotel_screen/hotel_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({ Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   final image = "assets/images/profile.png";
   final String imageOfHotel =
       "https://www.nepal-travel-guide.com/wp-content/uploads/2020/05/image-156.png";
-  
- 
+
+    
 
   @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
       appBar: AppBar(
         title: Text("Welcome Hotel"),
@@ -43,11 +46,11 @@ class HomeScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (_) => AddHotelsScreen(
                               hotelImageUrl: imageOfHotel,
-                            
                              
                             ),
                           ),
                         );
+                        
                       },
                       child: Text(
                         "Add Hotel",
@@ -92,90 +95,99 @@ class HomeScreen extends StatelessWidget {
                 );
               }),
               buildListTile(
-                      context,
-                      iconData: Icons.person_outlined,
-                      label: "Profile",
-                      widget: ProfileScreen(imageUrl: image),
-                    ),
+                context,
+                iconData: Icons.person_outlined,
+                label: "Profile",
+                widget: ProfileScreen(imageUrl: image),
+              ),
+              //  buildListTile(
+              //   context,
+              //   iconData: Icons.map_outlined,
+              //   label: "Map",
+              //   widget: GoogleMapScreen(),
+              // ),
             ],
           ),
         ),
       ),
       body: CurvedBodyWidget(
         widget: FutureBuilder(
-            future: Provider.of<HotelProvider>(context, listen: true)
-                .fetchHotelData(context),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final listOfHotel =
-                  Provider.of<HotelProvider>(context).listOfHotel;
+          future: Provider.of<HotelProvider>(context, listen: true)
+              .fetchHotelData(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            final listOfHotel = Provider.of<HotelProvider>(context).listOfHotel;
 
-              return listOfHotel.isEmpty
-                  ? Center(
-                      child: Text("Any hotel is not available for booking"),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: SizeConfig.width * 3,
-                            ),
-                            child: Text(
-                              "Available Hotels",
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
+            return listOfHotel.isEmpty
+                ? Center(
+                    child: Text("Any hotel is not available for booking"),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: SizeConfig.width * 3,
                           ),
-                          SizedBox(
-                            height: SizeConfig.height * 1.5,
+                          child: Text(
+                            "Available Hotels",
+                            style: Theme.of(context).textTheme.headline6,
                           ),
-                          ListView.separated(
-                            scrollDirection: Axis.vertical,
-                            itemCount: listOfHotel.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () => navigate(
-                                  context,
-                                  HotelDetailsScreen(
-                                    hotel: listOfHotel[index],
-                                  ),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.height * 1.5,
+                        ),
+                        ListView.separated(
+                          scrollDirection: Axis.vertical,
+                          itemCount: listOfHotel.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () => navigate(
+                                context,
+                                HotelDetailsScreen(
+                                  hotel: listOfHotel[index],
                                 ),
-                                child: hotelCard(
-                                  context,
-                                  hotelName: listOfHotel[index].hotelName,
-                                  hotelAddress: listOfHotel[index].hotelAddress,
-                                  hotelCity: listOfHotel[index].hotelCity,
-                                  imageUrl: imageOfHotel,
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(
-                                height: SizeConfig.height * 1.5,
-                              );
-                            },
-                            shrinkWrap: true,
-                            primary:  false,
-                          ),
-                        ],
-                      ),
-                    );
-            }),
+                              ),
+                              child: hotelCard(
+                                context,
+                                hotelName: listOfHotel[index].hotelName,
+                                hotelAddress: listOfHotel[index].hotelAddress,
+                                hotelCity: listOfHotel[index].hotelCity,
+                                
+                                hotel: listOfHotel[index],
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(
+                              height: SizeConfig.height * 1.5,
+                            );
+                          },
+                          shrinkWrap: true,
+                          primary: false,
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
       ),
     );
   }
 
   Widget buildListTile(
+    
     BuildContext context, {
     required IconData iconData,
     required String label,
     required Widget widget,
   }) {
+    
     return ListTile(
       leading: Icon(
         iconData,
@@ -189,13 +201,16 @@ class HomeScreen extends StatelessWidget {
   }
 
   Card hotelCard(
+    
     BuildContext context, {
     required String hotelName,
     required String hotelAddress,
     required String hotelCity,
-    required String imageUrl,
+    
+    required Hotel hotel,
   }) {
     return Card(
+      
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
@@ -213,14 +228,31 @@ class HomeScreen extends StatelessWidget {
             Container(
               height: SizeConfig.height * 12,
               width: SizeConfig.height * 12,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(15),
-                image: DecorationImage(
-                  image: NetworkImage(imageUrl),
-                  fit: BoxFit.cover,
-                  scale: 2,
+              // decoration: BoxDecoration(
+
+              //   borderRadius: BorderRadius.circular(15),
+              //   image: DecorationImage(
+              //     image: NetworkImage(hotel.hotelImage!),
+                
+              //     fit: BoxFit.cover,
+              //     scale: 2,
+              //   ),
+              // ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(
+                  SizeConfig.height * 2,
                 ),
+                child: hotel.hotelImage == imageOfHotel
+                ?Image.network(
+                  imageOfHotel,
+                fit: BoxFit.cover,)
+                :Image.memory(
+                        base64Decode(
+                          hotel.hotelImage!,
+                          
+                        ),
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
             SizedBox(

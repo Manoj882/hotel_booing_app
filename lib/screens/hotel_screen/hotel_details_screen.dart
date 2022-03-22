@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/screens/room/room_screen.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +25,6 @@ class HotelDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(hotel.hotelName),
-        
         actions: [
           Provider.of<UserProvider>(context).user.isAdmin
               ? Padding(
@@ -37,9 +40,8 @@ class HotelDetailsScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (_) => EditHotelScreen(
-                              hotelImageUrl: imageOfHotel,
+                              hotelImageUrl: hotel.hotelImage!,
                               model: hotel,
-                              
                             ),
                           ),
                         );
@@ -55,8 +57,6 @@ class HotelDetailsScreen extends StatelessWidget {
                 )
               : SizedBox.shrink(),
         ],
-        
-
       ),
       body: CurvedBodyWidget(
         widget: SingleChildScrollView(
@@ -68,7 +68,7 @@ class HotelDetailsScreen extends StatelessWidget {
               SizedBox(
                 height: SizeConfig.height,
               ),
-              buildHotelDetails(imageUrl: imageOfHotel),
+              buildHotelDetails(context,imageUrl: hotel.hotelImage ?? imageOfHotel),
             ],
           ),
         ),
@@ -76,7 +76,8 @@ class HotelDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildHotelDetails({
+  Widget buildHotelDetails(
+    BuildContext context, {
     required String imageUrl,
   }) {
     return Column(
@@ -84,17 +85,52 @@ class HotelDetailsScreen extends StatelessWidget {
       children: [
         Container(
           height: 250,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(imageUrl),
-            ),
-          ),
+          width: double.infinity,
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //     image: NetworkImage(imageUrl),
+          //   ),
+          // ),
+           child: ClipRRect(
+                borderRadius: BorderRadius.circular(
+                  SizeConfig.height * 2,
+                ),
+                child: hotel.hotelImage == imageOfHotel
+                ?Image.network(
+                  imageOfHotel,
+                fit: BoxFit.cover,)
+                :Image.memory(
+                        base64Decode(
+                          hotel.hotelImage!,
+                          
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+              ),
+          
         ),
         SizedBox(
           height: SizeConfig.height * 1.5,
         ),
         Text(hotel.hotelAddress),
         Text(hotel.hotelCity),
+        Text(hotel.hotelDescription),
+        Text(hotel.hotelAmneties),
+        SizedBox(
+          height: SizeConfig.height * 2,
+        ),
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => ChooseRoomScreen(),
+                ),
+              );
+            },
+            child: Text("Choose Room"),
+          ),
+        ),
       ],
     );
   }

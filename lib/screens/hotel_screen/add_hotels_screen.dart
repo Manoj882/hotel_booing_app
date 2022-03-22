@@ -1,7 +1,13 @@
+
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/models/hotel_model.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
-import 'package:hotel_booking_app/utils/image_bottom_sheet.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../constants/constant.dart';
 import '/utils/curved_body_widget.dart';
 import '/utils/size_config.dart';
 import '/utils/text_form_field.dart';
@@ -10,20 +16,21 @@ import 'package:provider/provider.dart';
 import '/widgets/general_alert_dialog.dart';
 
 class AddHotelsScreen extends StatelessWidget {
-  AddHotelsScreen({required this.hotelImageUrl, Key? key}) : super(key: key);
+  AddHotelsScreen({required this.hotelImageUrl,  Key? key}) : super(key: key);
 
   final hotelNameController = TextEditingController();
   final hotelAddressController = TextEditingController();
   final hotelCityController = TextEditingController();
+  final hotelDescriptionController = TextEditingController();
+  final hotelAmnetiesController = TextEditingController();
   final String hotelImageUrl;
-  final formKey = GlobalKey<FormState>();
-
- 
-
   
+ 
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    
     final future = Provider.of<HotelProvider>(context, listen: false)
         .fetchHotelData(context);
     return Scaffold(
@@ -119,12 +126,52 @@ class AddHotelsScreen extends StatelessWidget {
                       SizedBox(
                         height: SizeConfig.height * 2,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          showBottomImageSheet().showBottomSheet(context);
-                        },
-                        child: Text("Upload Image"),
+                     
+                      
+                      Text(
+                        "Description",
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
+                      SizedBox(
+                        height: SizeConfig.height,
+                      ),
+                      InputTextField(
+                        title: "Description",
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        controller: hotelDescriptionController,
+                        validate: (value) =>
+                            ValidationMixin().validate(value!, "description"),
+                        onFieldSubmitted: (_) {},
+                      ),
+                      SizedBox(
+                        height: SizeConfig.height * 2,
+                      ),
+                      Text(
+                        "Amneties",
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                      SizedBox(
+                        height: SizeConfig.height,
+                      ),
+                      InputTextField(
+                        title: "Amneties",
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        controller: hotelAmnetiesController,
+                        validate: (value) =>
+                            ValidationMixin().validate(value!, "amneties"),
+                        onFieldSubmitted: (_) {},
+                      ),
+                       SizedBox(
+                        height: SizeConfig.height * 2,
+                      ),
+                      // ElevatedButton(
+                      //   onPressed: () async {
+                      //     await showBottomSheet(context);
+                      //   },
+                      //   child: Text("Upload Image"),
+                      // ),
                       SizedBox(
                         height: SizeConfig.height * 2,
                       ),
@@ -148,32 +195,120 @@ class AddHotelsScreen extends StatelessWidget {
       try {
         GeneralAlertDialog().customLoadingDialog(context);
         
-        // final uid = Provider.of<UserProvider>(context, listen: false).user.uuid;
+        
         final map = Hotel(
           hotelName: hotelNameController.text,
           hotelCity: hotelCityController.text,
           hotelAddress: hotelAddressController.text,
-
-          // uuid: uid,
+          hotelDescription: hotelDescriptionController.text,
+          hotelAmneties: hotelAmnetiesController.text,
+          hotelImage: hotelImageUrl, 
         ).toJson();
 
         Navigator.pop(context);
         Navigator.pop(context);
 
-        // await FirebaseHelper().addData(context, map: map, collectionId: HotelConstant.hotelCollection);
-        //add hotel data from HotelProvider
-
-       
-          await Provider.of<HotelProvider>(context, listen: false).addHotelData(
+            await Provider.of<HotelProvider>(context, listen: false).addHotelData(
             context,
             hotelNameController.text,
             hotelCityController.text,
             hotelAddressController.text,
+            hotelDescriptionController.text,
+            hotelAmnetiesController.text,
+            hotelImageUrl,
           );
        
       } catch (ex) {
         print(ex.toString());
       }
     }
+  }
+
+  Future<void> showBottomSheet(BuildContext context) async {
+    
+
+    final imagePicker = ImagePicker();
+
+    await showModalBottomSheet(
+      
+        context: context,
+        builder: (_) => Padding(
+              padding: basePadding,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Choose a source",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  SizedBox(
+                    height: SizeConfig.height * 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      buildPhotoChooseOption(
+                        context,
+                        function: () async {
+                          final xFile = await imagePicker.pickImage(
+                              source: ImageSource.camera,
+                              maxWidth: 480,
+                            maxHeight: 640,);
+                          if (xFile != null) {
+                            final uint8List = await xFile.readAsBytes();
+                                // Provider.of<HotelProvider>(context, listen: false)
+                                // .addHotelImage(context,image: base64Encode(uint8List));
+                          }
+                        },
+                        iconData: Icons.photo_camera_outlined,
+                        label: "Camera",
+                      ),
+                      buildPhotoChooseOption(
+                      
+                        context,
+                        function: () async {
+                         
+                          final xFile = await imagePicker.pickImage(
+                              source: ImageSource.gallery);
+                          if (xFile != null) {
+                            final uint8List = await xFile.readAsBytes();
+                            // Provider.of<HotelProvider>(context, listen: false)
+                            //     .addHotelImage(context,image: base64Encode(uint8List));
+
+                              
+                          }
+                          
+                           
+                        },
+                      
+                        iconData: Icons.collections_outlined,
+                        label: "Gallery",
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+  }
+
+  Column buildPhotoChooseOption(
+    BuildContext context, {
+    required Function function,
+    required IconData iconData,
+    required String label,
+  }) {
+    return Column(
+      children: [
+        IconButton(
+          onPressed: () => function(),
+          color: Theme.of(context).primaryColor,
+          icon: Icon(iconData),
+          iconSize: SizeConfig.height * 5,
+        ),
+        Text(
+          label,
+        ),
+      ],
+    );
   }
 }
