@@ -50,6 +50,7 @@ class HotelProvider extends ChangeNotifier {
 
   set currentHotel(Hotel hotel) {
     _currentHotel = hotel;
+    _currentHotel.id = hotel.id;
     notifyListeners();
   }
 

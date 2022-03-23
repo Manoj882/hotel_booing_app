@@ -30,5 +30,10 @@ class HotelConstant{
   static const hotelId = "id";
 }
 
+class RoomConstants{
+  static const roomCollection = "room";
+  static const roomId ="roomId";
+}
+
 
 

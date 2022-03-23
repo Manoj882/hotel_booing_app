@@ -104,7 +104,9 @@ class FirebaseHelper {
     required String collectionId,
   }) async {
     try {
+      log("calling firebase");
       final docs = await FirebaseFirestore.instance.collection(collectionId).add(map);
+      log("document acheived");
       return docs.id;
     } catch (ex) {
       print(ex.toString());

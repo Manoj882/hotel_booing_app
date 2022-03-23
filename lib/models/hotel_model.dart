@@ -33,6 +33,7 @@ class Hotel{
     hotelDescription = obj["hotelDescription"];
     hotelAmneties = obj["hotelAmneties"];
     hotelImage = obj["hotelImage"];
+    // id = obj["id"];
    
     // uuid = obj["uuid"];
   }

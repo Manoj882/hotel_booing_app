@@ -11,6 +11,7 @@ import '/screens/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '/screens/onboarding_screen.dart';
+import 'providers/room_provider.dart';
 
 bool? seenOnBoard;
 
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => HotelProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RoomProvider(),
         ),
       ],
       child: LayoutBuilder(builder: (context, boxConstraint) {
