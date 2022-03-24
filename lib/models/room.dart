@@ -2,9 +2,11 @@ class Room {
   late String roomName;
   late String hotelId;
 
+
   Room({
     required this.roomName,
     required this.hotelId,
+  
   });
 
   Room.fromJson(Map obj) {
@@ -15,6 +17,8 @@ class Room {
     final map = <String, dynamic>{};
     map["roomName"] = roomName;
     map["hotelId"] = hotelId;
+  
     return map;
   }
 }
+ 

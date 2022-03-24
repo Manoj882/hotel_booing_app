@@ -32,6 +32,7 @@ class HotelConstant{
 
 class RoomConstants{
   static const roomCollection = "room";
+  static const hotelRoomId = "hotelId";
   static const roomId ="roomId";
 }
 

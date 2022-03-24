@@ -76,7 +76,7 @@ class HotelProvider extends ChangeNotifier {
         // });
         for (var element in data.docs) {
           // print(element.data());
-          print(element.id);
+          print("Element id is :${element.id}");
           _listOfHotel.add(Hotel.fromJson(element.data(), element.id));
         }
       }
@@ -113,6 +113,7 @@ class HotelProvider extends ChangeNotifier {
     String hotelDescription,
     String hotelAmneties,
     String hotelImage,
+    
   ) async {
     try {
       // final uuid = Provider.of<UserProvider>(context, listen: false).user.uuid;
@@ -123,6 +124,7 @@ class HotelProvider extends ChangeNotifier {
         hotelDescription: hotelDescription,
         hotelAmneties: hotelAmneties,
         hotelImage: hotelImage,
+       
         // uuid: uuid,
       );
       final map = hotel.toJson();
@@ -131,9 +133,9 @@ class HotelProvider extends ChangeNotifier {
         map: map,
         collectionId: HotelConstant.hotelCollection,
       );
-      // hotel.id = uid;
-      // print(hotel.toJson());
+      hotel.id = uid;
       listOfHotel.add(hotel);
+
       notifyListeners();
     } catch (ex) {
       print(ex.toString());
@@ -144,25 +146,27 @@ class HotelProvider extends ChangeNotifier {
     BuildContext context, {
     required String docId,
     required Hotel hotel,
+    
+  
   }) async {
     await FirebaseHelper().updateData(
       context,
       collectionId: HotelConstant.hotelCollection,
       docId: docId,
        map: hotel.toJson(),
-      //added map without imgaeUrl and id
 
-      //
     );
+    
 
-    log("message");
+    // log("message");
     _listOfHotel.clear();
     notifyListeners();
     
 
     // final oldHotel = listOfHotel.firstWhere((element) => element.id! == docId);
+    // // notifyListeners();
 
-    // log(oldHotel.toJson().toString());
+    // // log(oldHotel.toJson().toString());
 
     // final index = _listOfHotel.indexOf(oldHotel);
     
@@ -172,6 +176,8 @@ class HotelProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
+
+//update image
   updateHotelImage(
     BuildContext context, {
     required String image,

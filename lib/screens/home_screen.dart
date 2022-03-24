@@ -121,6 +121,7 @@ class HomeScreen extends StatelessWidget {
               );
             }
             final listOfHotel = Provider.of<HotelProvider>(context).listOfHotel;
+            
 
             return listOfHotel.isEmpty
                 ? Center(

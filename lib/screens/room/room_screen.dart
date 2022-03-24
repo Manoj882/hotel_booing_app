@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/providers/room_provider.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
+import 'package:hotel_booking_app/utils/size_config.dart';
 import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 import 'package:hotel_booking_app/widgets/general_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class ChooseRoomScreen extends StatelessWidget {
-  const ChooseRoomScreen({required this.hotelId,Key? key}) : super(key: key);
+  const ChooseRoomScreen({required this.hotelId, Key? key}) : super(key: key);
 
   final String hotelId;
 
   @override
   Widget build(BuildContext context) {
+    final future =
+        Provider.of<RoomProvider>(context,listen: false).fetchRoomData(context, hotelId);
     return Scaffold(
       appBar: AppBar(
         title: Text("Choose a room for booking"),
@@ -22,15 +25,16 @@ class ChooseRoomScreen extends StatelessWidget {
                   await GeneralButtomSheet().customBottomSheet(context);
               // print(roomName);
               if (roomName != null) {
-                try{
+                try {
                   GeneralAlertDialog().customLoadingDialog(context);
-                await Provider.of<RoomProvider>(context, listen: false)
-                    .addRoomData(context, roomName, hotelId);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                } catch (ex){
+                  await Provider.of<RoomProvider>(context, listen: false)
+                      .addRoomData(context, roomName, hotelId);
                   Navigator.pop(context);
-                  GeneralAlertDialog().customAlertDialog(context, ex.toString());
+                  Navigator.pop(context);
+                } catch (ex) {
+                  Navigator.pop(context);
+                  GeneralAlertDialog()
+                      .customAlertDialog(context, ex.toString());
                 }
               }
             },
@@ -42,20 +46,56 @@ class ChooseRoomScreen extends StatelessWidget {
       ),
       body: CurvedBodyWidget(
         widget: FutureBuilder(
-            future: Provider.of<RoomProvider>(context).fetchRoomData(context, hotelId),
+            future: future,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Text("Room"),
-                  ],
-                ),
-              );
+              final listOfRoom =
+                  Provider.of<RoomProvider>(context, listen: false).listOfRoom;
+                  print("room is $listOfRoom");
+
+              return listOfRoom.isEmpty
+                  ? Center(
+                      child: Text(
+                        "Any room is not available",
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Select Room",
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          SizedBox(
+                            height: SizeConfig.height * 2,
+                          ),
+                          
+                          GridView.builder(
+                            
+                            itemCount: listOfRoom.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                            ),
+                            itemBuilder: (context, index) {
+                              print(listOfRoom[index].roomName);
+                              return Container(
+                                height: 200,
+                                width: 200,
+                                child: Text(listOfRoom[index].roomName),
+                              );
+                            },
+                            shrinkWrap: true,
+                            primary: false,
+                          ),
+                        ],
+                      ),
+                    );
             }),
       ),
     );

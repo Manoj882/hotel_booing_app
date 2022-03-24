@@ -7,7 +7,7 @@ import '../utils/validation_mixin.dart';
 class GeneralButtomSheet {
   customBottomSheet(BuildContext context) async{
     final roomNameController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
+  
     return await showModalBottomSheet(
         context: context,
         builder: (_) {
@@ -18,8 +18,7 @@ class GeneralButtomSheet {
               right: 16,
               left: 16,
             ),
-            child: Form(
-              key: formKey,
+          
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -50,6 +49,7 @@ class GeneralButtomSheet {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
+                        
                         Navigator.of(context).pop(roomNameController.text);
                       },
                       child: const Text('Add'),
@@ -57,7 +57,7 @@ class GeneralButtomSheet {
                   ),
                 ],
               ),
-            ),
+            
           );
         });
   }

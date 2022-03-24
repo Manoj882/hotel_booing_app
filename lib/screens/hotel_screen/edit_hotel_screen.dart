@@ -29,6 +29,7 @@ class EditHotelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Hotel id calling from edit hotel screen: ${model.id}");
     // final future = Provider.of<HotelProvider>(context, listen: false)
     //     .fetchIndiviudalHotelData(
     //   hotelId: model.id!,
@@ -194,6 +195,7 @@ class EditHotelScreen extends StatelessWidget {
           hotelImage: model.hotelImage,
           id: model.id,
         );
+       
         log(model.id ?? "");
         print(hotelAmnetiesController.text);
 

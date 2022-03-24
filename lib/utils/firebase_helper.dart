@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -102,16 +102,17 @@ class FirebaseHelper {
     BuildContext context, {
     required Map<String, dynamic> map,
     required String collectionId,
-  }) async {
+  }) async { 
     try {
-      log("calling firebase");
+      // log("calling firebase");
       final docs = await FirebaseFirestore.instance.collection(collectionId).add(map);
-      log("document acheived");
+      // log("document acheived");
       return docs.id;
     } catch (ex) {
       print(ex.toString());
     }
   }
+
 
   updateData(
     BuildContext context, {
@@ -124,7 +125,7 @@ class FirebaseHelper {
           .collection(collectionId)
           .doc(docId)
           .update(map);
-          print("object");
+          // print("object");
     } catch (ex) {
       print(ex.toString());
     }
