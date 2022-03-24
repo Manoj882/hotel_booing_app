@@ -124,7 +124,7 @@ class HotelDetailsScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (_) => ChooseRoomScreen(hotelId: hotel.id!,),
+                  builder: (_) => ChooseRoomScreen(hotelId: hotel.id!,hotel: hotel,),
                 ),
               );
             },

@@ -7,6 +7,8 @@ import '../utils/validation_mixin.dart';
 class GeneralButtomSheet {
   customBottomSheet(BuildContext context) async{
     final roomNameController = TextEditingController();
+    final roomInformationController = TextEditingController();
+    final roomPriceController = TextEditingController();
   
     return await showModalBottomSheet(
         context: context,
@@ -23,8 +25,8 @@ class GeneralButtomSheet {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                   Text(
-                          "Hotel Name",
+                        Text(
+                          "Room Name",
                           style: Theme.of(context).textTheme.bodyText2,
                         ),
                         SizedBox(
@@ -34,6 +36,44 @@ class GeneralButtomSheet {
                           title: "Enter room name",
                           textInputType: TextInputType.text,
                           textInputAction: TextInputAction.next,
+                          controller: roomNameController,
+                          validate: (value) =>
+                              ValidationMixin().validate(value!, "room name"),
+                          onFieldSubmitted: (_) {},
+                        ),
+                        SizedBox(
+                          height: SizeConfig.height * 2,
+                        ),
+                        Text(
+                          "Room Information",
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        SizedBox(
+                          height: SizeConfig.height,
+                        ),
+                        InputTextField(
+                          title: "Enter room information",
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          controller: roomNameController,
+                          validate: (value) =>
+                              ValidationMixin().validate(value!, "room name"),
+                          onFieldSubmitted: (_) {},
+                        ),
+                        SizedBox(
+                          height: SizeConfig.height * 2,
+                        ),
+                        Text(
+                          "Room Price",
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        SizedBox(
+                          height: SizeConfig.height,
+                        ),
+                        InputTextField(
+                          title: "Enter room price",
+                          textInputType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
                           controller: roomNameController,
                           validate: (value) =>
                               ValidationMixin().validate(value!, "hotel name"),
@@ -50,7 +90,7 @@ class GeneralButtomSheet {
                     child: ElevatedButton(
                       onPressed: () {
                         
-                        Navigator.of(context).pop(roomNameController.text);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('Add'),
                     ),

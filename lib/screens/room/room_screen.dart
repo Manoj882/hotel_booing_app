@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/providers/room_provider.dart';
+import 'package:hotel_booking_app/screens/room/add_room_screen.dart';
+import 'package:hotel_booking_app/screens/room/room_details_screen.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
+import 'package:hotel_booking_app/utils/navigate.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
-import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
-import 'package:hotel_booking_app/widgets/general_bottom_sheet.dart';
+
+
 import 'package:provider/provider.dart';
 
+import '../../models/hotel_model.dart';
+
+
 class ChooseRoomScreen extends StatelessWidget {
-  const ChooseRoomScreen({required this.hotelId, Key? key}) : super(key: key);
+  const ChooseRoomScreen({required this.hotelId, required this.hotel, Key? key})
+      : super(key: key);
 
   final String hotelId;
+  final Hotel hotel;
 
   @override
   Widget build(BuildContext context) {
-    final future =
-        Provider.of<RoomProvider>(context,listen: false).fetchRoomData(context, hotelId);
+    final future = Provider.of<RoomProvider>(context, listen: true)
+        .fetchRoomData(context, hotelId);
     return Scaffold(
       appBar: AppBar(
         title: Text("Choose a room for booking"),
         actions: [
           IconButton(
-            onPressed: () async {
-              final roomName =
-                  await GeneralButtomSheet().customBottomSheet(context);
-              // print(roomName);
-              if (roomName != null) {
-                try {
-                  GeneralAlertDialog().customLoadingDialog(context);
-                  await Provider.of<RoomProvider>(context, listen: false)
-                      .addRoomData(context, roomName, hotelId);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                } catch (ex) {
-                  Navigator.pop(context);
-                  GeneralAlertDialog()
-                      .customAlertDialog(context, ex.toString());
-                }
-              }
+            onPressed: () async { 
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AddRoomScreen(hotelId: hotelId),
+                ),
+              );
             },
             icon: Icon(
               Icons.add_outlined,
@@ -55,7 +53,7 @@ class ChooseRoomScreen extends StatelessWidget {
               }
               final listOfRoom =
                   Provider.of<RoomProvider>(context, listen: false).listOfRoom;
-                  print("room is $listOfRoom");
+              print("room is $listOfRoom");
 
               return listOfRoom.isEmpty
                   ? Center(
@@ -74,20 +72,30 @@ class ChooseRoomScreen extends StatelessWidget {
                           SizedBox(
                             height: SizeConfig.height * 2,
                           ),
-                          
                           GridView.builder(
-                            
                             itemCount: listOfRoom.length,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
+                              childAspectRatio: 2,
+                              mainAxisSpacing: SizeConfig.height,
+                              crossAxisSpacing: SizeConfig.width * 3,
                             ),
                             itemBuilder: (context, index) {
                               print(listOfRoom[index].roomName);
-                              return Container(
-                                height: 200,
-                                width: 200,
-                                child: Text(listOfRoom[index].roomName),
+                              return InkWell(
+                                onTap: () => navigate(
+                                  context,
+                                  RoomDetailsScreen(
+                                    room: listOfRoom[index],
+                                    hotel: hotel,
+                                  ),
+                                ),
+                                child: Card(
+                                  child: Center(
+                                    child: Text(listOfRoom[index].roomName),
+                                  ),
+                                ),
                               );
                             },
                             shrinkWrap: true,
