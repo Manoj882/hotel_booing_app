@@ -14,11 +14,11 @@ class User{
     required this.uuid,
     required this.name,
     required this.email,
-    required this.image,
+     this.image,
     required this.photoUrl,
-    required this.address,
-    required this.age,
-    required this.isAdmin,
+     this.address,
+     this.age,
+     this.isAdmin = false,
  
     
   });

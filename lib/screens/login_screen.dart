@@ -15,6 +15,7 @@ import '/screens/home_screen.dart';
 import '/screens/signup_screen.dart';
 import '/widgets/general_alert_dialog.dart';
 import '/utils/choose_account_button.dart';
+import '/models/user.dart' as us;
 import '/utils/submit_button.dart';
 import '/utils/text_form_field.dart';
 import '/constants/constant.dart';
@@ -149,7 +150,13 @@ class LoginScreen extends StatelessWidget {
                             //added line
                             final User user = authResult.user!;
 
-                            
+                            Provider.of<UserProvider>(context, listen: false).setUser(us.User(
+                              
+                              email: user.email,
+                              name: user.displayName,
+                              photoUrl: user.photoURL,
+                              uuid: user.uid
+                            ).toJson());
 
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
