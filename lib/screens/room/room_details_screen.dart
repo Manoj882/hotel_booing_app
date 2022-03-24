@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/screens/book_room/book_room_screen.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
 
@@ -29,7 +30,36 @@ class RoomDetailsScreen extends StatelessWidget {
               ),
               SizedBox(
                 height: SizeConfig.height,
-              )
+              ),
+              Text(
+                room.roomInformation,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              SizedBox(
+                height: SizeConfig.height,
+              ),
+              Text(
+                room.roomPrice.toString(),
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              SizedBox(
+                height: SizeConfig.height,
+              ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BookRoomscreen(roomId: room.id!,),
+                      ),
+                    );
+                  },
+                  child: Text("Book Room"),
+                ),
+              ),
             ],
           ),
         ),

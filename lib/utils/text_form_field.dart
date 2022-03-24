@@ -4,27 +4,31 @@ import 'package:flutter/material.dart';
 class InputTextField extends StatefulWidget {
   const InputTextField(
       {required this.title,
-      required this.textInputType,
-      required this.textInputAction,
+      this.textInputType,
+      this.textInputAction,
       required this.controller,
       required this.validate,
       this.isObscure = false,
       required this.onFieldSubmitted,
        this.prefixIcon,
        this.iconData,
+       this.readOnly =false,
+       this.onTap,
        
       Key? key})
       : super(key: key);
 
   final String title;
-  final TextInputType textInputType;
-  final TextInputAction textInputAction;
+  final TextInputType? textInputType;
+  final TextInputAction? textInputAction;
   final TextEditingController controller;
   final bool isObscure;
   final Icon? prefixIcon;
   final IconData? iconData;
   final String? Function(String?)? validate;
   final Function(String)? onFieldSubmitted;
+  final bool readOnly;
+  final void Function()? onTap;
   @override
   State<InputTextField> createState() => _InputTextFieldState();
 }
@@ -45,6 +49,7 @@ class _InputTextFieldState extends State<InputTextField> {
       textInputAction: widget.textInputAction,
       controller: widget.controller,
       obscureText: toHide,
+      readOnly: widget.readOnly,
       decoration: InputDecoration(
         prefixIcon: widget.prefixIcon,
         hintText: widget.title,
@@ -64,6 +69,7 @@ class _InputTextFieldState extends State<InputTextField> {
       ),
       validator: widget.validate,
       onFieldSubmitted: widget.onFieldSubmitted,
+      onTap: widget.onTap,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
+import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
 import 'package:hotel_booking_app/utils/google_map.dart';
 import '../models/hotel_model.dart';
 import '/providers/user_provider.dart';
@@ -99,6 +100,13 @@ class HomeScreen extends StatelessWidget {
                 iconData: Icons.person_outlined,
                 label: "Profile",
                 widget: ProfileScreen(imageUrl: image),
+              ),
+
+              buildListTile(
+                context,
+                iconData: Icons.book_online_outlined, 
+                label: "Reservation",
+                widget: ListOfBookingRoom(),
               ),
               //  buildListTile(
               //   context,

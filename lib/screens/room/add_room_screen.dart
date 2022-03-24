@@ -129,8 +129,7 @@ class AddRoomScreen extends StatelessWidget {
                 roomPrice: double.parse(roomPriceController.text),
                 hotelId: hotelId).toJson();
 
-        Navigator.pop(context);
-        Navigator.pop(context);
+       
 
         await Provider.of<RoomProvider>(context, listen: false).addRoomData(
           context, 
@@ -138,6 +137,9 @@ class AddRoomScreen extends StatelessWidget {
           roomInformationController.text, 
           double.parse(roomPriceController.text), 
           hotelId,);
+
+        Navigator.pop(context);
+        Navigator.pop(context);
         
         
     
