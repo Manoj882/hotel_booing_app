@@ -36,4 +36,21 @@ class GeneralAlertDialog {
       ),
     );
   }
+
+  Future<void>customMessageDialog(BuildContext context) async{
+    return await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Sorry, room is already booked"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Ok"),
+          ),
+        ],
+      ),
+    );
+  }
 }

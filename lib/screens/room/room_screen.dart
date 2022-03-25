@@ -5,6 +5,7 @@ import 'package:hotel_booking_app/screens/room/room_details_screen.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/navigate.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
+import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 
 
 import 'package:provider/provider.dart';
@@ -72,32 +73,45 @@ class ChooseRoomScreen extends StatelessWidget {
                           SizedBox(
                             height: SizeConfig.height * 2,
                           ),
-                          GridView.builder(
+                          ListView.separated(
                             itemCount: listOfRoom.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 2,
-                              mainAxisSpacing: SizeConfig.height,
-                              crossAxisSpacing: SizeConfig.width * 3,
-                            ),
+                            
                             itemBuilder: (context, index) {
                               print(listOfRoom[index].roomName);
                               return InkWell(
-                                onTap: () => navigate(
+                                
+                                onTap: () {
+                                  print("Booking status: ${listOfRoom[index].isBooked}");
+                                  listOfRoom[index].isBooked ?
+                                  GeneralAlertDialog().customMessageDialog(context)
+
+                                  : navigate(
                                   context,
                                   RoomDetailsScreen(
                                     room: listOfRoom[index],
                                     hotel: hotel,
                                   ),
-                                ),
-                                child: Card(
-                                  child: Center(
-                                    child: Text(listOfRoom[index].roomName),
+                                  );
+                                
+                                
+                            },
+                                child: Container(
+                                  height: SizeConfig.height * 12,
+                                  width: double.infinity,
+                                  child: Card(
+                                    elevation: 3,
+                                    child: Center(
+                                      child: Text(listOfRoom[index].roomName),
+                                    ),
                                   ),
                                 ),
                               );
                             },
+                             separatorBuilder: (context, index) {
+                            return SizedBox(
+                              height: SizeConfig.height * 1.5,
+                            );
+                          },
                             shrinkWrap: true,
                             primary: false,
                           ),
