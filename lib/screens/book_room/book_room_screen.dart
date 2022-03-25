@@ -100,7 +100,7 @@ class BookRoomscreen extends StatelessWidget {
                   height: SizeConfig.height,
                 ),
                 InputTextField(
-                  title: "Enter check",
+                  title: "Enter check out",
                   readOnly: true,
                   controller: checkOutController,
                   validate: (value) =>

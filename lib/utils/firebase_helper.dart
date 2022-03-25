@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../widgets/general_alert_dialog.dart';
@@ -16,7 +14,6 @@ class FirebaseHelper {
       GeneralAlertDialog().customLoadingDialog(context);
 
       final data = await getData(
-        
         collectionId: collectionId,
         whereId: whereId,
         whereValue: whereValue,
@@ -26,6 +23,7 @@ class FirebaseHelper {
         await FirebaseFirestore.instance.collection(collectionId).add(map);
       } else {
         data.docs.first.reference.update(map);
+        
       }
 
       Navigator.pop(context);
@@ -47,7 +45,6 @@ class FirebaseHelper {
       GeneralAlertDialog().customLoadingDialog(context);
 
       final data = await getData(
-        
         collectionId: collectionId,
         whereId: whereId,
         whereValue: whereValue,
@@ -76,8 +73,7 @@ class FirebaseHelper {
     }
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getData(
-     {
+  Future<QuerySnapshot<Map<String, dynamic>>> getData({
     required String collectionId,
     required String whereId,
     required String whereValue,
@@ -102,10 +98,11 @@ class FirebaseHelper {
     BuildContext context, {
     required Map<String, dynamic> map,
     required String collectionId,
-  }) async { 
+  }) async {
     try {
       // log("calling firebase");
-      final docs = await FirebaseFirestore.instance.collection(collectionId).add(map);
+      final docs =
+          await FirebaseFirestore.instance.collection(collectionId).add(map);
       // log("document acheived");
       return docs.id;
     } catch (ex) {
@@ -113,7 +110,7 @@ class FirebaseHelper {
     }
   }
 
-
+  //update data
   updateData(
     BuildContext context, {
     required Map<String, dynamic> map,
@@ -125,7 +122,25 @@ class FirebaseHelper {
           .collection(collectionId)
           .doc(docId)
           .update(map);
-          // print("object");
+      // print("object");
+    } catch (ex) {
+      print(ex.toString());
+    }
+  }
+
+  //delete data
+   Future<void>deleteData(
+    BuildContext context, {
+    
+    required String collectionId,
+    required String docId,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(collectionId)
+          .doc(docId)
+          .delete();
+      // print("object");
     } catch (ex) {
       print(ex.toString());
     }

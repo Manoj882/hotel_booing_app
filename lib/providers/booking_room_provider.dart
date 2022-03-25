@@ -20,14 +20,14 @@ class BookingRoomProvider extends ChangeNotifier {
       if (_listOfBookingRoom.isNotEmpty) _listOfBookingRoom.clear();
       final data = await FirebaseHelper().getData(
         collectionId: BookingRoomConstants.bookingCollection,
-       
         whereId: BookingRoomConstants.userId,
         whereValue: userId,
       );
       if (data.docs.length != _listOfBookingRoom.length) {
         _listOfBookingRoom.clear();
         for (var element in data.docs) {
-          _listOfBookingRoom.add(BookingRoom.fromJson(element.data(),element.id));
+          _listOfBookingRoom
+              .add(BookingRoom.fromJson(element.data(), element.id));
         }
       }
     } catch (ex) {
@@ -42,16 +42,10 @@ class BookingRoomProvider extends ChangeNotifier {
     DateTime checkIn,
     DateTime checkOut,
     int numberOfPerson,
-   
     String hotelName,
     String roomName,
     String roomId,
-     String userId,
-    
-   
-    
-    
-
+    String userId,
   ) async {
     try {
       final booking = BookingRoom(
@@ -67,7 +61,6 @@ class BookingRoomProvider extends ChangeNotifier {
 
       // room Id, roomName, Hotel Name
 
-
       final map = booking.toJson();
 
       final bid = await FirebaseHelper().addData(
@@ -78,7 +71,8 @@ class BookingRoomProvider extends ChangeNotifier {
 
       // TODO: Uncomment and add room Id
 
-      await Provider.of<RoomProvider>(context, listen: false).updateRoomStatus(context, roomId: roomId, isBooked: true);
+      await Provider.of<RoomProvider>(context, listen: false)
+          .updateRoomStatus(context, roomId: roomId, isBooked: true);
 
       booking.id = bid;
       listOfBookingRoom.add(booking);
@@ -87,5 +81,21 @@ class BookingRoomProvider extends ChangeNotifier {
       print(ex.toString());
       throw ex.toString();
     }
+  }
+
+  deleteBooking(
+    BuildContext context, {
+    required String docId,
+    required String roomId,
+  }) async {
+    FirebaseHelper().deleteData(
+      context,
+      collectionId: BookingRoomConstants.bookingCollection,
+      docId: docId,
+    );
+
+    await Provider.of<RoomProvider>(context, listen: false)
+        .updateRoomStatus(context, roomId: roomId, isBooked: false);
+    notifyListeners();
   }
 }
