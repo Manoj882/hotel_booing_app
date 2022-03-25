@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/constants/constant.dart';
+import 'package:hotel_booking_app/providers/room_provider.dart';
+import 'package:hotel_booking_app/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../models/booking_room_model.dart';
+import '../models/hotel_model.dart';
+import '../models/room.dart';
 import '../utils/firebase_helper.dart';
 
 class BookingRoomProvider extends ChangeNotifier {
@@ -9,14 +14,15 @@ class BookingRoomProvider extends ChangeNotifier {
 
   List<BookingRoom> get listOfBookingRoom => _listOfBookingRoom;
 
-  fetchBookingData(BuildContext context, String roomId, String userId) async {
+  fetchBookingData(BuildContext context, String userId) async {
+    // final userId = Provider.of<UserProvider>(context).user.uuid;
     try {
       if (_listOfBookingRoom.isNotEmpty) _listOfBookingRoom.clear();
       final data = await FirebaseHelper().getData(
         collectionId: BookingRoomConstants.bookingCollection,
-        // whereId: RoomConstants.hotelRoomId,
-        whereId: BookingRoomConstants.bookingRoomId,
-        whereValue: roomId,
+       
+        whereId: BookingRoomConstants.userId,
+        whereValue: userId,
       );
       if (data.docs.length != _listOfBookingRoom.length) {
         _listOfBookingRoom.clear();
@@ -36,7 +42,16 @@ class BookingRoomProvider extends ChangeNotifier {
     DateTime checkIn,
     DateTime checkOut,
     int numberOfPerson,
+   
+    String hotelName,
+    String roomName,
     String roomId,
+     String userId,
+    
+   
+    
+    
+
   ) async {
     try {
       final booking = BookingRoom(
@@ -44,8 +59,14 @@ class BookingRoomProvider extends ChangeNotifier {
         checkIn: checkIn,
         checkOut: checkOut,
         numberOfPerson: numberOfPerson,
+        hotelName: hotelName,
+        roomName: roomName,
         roomId: roomId,
+        userId: userId,
       );
+
+      // room Id, roomName, Hotel Name
+
 
       final map = booking.toJson();
 
@@ -54,6 +75,11 @@ class BookingRoomProvider extends ChangeNotifier {
         map: map,
         collectionId: BookingRoomConstants.bookingCollection,
       );
+
+      // TODO: Uncomment and add room Id
+
+      await Provider.of<RoomProvider>(context, listen: false).updateRoomStatus(context, roomId: roomId, isBooked: true);
+
       booking.id = bid;
       listOfBookingRoom.add(booking);
       notifyListeners();

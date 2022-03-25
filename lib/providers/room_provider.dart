@@ -65,4 +65,26 @@ class RoomProvider extends ChangeNotifier {
       throw ex.toString();
     }
   }
+
+  updateRoomStatus(BuildContext context,{required String roomId, required bool isBooked,} ) async{
+    try {
+      final map = {
+        "isBooked": isBooked
+      };
+
+      await FirebaseHelper().updateData(
+        context,
+        map: map,
+        collectionId: RoomConstants.roomCollection,
+        docId: roomId,
+      );
+
+      final room = _listOfRoom.firstWhere((element) => element.id == roomId);
+      room.isBooked = isBooked;
+      notifyListeners();
+    } catch (ex) {
+      print(ex.toString());
+      throw ex.toString();
+    }
+  }
 }

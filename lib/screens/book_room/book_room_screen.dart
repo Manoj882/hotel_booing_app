@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hotel_booking_app/models/booking_room_model.dart';
+import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/show_date_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/hotel_model.dart';
+import '../../models/room.dart';
 import '../../providers/booking_room_provider.dart';
 import '../../providers/room_provider.dart';
 import '../../utils/size_config.dart';
@@ -13,7 +16,7 @@ import '../../utils/validation_mixin.dart';
 import '../../widgets/general_alert_dialog.dart';
 
 class BookRoomscreen extends StatelessWidget {
-  BookRoomscreen({required this.roomId,Key? key}) : super(key: key);
+  BookRoomscreen({required this.hotel, required this.room,Key? key}) : super(key: key);
 
   final bookingDateController = TextEditingController();
   final checkInController = TextEditingController();
@@ -21,10 +24,15 @@ class BookRoomscreen extends StatelessWidget {
   final numberOfPersonController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  final String roomId;
+  final Hotel hotel;
+  final Room room;
+
+
+  
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text("Book Room"),
@@ -144,23 +152,27 @@ class BookRoomscreen extends StatelessWidget {
   }
 
   submit(BuildContext context) async {
-    print("datetime called");
     if (formKey.currentState!.validate()) {
       try {
         GeneralAlertDialog().customLoadingDialog(context);
+
+        final userId = Provider.of<UserProvider>(context, listen: false).user.uuid;
 
         final map = BookingRoom(
           bookingDate: DateTime.parse(bookingDateController.text),
           checkIn: DateTime.parse(checkInController.text),
           checkOut: DateTime.parse(checkOutController.text),
           numberOfPerson: int.parse(numberOfPersonController.text),
-          roomId: roomId,
+          hotelName: hotel.hotelName,
+          roomName: room.roomName,
+          roomId: room.id!,
+          // roomName, hoteName
+          userId: userId,
+          
         ).toJson();
 
-        Navigator.pop(context);
-        Navigator.pop(context);
-        print("2nd time calling");
-
+        
+        
         await Provider.of<BookingRoomProvider>(context, listen: false)
             .addBookingData(
           context,
@@ -168,11 +180,19 @@ class BookRoomscreen extends StatelessWidget {
           DateTime.parse(checkInController.text),
           DateTime.parse(checkOutController.text),
           int.parse(numberOfPersonController.text),
-          roomId,
+          hotel.hotelName,
+          room.roomName,
+          room.id!, 
+          
+          userId,
+          
           
         ); 
-        print("3rd time calling");
 
+        Navigator.pop(context);
+        Navigator.pop(context);
+
+       
         
       } catch (ex) {
         print(ex.toString());

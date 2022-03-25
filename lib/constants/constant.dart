@@ -40,6 +40,7 @@ class BookingRoomConstants{
   static const bookingCollection = "booking";
   static const bookingRoomId = "roomId";
   static const bookingId ="bookingId";
+  static const userId = "userId";
 }
 
 

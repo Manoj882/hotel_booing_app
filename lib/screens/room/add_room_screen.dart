@@ -136,7 +136,9 @@ class AddRoomScreen extends StatelessWidget {
           roomNameController.text, 
           roomInformationController.text, 
           double.parse(roomPriceController.text), 
-          hotelId,);
+          hotelId,
+          
+          );
 
         Navigator.pop(context);
         Navigator.pop(context);

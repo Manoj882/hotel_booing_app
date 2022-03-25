@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/constants/constant.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
+import 'package:hotel_booking_app/providers/room_provider.dart';
 import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
 import 'package:hotel_booking_app/utils/google_map.dart';
 import '../models/hotel_model.dart';
+import '../models/room.dart';
 import '/providers/user_provider.dart';
 import '/screens/hotel_screen/add_hotels_screen.dart';
 import '/utils/curved_body_widget.dart';
@@ -16,11 +20,13 @@ import '../profile/profile_screen.dart';
 import 'hotel_screen/hotel_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
   final image = "assets/images/profile.png";
   final String imageOfHotel =
       "https://www.nepal-travel-guide.com/wp-content/uploads/2020/05/image-156.png";
+
+  
 
     
 
@@ -237,16 +243,7 @@ class HomeScreen extends StatelessWidget {
             Container(
               height: SizeConfig.height * 12,
               width: SizeConfig.height * 12,
-              // decoration: BoxDecoration(
-
-              //   borderRadius: BorderRadius.circular(15),
-              //   image: DecorationImage(
-              //     image: NetworkImage(hotel.hotelImage!),
-                
-              //     fit: BoxFit.cover,
-              //     scale: 2,
-              //   ),
-              // ),
+              
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(
                   SizeConfig.height * 2,

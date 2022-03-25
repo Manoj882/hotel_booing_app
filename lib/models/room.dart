@@ -4,12 +4,14 @@ class Room {
   late String roomInformation;
   late double roomPrice;
   late String? id;
+  bool isBooked = false;
 
   Room({
     required this.roomName,
     required this.roomInformation,
     required this.roomPrice,
     required this.hotelId,
+    this.isBooked = false,
   });
 
   Room.fromJson(
@@ -20,6 +22,7 @@ class Room {
     roomInformation = obj["roomInformation"];
     roomPrice = obj["roomPrice"];
     hotelId = obj["hotelId"];
+    isBooked = obj["isBooked"];
   }
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -27,6 +30,7 @@ class Room {
     map["roomInformation"] = roomInformation;
     map["roomPrice"] = roomPrice;
     map["hotelId"] = hotelId;
+    map["isBooked"] = isBooked;
     
 
     return map;

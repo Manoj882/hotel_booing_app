@@ -6,7 +6,11 @@ class BookingRoom {
   DateTime checkOut = DateTime.now();
   late int numberOfPerson;
   late String roomId;
+  late String userId;
   late String? id;
+  late String hotelName;
+  late String roomName;
+
 
   BookingRoom({
     required this.bookingDate,
@@ -14,6 +18,10 @@ class BookingRoom {
     required this.checkOut,
     required this.numberOfPerson,
     required this.roomId,
+    
+    required this.hotelName,
+    required this.roomName,
+    required this.userId,
   });
 
   BookingRoom.fromJson(
@@ -25,6 +33,10 @@ class BookingRoom {
     checkOut = (obj["checkOut"]as Timestamp).toDate();
     numberOfPerson = obj["numberOfPerson"];
     roomId = obj["roomId"];
+    
+    hotelName = obj["hotelName"];
+    roomName = obj["roomName"];
+    userId = obj["userId"];
   }
 
   Map<String, dynamic> toJson() {
@@ -34,6 +46,10 @@ class BookingRoom {
     map["checkOut"] = checkOut;
     map["numberOfPerson"] = numberOfPerson;
     map["roomId"] = roomId;
+    map["hotelName"] = hotelName;
+    map["roomName"] = roomName;
+
+    map["userId"] = userId;
     return map;
   }
 }

@@ -53,7 +53,7 @@ class RoomDetailsScreen extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => BookRoomscreen(roomId: room.id!,),
+                        builder: (_) => BookRoomscreen(hotel: hotel,room: room,),
                       ),
                     );
                   },
