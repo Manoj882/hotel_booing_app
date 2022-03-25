@@ -1,53 +1,44 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hotel_booking_app/constants/constant.dart';
 import 'package:hotel_booking_app/providers/booking_room_provider.dart';
-import 'package:hotel_booking_app/providers/room_provider.dart';
-import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
-import 'package:hotel_booking_app/utils/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/booking_room_model.dart';
-import '../../models/room.dart';
+import '../../utils/size_config.dart';
 
-class ListOfBookingRoom extends StatelessWidget {
-  const ListOfBookingRoom({Key? key}) : super(key: key);
+class AllUserBookedRoom extends StatelessWidget {
+  const AllUserBookedRoom({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final userId = Provider.of<UserProvider>(context).user.uuid;
-
-   
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your All Reservation"),
+        title: Text(
+          "User Booking Rooms",
+        ),
       ),
       body: CurvedBodyWidget(
-        widget: SingleChildScrollView(
-          child: Column(
-            children: [
-              FutureBuilder(
-                  future:
-                      Provider.of<BookingRoomProvider>(context, listen: true)
-                          .fetchBookingData(
-                    context,
-                    userId,
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    final listOfBooking =
-                        Provider.of<BookingRoomProvider>(context)
-                            .listOfBookingRoom;
+        widget: FutureBuilder(
+          future: Provider.of<BookingRoomProvider>(context, listen: true).fetchAllBookingData(context),
 
-                    return ListView.separated(
+          builder: (context,snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+              
+            }
+            final listOfBooking = Provider.of<BookingRoomProvider>(context).listOfBookingRoom;
+
+            return listOfBooking.isEmpty
+            ? Center(
+              child: Text("Any room is not booking"),
+            )
+            : SingleChildScrollView(
+              child: Column(
+                children: [
+
+                  ListView.separated(
                       itemCount: listOfBooking.length,
                       itemBuilder: (context, index) {
                         return bookingCard(
@@ -66,14 +57,19 @@ class ListOfBookingRoom extends StatelessWidget {
                       },
                       shrinkWrap: true,
                       primary: false,
-                    );
-                  }),
-            ],
-          ),
+                    ),
+                  
+                ],
+              ),
+            );
+          }
         ),
       ),
     );
   }
+
+
+
 
   bookingCard(
     BuildContext context, {

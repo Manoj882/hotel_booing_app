@@ -21,7 +21,7 @@ class HotelDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Hotel id calling from hotel details page: ${hotel.id}");
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(hotel.hotelName),

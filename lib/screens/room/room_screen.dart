@@ -11,6 +11,7 @@ import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/hotel_model.dart';
+import '../../providers/user_provider.dart';
 
 
 class ChooseRoomScreen extends StatelessWidget {
@@ -28,6 +29,7 @@ class ChooseRoomScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Choose a room for booking"),
         actions: [
+          Provider.of<UserProvider>(context).user.isAdmin ?
           IconButton(
             onPressed: () async { 
               Navigator.push(
@@ -40,7 +42,8 @@ class ChooseRoomScreen extends StatelessWidget {
             icon: Icon(
               Icons.add_outlined,
             ),
-          ),
+          )
+          : SizedBox.shrink(),
         ],
       ),
       body: CurvedBodyWidget(

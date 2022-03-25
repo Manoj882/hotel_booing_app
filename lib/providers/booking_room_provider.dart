@@ -36,6 +36,44 @@ class BookingRoomProvider extends ChangeNotifier {
     }
   }
 
+
+
+
+  //fetch all booking data
+  fetchAllBookingData(BuildContext context) async {
+    try {
+      
+      final data = await FirebaseHelper().getAllData(
+        context,
+        collectionId: BookingRoomConstants.bookingCollection,
+      );
+      // log("being called");
+      if (data.docs.length != _listOfBookingRoom.length) {
+        _listOfBookingRoom.clear();
+        
+        for (var element in data.docs) {
+          
+          _listOfBookingRoom.add(BookingRoom.fromJson(element.data(), element.id));
+        }
+      }
+    } catch (ex) {
+      print(ex.toString());
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   addBookingData(
     BuildContext context,
     DateTime bookingDate,

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/constants/constant.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
 import 'package:hotel_booking_app/providers/room_provider.dart';
+import 'package:hotel_booking_app/screens/book_room/all_user_booked_room.dart';
 import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
+import 'package:hotel_booking_app/screens/login_screen.dart';
 import 'package:hotel_booking_app/utils/google_map.dart';
 import '../models/hotel_model.dart';
 import '../models/room.dart';
@@ -108,11 +110,26 @@ class HomeScreen extends StatelessWidget {
                 widget: ProfileScreen(imageUrl: image),
               ),
 
+              Provider.of<UserProvider>(context).user.isAdmin ?
               buildListTile(
+                context,
+                iconData: Icons.book_online_outlined, 
+                label: "Reservations",
+                widget: AllUserBookedRoom(),
+              )
+
+
+              : buildListTile(
                 context,
                 iconData: Icons.book_online_outlined, 
                 label: "Reservation",
                 widget: ListOfBookingRoom(),
+              ),
+              buildListTile(
+                context,
+                iconData: Icons.logout_outlined, 
+                label: "Log Out",
+                widget: LoginScreen(),
               ),
               //  buildListTile(
               //   context,

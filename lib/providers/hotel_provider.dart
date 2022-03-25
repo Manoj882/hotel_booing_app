@@ -76,7 +76,7 @@ class HotelProvider extends ChangeNotifier {
         // });
         for (var element in data.docs) {
           // print(element.data());
-          print("Element id is :${element.id}");
+          // print("Element id is :${element.id}");
           _listOfHotel.add(Hotel.fromJson(element.data(), element.id));
         }
       }
