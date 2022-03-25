@@ -62,18 +62,6 @@ class BookingRoomProvider extends ChangeNotifier {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   addBookingData(
     BuildContext context,
     DateTime bookingDate,
@@ -82,6 +70,7 @@ class BookingRoomProvider extends ChangeNotifier {
     int numberOfPerson,
     String hotelName,
     String roomName,
+    String userEmail,
     String roomId,
     String userId,
   ) async {
@@ -93,6 +82,7 @@ class BookingRoomProvider extends ChangeNotifier {
         numberOfPerson: numberOfPerson,
         hotelName: hotelName,
         roomName: roomName,
+        userEmail: userEmail,
         roomId: roomId,
         userId: userId,
       );

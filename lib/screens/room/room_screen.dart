@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/constants/constant.dart';
+import 'package:hotel_booking_app/models/room.dart';
 import 'package:hotel_booking_app/providers/room_provider.dart';
 import 'package:hotel_booking_app/screens/room/add_room_screen.dart';
 import 'package:hotel_booking_app/screens/room/room_details_screen.dart';
@@ -7,19 +11,26 @@ import 'package:hotel_booking_app/utils/navigate.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
 import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 
-
 import 'package:provider/provider.dart';
 
 import '../../models/hotel_model.dart';
+import '../../models/user.dart';
 import '../../providers/user_provider.dart';
 
-
 class ChooseRoomScreen extends StatelessWidget {
-  const ChooseRoomScreen({required this.hotelId, required this.hotel, Key? key})
+  const ChooseRoomScreen(
+      {required this.hotelId,
+      required this.hotel,
+      required this.user,
+      Key? key})
       : super(key: key);
 
   final String hotelId;
   final Hotel hotel;
+  final User user;
+
+  final String imageOfRoom =
+      "https://upload.wikimedia.org/wikipedia/commons/3/35/Ibis_Hotels_Dresden_Single_Room_Standard_Queen_Size_Bed.png";
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +40,24 @@ class ChooseRoomScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Choose a room for booking"),
         actions: [
-          Provider.of<UserProvider>(context).user.isAdmin ?
-          IconButton(
-            onPressed: () async { 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => AddRoomScreen(hotelId: hotelId),
-                ),
-              );
-            },
-            icon: Icon(
-              Icons.add_outlined,
-            ),
-          )
-          : SizedBox.shrink(),
+          Provider.of<UserProvider>(context).user.isAdmin
+              ? IconButton(
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => AddRoomScreen(
+                          hotelId: hotelId,
+                          roomImageUrl: imageOfRoom,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.add_outlined,
+                  ),
+                )
+              : SizedBox.shrink(),
         ],
       ),
       body: CurvedBodyWidget(
@@ -77,44 +91,41 @@ class ChooseRoomScreen extends StatelessWidget {
                             height: SizeConfig.height * 2,
                           ),
                           ListView.separated(
+                            scrollDirection: Axis.vertical,
                             itemCount: listOfRoom.length,
-                            
                             itemBuilder: (context, index) {
                               print(listOfRoom[index].roomName);
                               return InkWell(
-                                
                                 onTap: () {
-                                  print("Booking status: ${listOfRoom[index].isBooked}");
-                                  listOfRoom[index].isBooked ?
-                                  GeneralAlertDialog().customMessageDialog(context)
-
-                                  : navigate(
+                                  // print("Booking status: ${listOfRoom[index].isBooked}");
+                                  listOfRoom[index].isBooked
+                                      ? GeneralAlertDialog()
+                                          .customMessageDialog(context)
+                                      : navigate(
+                                          context,
+                                          RoomDetailsScreen(
+                                            room: listOfRoom[index],
+                                            hotel: hotel,
+                                            user: user,
+                                          ),
+                                        );
+                                },
+                                child: roomCard(
                                   context,
-                                  RoomDetailsScreen(
-                                    room: listOfRoom[index],
-                                    hotel: hotel,
-                                  ),
-                                  );
-                                
-                                
-                            },
-                                child: Container(
-                                  height: SizeConfig.height * 12,
-                                  width: double.infinity,
-                                  child: Card(
-                                    elevation: 3,
-                                    child: Center(
-                                      child: Text(listOfRoom[index].roomName),
-                                    ),
-                                  ),
+                                  roomName: listOfRoom[index].roomName,
+                                  roomInformation:
+                                      listOfRoom[index].roomInformation,
+                                  roomPrice:
+                                      listOfRoom[index].roomPrice.toString(),
+                                  room: listOfRoom[index],
                                 ),
                               );
                             },
-                             separatorBuilder: (context, index) {
-                            return SizedBox(
-                              height: SizeConfig.height * 1.5,
-                            );
-                          },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: SizeConfig.height * 1.5,
+                              );
+                            },
                             shrinkWrap: true,
                             primary: false,
                           ),
@@ -122,6 +133,89 @@ class ChooseRoomScreen extends StatelessWidget {
                       ),
                     );
             }),
+      ),
+    );
+  }
+
+  roomCard(
+    BuildContext context, {
+    required String roomName,
+    required String roomInformation,
+    required String roomPrice,
+    required Room room,
+  }) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          SizeConfig.height * 2,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: SizeConfig.height * 15,
+            width: double.infinity,
+
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(
+                  imageOfRoom,
+                
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            // child: ClipRRect(
+            //   borderRadius: BorderRadius.circular(
+            //     SizeConfig.height * 2,
+            //   ),
+            //   child: room.roomImage == imageOfRoom
+            //   ?Image.network(
+            //     imageOfRoom,
+            //   fit: BoxFit.cover,)
+            //   :Image.memory(
+            //           base64Decode(
+            //             hotel.hotelImage!,
+
+            //           ),
+            //           fit: BoxFit.cover,
+            //         ),
+            // ),
+          ),
+          
+          Padding(
+            padding: basePadding,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  roomName,
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: SizeConfig.height),
+                Row(
+                  children: [
+                    Text(
+                      "\$${roomPrice} /night",
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

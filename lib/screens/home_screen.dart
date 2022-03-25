@@ -142,6 +142,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: CurvedBodyWidget(
+        
         widget: FutureBuilder(
           future: Provider.of<HotelProvider>(context, listen: true)
               .fetchHotelData(context),
@@ -152,6 +153,7 @@ class HomeScreen extends StatelessWidget {
               );
             }
             final listOfHotel = Provider.of<HotelProvider>(context).listOfHotel;
+            final user = Provider.of<UserProvider>(context).user;
             
 
             return listOfHotel.isEmpty
@@ -179,13 +181,17 @@ class HomeScreen extends StatelessWidget {
                           itemCount: listOfHotel.length,
                           itemBuilder: (context, index) {
                             return InkWell(
+                              
                               onTap: () => navigate(
                                 context,
                                 HotelDetailsScreen(
                                   hotel: listOfHotel[index],
+                                  user: user,
+                                  
                                 ),
                               ),
                               child: hotelCard(
+                                
                                 context,
                                 hotelName: listOfHotel[index].hotelName,
                                 hotelAddress: listOfHotel[index].hotelAddress,
@@ -232,7 +238,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Card hotelCard(
+  hotelCard(
+  
     
     BuildContext context, {
     required String hotelName,

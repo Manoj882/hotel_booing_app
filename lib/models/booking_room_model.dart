@@ -10,6 +10,7 @@ class BookingRoom {
   late String? id;
   late String hotelName;
   late String roomName;
+  late String userEmail;
 
 
   BookingRoom({
@@ -18,9 +19,9 @@ class BookingRoom {
     required this.checkOut,
     required this.numberOfPerson,
     required this.roomId,
-    
     required this.hotelName,
     required this.roomName,
+    required this.userEmail,
     required this.userId,
   });
 
@@ -36,6 +37,7 @@ class BookingRoom {
     
     hotelName = obj["hotelName"];
     roomName = obj["roomName"];
+    userEmail = obj["userEmail"];
     userId = obj["userId"];
   }
 
@@ -48,6 +50,7 @@ class BookingRoom {
     map["roomId"] = roomId;
     map["hotelName"] = hotelName;
     map["roomName"] = roomName;
+    map["userEmail"] = userEmail;
 
     map["userId"] = userId;
     return map;

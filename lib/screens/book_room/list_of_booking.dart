@@ -21,7 +21,6 @@ class ListOfBookingRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     final userId = Provider.of<UserProvider>(context).user.uuid;
 
-   
     return Scaffold(
       appBar: AppBar(
         title: Text("Your All Reservation"),
@@ -47,26 +46,33 @@ class ListOfBookingRoom extends StatelessWidget {
                         Provider.of<BookingRoomProvider>(context)
                             .listOfBookingRoom;
 
-                    return ListView.separated(
-                      itemCount: listOfBooking.length,
-                      itemBuilder: (context, index) {
-                        return bookingCard(
-                          context,
-                          bookingDate: listOfBooking[index].bookingDate,
-                          checkIn: listOfBooking[index].checkIn,
-                          checkOut: listOfBooking[index].checkOut,
-                          numberOfPerson: listOfBooking[index].numberOfPerson,
-                          booking: listOfBooking[index],
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: SizeConfig.height * 1.5,
-                        );
-                      },
-                      shrinkWrap: true,
-                      primary: false,
-                    );
+                    return listOfBooking.isEmpty
+                        ? Center(
+                            child: Text(
+                              "You don't book any room",
+                            ),
+                          )
+                        : ListView.separated(
+                            itemCount: listOfBooking.length,
+                            itemBuilder: (context, index) {
+                              return bookingCard(
+                                context,
+                                bookingDate: listOfBooking[index].bookingDate,
+                                checkIn: listOfBooking[index].checkIn,
+                                checkOut: listOfBooking[index].checkOut,
+                                numberOfPerson:
+                                    listOfBooking[index].numberOfPerson,
+                                booking: listOfBooking[index],
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: SizeConfig.height * 1.5,
+                              );
+                            },
+                            shrinkWrap: true,
+                            primary: false,
+                          );
                   }),
             ],
           ),
@@ -94,8 +100,9 @@ class ListOfBookingRoom extends StatelessWidget {
         ),
         subtitle: Text(booking.roomName),
         trailing: IconButton(
-          onPressed: () async{
-            await Provider.of<BookingRoomProvider>(context, listen: false).deleteBooking(
+          onPressed: () async {
+            await Provider.of<BookingRoomProvider>(context, listen: false)
+                .deleteBooking(
               context,
               docId: booking.id!,
               roomId: booking.roomId,
@@ -107,7 +114,5 @@ class ListOfBookingRoom extends StatelessWidget {
         ),
       ),
     );
-
-    
   }
 }

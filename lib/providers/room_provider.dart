@@ -40,7 +40,9 @@ class RoomProvider extends ChangeNotifier {
     String name,
     String information,
     double price,
+    String roomImage,
     String hotelId,
+    
   ) async {
     try {
       final room = Room(
@@ -48,6 +50,7 @@ class RoomProvider extends ChangeNotifier {
         roomInformation: information,
         roomPrice: price,
         hotelId: hotelId,
+        roomImage: roomImage,
       );
 
       final map = room.toJson();
@@ -69,7 +72,7 @@ class RoomProvider extends ChangeNotifier {
   updateRoomStatus(BuildContext context,{required String roomId, required bool isBooked,} ) async{
     try {
       final map = {
-        "isBooked": isBooked
+        "isBooked": isBooked,
       };
 
       await FirebaseHelper().updateData(

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/hotel_model.dart';
 import '../../models/room.dart';
+import '../../models/user.dart';
 import '../../providers/booking_room_provider.dart';
 import '../../providers/room_provider.dart';
 import '../../utils/size_config.dart';
@@ -16,7 +17,7 @@ import '../../utils/validation_mixin.dart';
 import '../../widgets/general_alert_dialog.dart';
 
 class BookRoomscreen extends StatelessWidget {
-  BookRoomscreen({required this.hotel, required this.room,Key? key}) : super(key: key);
+  BookRoomscreen({required this.hotel, required this.room,required this.user,Key? key}) : super(key: key);
 
   final bookingDateController = TextEditingController();
   final checkInController = TextEditingController();
@@ -26,12 +27,14 @@ class BookRoomscreen extends StatelessWidget {
 
   final Hotel hotel;
   final Room room;
+  final User user;
 
 
   
 
   @override
   Widget build(BuildContext context) {
+    
     
     return Scaffold(
       appBar: AppBar(
@@ -156,7 +159,7 @@ class BookRoomscreen extends StatelessWidget {
       try {
         GeneralAlertDialog().customLoadingDialog(context);
 
-        final userId = Provider.of<UserProvider>(context, listen: false).user.uuid;
+        final user = Provider.of<UserProvider>(context, listen: false).user;
 
         final map = BookingRoom(
           bookingDate: DateTime.parse(bookingDateController.text),
@@ -165,9 +168,10 @@ class BookRoomscreen extends StatelessWidget {
           numberOfPerson: int.parse(numberOfPersonController.text),
           hotelName: hotel.hotelName,
           roomName: room.roomName,
+          userEmail: user.email!,
           roomId: room.id!,
           // roomName, hoteName
-          userId: userId,
+          userId: user.uuid,
           
         ).toJson();
 
@@ -182,9 +186,10 @@ class BookRoomscreen extends StatelessWidget {
           int.parse(numberOfPersonController.text),
           hotel.hotelName,
           room.roomName,
+          user.email!,
           room.id!, 
           
-          userId,
+          user.uuid,
           
           
         ); 

@@ -10,13 +10,15 @@ import '../../utils/validation_mixin.dart';
 import '../../widgets/general_alert_dialog.dart';
 
 class AddRoomScreen extends StatelessWidget {
-  AddRoomScreen({required this.hotelId, Key? key}) : super(key: key);
+  AddRoomScreen({required this.hotelId, required this.roomImageUrl, Key? key})
+      : super(key: key);
 
   final roomNameController = TextEditingController();
   final roomInformationController = TextEditingController();
   final roomPriceController = TextEditingController();
 
   final String hotelId;
+  final String roomImageUrl;
 
   final formKey = GlobalKey<FormState>();
 
@@ -94,8 +96,8 @@ class AddRoomScreen extends StatelessWidget {
                         textInputType: TextInputType.number,
                         textInputAction: TextInputAction.done,
                         controller: roomPriceController,
-                        validate: (value) =>
-                            ValidationMixin().validateNumber(value!, "room price", 100000),
+                        validate: (value) => ValidationMixin()
+                            .validateNumber(value!, "room price", 100000),
                         onFieldSubmitted: (_) {},
                       ),
                       SizedBox(
@@ -103,7 +105,7 @@ class AddRoomScreen extends StatelessWidget {
                       ),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () async{
+                          onPressed: () async {
                             await submit(context);
                           },
                           child: const Text('Add'),
@@ -124,27 +126,25 @@ class AddRoomScreen extends StatelessWidget {
         GeneralAlertDialog().customLoadingDialog(context);
 
         final map = Room(
-                roomName: roomNameController.text,
-                roomInformation: roomInformationController.text,
-                roomPrice: double.parse(roomPriceController.text),
-                hotelId: hotelId).toJson();
-
-       
+          roomName: roomNameController.text,
+          roomInformation: roomInformationController.text,
+          roomPrice: double.parse(roomPriceController.text),
+          hotelId: hotelId,
+          roomImage: roomImageUrl,
+        ).toJson();
 
         await Provider.of<RoomProvider>(context, listen: false).addRoomData(
-          context, 
-          roomNameController.text, 
-          roomInformationController.text, 
-          double.parse(roomPriceController.text), 
+          context,
+          roomNameController.text,
+          roomInformationController.text,
+          double.parse(roomPriceController.text),
+          roomImageUrl,
           hotelId,
           
-          );
+        );
 
         Navigator.pop(context);
         Navigator.pop(context);
-        
-        
-    
       } catch (ex) {
         print(ex.toString());
       }
