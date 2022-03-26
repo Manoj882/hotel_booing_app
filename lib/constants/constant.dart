@@ -43,5 +43,11 @@ class BookingRoomConstants{
   static const userId = "userId";
 }
 
+class SecureStorageConstants{
+  static const emailKey = "email";
+  static const passwordKey = "password";
+  
+}
+
 
 

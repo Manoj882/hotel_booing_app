@@ -6,6 +6,7 @@ import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 
 import 'package:hotel_booking_app/utils/size_config.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import '/Theme/theme_data.dart';
 import '/screens/signup_screen.dart';
@@ -25,11 +26,18 @@ void main() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   seenOnBoard = preferences.getBool("seenOnBoard") ?? false;
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  final localAuth = LocalAuthentication();
+  
+ final canCheckBiometric = await localAuth.canCheckBiometrics;
+  runApp(
+    MyApp(canCheckBiometric),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp(this.cancheckBioMetric,{Key? key}) : super(key: key);
+
+  final cancheckBioMetric;
 
   // This widget is the root of your application.
   @override
@@ -55,8 +63,9 @@ class MyApp extends StatelessWidget {
           title: 'hotel booking app',
           theme: ligthTheme(context),
           debugShowCheckedModeBanner: false,
+          // home: seenOnBoard == true ? LoginScreen(cancheckBioMetric) : OnBoardingScreen(),
           home: seenOnBoard == true ? LoginScreen() : OnBoardingScreen(),
-          
+
           // home: SignUpScreen(),
         );
       }),

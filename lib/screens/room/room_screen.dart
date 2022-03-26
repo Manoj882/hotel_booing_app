@@ -97,15 +97,14 @@ class ChooseRoomScreen extends StatelessWidget {
                               print(listOfRoom[index].roomName);
                               return InkWell(
                                 onTap: () {
-                                  
                                   navigate(
-                                          context,
-                                          RoomDetailsScreen(
-                                            room: listOfRoom[index],
-                                            hotel: hotel,
-                                            user: user,
-                                          ),
-                                        );
+                                    context,
+                                    RoomDetailsScreen(
+                                      room: listOfRoom[index],
+                                      hotel: hotel,
+                                      user: user,
+                                    ),
+                                  );
                                 },
                                 child: roomCard(
                                   context,
@@ -155,26 +154,28 @@ class ChooseRoomScreen extends StatelessWidget {
           Container(
             height: SizeConfig.height * 15,
             width: double.infinity,
-
-          
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(
-                SizeConfig.height * 2,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(
+                  SizeConfig.height * 2,
+                ),
+                topRight: Radius.circular(
+                  SizeConfig.height * 2,
+                ),
               ),
               child: room.roomImage == imageOfRoom
-              ?Image.network(
-                imageOfRoom,
-              fit: BoxFit.cover,)
-              :Image.memory(
+                  ? Image.network(
+                      imageOfRoom,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.memory(
                       base64Decode(
                         room.roomImage!,
-
                       ),
                       fit: BoxFit.cover,
                     ),
             ),
           ),
-          
           Padding(
             padding: basePadding,
             child: Row(

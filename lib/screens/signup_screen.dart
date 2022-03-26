@@ -129,58 +129,45 @@ class SignUpScreen extends StatelessWidget {
                   SizedBox(
                     height: SizeConfig.height * 1.5,
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SocialMediaLoginButton(
-                          socialMediaName: "Google",
-                          onPressed: () async {
-                            final googleSignin = GoogleSignIn();
-                            final user = await googleSignin.signIn();
-                            if (user != null) {
-                              final authenticateduser =
-                                  await user.authentication;
-                              final authProvider =
-                                  GoogleAuthProvider.credential(
-                                idToken: authenticateduser.idToken,
-                                accessToken: authenticateduser.accessToken,
-                              );
+                  SocialMediaLoginButton(
+                    socialMediaName: "Google",
+                    onPressed: () async {
+                      final googleSignin = GoogleSignIn();
+                      final user = await googleSignin.signIn();
+                      if (user != null) {
+                        final authenticateduser =
+                            await user.authentication;
+                        final authProvider =
+                            GoogleAuthProvider.credential(
+                          idToken: authenticateduser.idToken,
+                          accessToken: authenticateduser.accessToken,
+                        );
 
-                              await FirebaseAuth.instance
-                                  .signInWithCredential(authProvider);
+                        await FirebaseAuth.instance
+                            .signInWithCredential(authProvider);
 
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (_) => HomeScreen(),
-                                ),
-                              );
-                            }
-                          },
-                          imageUrl: ImageConstant.googleImageUrl,
-                        ),
-                      ),
-                      SizedBox(
-                        width: SizeConfig.width * 5,
-                      ),
-                      Expanded(
-                        child: SocialMediaLoginButton(
-                          socialMediaName: "Facebook",
-                          onPressed: () {},
-                          imageUrl: ImageConstant.facebookImageUrl,
-                        ),
-                      ),
-                    ],
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => HomeScreen(),
+                          ),
+                        );
+                      }
+                    },
+                    imageUrl: ImageConstant.googleImageUrl,
                   ),
+                  
+                 
                   SizedBox(
                     height: SizeConfig.height * 1.5,
                   ),
                   GeneralChooseAccountPage(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => LoginScreen(),
-                        ),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (_) => LoginScreen(),
+                      //   ),
+                      // );
+                      Navigator.pop(context);
                     },
                     text: "Already have an account?",
                     accountTitle: "Login",
@@ -209,11 +196,12 @@ class SignUpScreen extends StatelessWidget {
             
           );
           Navigator.of(context).pop();
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => LoginScreen(),
-            ),
-          );
+          Navigator.of(context).pop();
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (_) => LoginScreen(),
+          //   ),
+          // );
         }
         } on FirebaseAuthException catch (e) {
           String message = "";

@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotel_booking_app/models/firebase_user.dart';
 import 'package:hotel_booking_app/providers/user_provider.dart';
+import 'package:hotel_booking_app/screens/finger_print_screen.dart';
 import 'package:hotel_booking_app/screens/hotel_screen/view_hotels_screen.dart.dart';
 import 'package:hotel_booking_app/utils/validation_mixin.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '/utils/buttons/social_media_login_button.dart';
@@ -22,6 +25,8 @@ import '/constants/constant.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
+
+  // final bool canCheckBioMetric;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -97,26 +102,26 @@ class LoginScreen extends StatelessWidget {
                           validate: (value) =>
                               ValidationMixin().validatePassword(value!),
                           onFieldSubmitted: (value) {
-                            submit(context);
+                            submit(context, false);
                           },
                         ),
+                        // SizedBox(
+                        //   height: SizeConfig.height * 1.5,
+                        // ),
+                        // Text(
+                        //   'Forgot Password?',
+                        //   style:
+                        //       Theme.of(context).textTheme.bodyText1!.copyWith(
+                        //             color: Color(0xff087f23),
+                        //           ),
+                        // ),
                         SizedBox(
-                          height: SizeConfig.height * 1.5,
-                        ),
-                        Text(
-                          'Forgot Password?',
-                          style:
-                              Theme.of(context).textTheme.bodyText1!.copyWith(
-                                    color: Color(0xff087f23),
-                                  ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig.height * 1.5,
+                          height: SizeConfig.height * 2,
                         ),
                         GeneralSubmitButton(
                           bottonTitle: "Login",
                           onPressed: () async {
-                            submit(context);
+                            submit(context, false);
                           },
                         ),
                       ],
@@ -132,13 +137,16 @@ class LoginScreen extends StatelessWidget {
                   Column(
                     children: [
                       SocialMediaLoginButton(
-                        socialMediaName: "Continue with Google",
+                        socialMediaName: "Login via Google",
                         onPressed: () async {
                           final googleSignin = GoogleSignIn();
-                          final googleSignInAccountUser = await googleSignin.signIn();
+                          final googleSignInAccountUser =
+                              await googleSignin.signIn();
                           if (googleSignInAccountUser != null) {
-                            final authenticateduser = await googleSignInAccountUser.authentication;
-                            final authCredential = GoogleAuthProvider.credential(
+                            final authenticateduser =
+                                await googleSignInAccountUser.authentication;
+                            final authCredential =
+                                GoogleAuthProvider.credential(
                               idToken: authenticateduser.idToken,
                               accessToken: authenticateduser.accessToken,
                             );
@@ -146,37 +154,49 @@ class LoginScreen extends StatelessWidget {
                             final authResult = await FirebaseAuth.instance
                                 .signInWithCredential(authCredential);
 
-                            
                             //added line
                             final User user = authResult.user!;
 
-                            Provider.of<UserProvider>(context, listen: false).setUser(us.User(
-                              
-                              email: user.email,
-                              name: user.displayName,
-                              photoUrl: user.photoURL,
-                              uuid: user.uid
-                            ).toJson());
+                            Provider.of<UserProvider>(context, listen: false)
+                                .setUser(us.User(
+                                        email: user.email,
+                                        name: user.displayName,
+                                        photoUrl: user.photoURL,
+                                        uuid: user.uid)
+                                    .toJson());
 
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (_) => HomeScreen(),
-                                
                               ),
                             );
-                            
                           }
                         },
                         imageUrl: ImageConstant.googleImageUrl,
                       ),
+
                       SizedBox(
                         height: SizeConfig.height * 1.5,
                       ),
-                      SocialMediaLoginButton(
-                        socialMediaName: "Continue with Facebook",
-                        onPressed: () {},
-                        imageUrl: ImageConstant.facebookImageUrl,
-                      ),
+                      // canCheckBioMetric
+                      //     ? ElevatedButton.icon(
+                      //         style: ButtonStyle(),
+                      //         icon: Icon(Icons.fingerprint_outlined),
+                      //         label: Text("Login via Fingerprint"),
+                      //         onPressed: () {
+                      //           loginViaFingerPrint(context);
+                      //         },
+                      //       )
+                      //     : SizedBox.shrink(),
+
+                      // SizedBox(
+                      //   height: SizeConfig.height * 1.5,
+                      // ),
+                      // SocialMediaLoginButton(
+                      //   socialMediaName: "Continue with Facebook",
+                      //   onPressed: () {},
+                      //   imageUrl: ImageConstant.facebookImageUrl,
+                      // ),
                     ],
                   ),
 
@@ -201,7 +221,10 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  submit(context) async {
+  submit(
+    BuildContext context,
+    bool isAuthenticated,
+  ) async {
     try {
       if (formKey.currentState!.validate()) {
         GeneralAlertDialog().customLoadingDialog(context);
@@ -221,28 +244,46 @@ class LoginScreen extends StatelessWidget {
               .collection(UserConstants.userCollection)
               .where(UserConstants.userId, isEqualTo: user.uid)
               .get();
-              var map ={};
-              if(data.docs.isEmpty){
-                  map = Firebaseuser(
-                    displayName: user.displayName,
-                    email: user.email,
-                    photoUrl: user.photoURL,
-                    uuid: user.uid,
-                  ).toJson();
-              }
-              else{
-                map = data.docs.first.data();
-              }
-              // print(map);
-              Provider.of<UserProvider>(context, listen: false).setUser(map);
+          var map = {};
+          if (data.docs.isEmpty) {
+            map = Firebaseuser(
+              displayName: user.displayName,
+              email: user.email,
+              photoUrl: user.photoURL,
+              uuid: user.uid,
+            ).toJson();
+          } else {
+            map = data.docs.first.data();
+          }
+          // print(map);
+          Provider.of<UserProvider>(context, listen: false).setUser(map);
         }
         Navigator.pop(context);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => HomeScreen(),
-            // builder: (_) => ViewHotelScreen(),
-          ),
-        );
+            MaterialPageRoute(
+              builder: (_) => HomeScreen(),
+              // builder: (_) => ViewHotelScreen(),
+            ),
+          );
+
+        // if (isAuthenticated) {
+        //   Navigator.of(context).pushReplacement(
+        //     MaterialPageRoute(
+        //       builder: (_) => HomeScreen(),
+        //       // builder: (_) => ViewHotelScreen(),
+        //     ),
+        //   );
+        // } else {
+        //   Navigator.of(context).pushReplacement(
+        //     MaterialPageRoute(
+        //       builder: (_) => FingerPrintAuthScreen(
+        //         username: emailController.text,
+        //         password: passwordController.text,
+        //       ),
+        //       // builder: (_) => ViewHotelScreen(),
+        //     ),
+        //   );
+        // }
       }
     } on FirebaseAuthException catch (e) {
       String message = "";
@@ -261,6 +302,29 @@ class LoginScreen extends StatelessWidget {
     } catch (ex) {
       Navigator.of(context).pop();
       await GeneralAlertDialog().customAlertDialog(context, ex.toString());
+    }
+  }
+
+  void loginViaFingerPrint(BuildContext context) async {
+    final localAuth = LocalAuthentication();
+    final authenticated = await localAuth.authenticate(
+      localizedReason: "Enter your fingerprint to login",
+      biometricOnly: true,
+      stickyAuth: true,
+    );
+    if (authenticated) {
+      final secureStorage = FlutterSecureStorage();
+
+      final email =
+          await secureStorage.read(key: SecureStorageConstants.emailKey);
+      final password =
+          await secureStorage.read(key: SecureStorageConstants.passwordKey);
+
+      if (email != null) {
+        emailController.text = email;
+        passwordController.text = password!;
+        submit(context, true);
+      }
     }
   }
 }

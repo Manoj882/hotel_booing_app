@@ -26,57 +26,52 @@ class ListOfBookingRoom extends StatelessWidget {
         title: Text("Your All Reservation"),
       ),
       body: CurvedBodyWidget(
-        widget: SingleChildScrollView(
-          child: Column(
-            children: [
-              FutureBuilder(
-                  future:
-                      Provider.of<BookingRoomProvider>(context, listen: true)
-                          .fetchBookingData(
-                    context,
-                    userId,
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    final listOfBooking =
-                        Provider.of<BookingRoomProvider>(context)
-                            .listOfBookingRoom;
+        widget: FutureBuilder(
+            future:
+                Provider.of<BookingRoomProvider>(context, listen: true)
+                    .fetchBookingData(
+              context,
+              userId,
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              final listOfBooking =
+                  Provider.of<BookingRoomProvider>(context)
+                      .listOfBookingRoom;
 
-                    return listOfBooking.isEmpty
-                        ? Center(
-                            child: Text(
-                              "You don't book any room",
-                            ),
-                          )
-                        : ListView.separated(
-                            itemCount: listOfBooking.length,
-                            itemBuilder: (context, index) {
-                              return bookingCard(
-                                context,
-                                bookingDate: listOfBooking[index].bookingDate,
-                                checkIn: listOfBooking[index].checkIn,
-                                checkOut: listOfBooking[index].checkOut,
-                                numberOfPerson:
-                                    listOfBooking[index].numberOfPerson,
-                                booking: listOfBooking[index],
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(
-                                height: SizeConfig.height * 1.5,
-                              );
-                            },
-                            shrinkWrap: true,
-                            primary: false,
-                          );
-                  }),
-            ],
-          ),
-        ),
+              return listOfBooking.isEmpty
+                  ? Center(
+                      child: Text(
+                        "You don't book any room",
+                      ),
+                    )
+                  : ListView.separated(
+                      itemCount: listOfBooking.length,
+                      itemBuilder: (context, index) {
+                        return bookingCard(
+                          context,
+                          bookingDate: listOfBooking[index].bookingDate,
+                          checkIn: listOfBooking[index].checkIn,
+                          checkOut: listOfBooking[index].checkOut,
+                          numberOfPerson:
+                              listOfBooking[index].numberOfPerson,
+                          booking: listOfBooking[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: SizeConfig.height * 1.5,
+                        );
+                      },
+                      shrinkWrap: true,
+                      primary: false,
+                    );
+            },
+            ),
       ),
     );
   }

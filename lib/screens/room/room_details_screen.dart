@@ -156,6 +156,8 @@ class RoomDetailsScreen extends StatelessWidget {
         SizedBox(
           height: SizeConfig.height * 2,
         ),
+
+        if(!Provider.of<UserProvider>(context).user.isAdmin)
         Center(
           child: ElevatedButton(
             style: ButtonStyle(

@@ -6,8 +6,11 @@ import 'package:hotel_booking_app/constants/constant.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
 import 'package:hotel_booking_app/providers/room_provider.dart';
 import 'package:hotel_booking_app/screens/book_room/all_user_booked_room.dart';
+import 'package:hotel_booking_app/screens/book_room/booking_history.dart';
 import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
+import 'package:hotel_booking_app/screens/finger_print_screen.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
+
 import 'package:hotel_booking_app/utils/google_map.dart';
 import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 import '../models/hotel_model.dart';
@@ -117,12 +120,20 @@ class HomeScreen extends StatelessWidget {
                       label: "Reservation",
                       widget: ListOfBookingRoom(),
                     ),
+                    if(!Provider.of<UserProvider>(context).user.isAdmin)
+                    buildListTile(
+                    context,
+                    iconData: Icons.history_outlined,
+                    label: "Booking History",
+                    widget: BookingHistoryScreen(),
+                  ),
               buildListTile(
                 context,
                 iconData: Icons.logout_outlined,
                 label: "Log Out",
                 widget: LoginScreen(),
               ),
+              
               //  buildListTile(
               //   context,
               //   iconData: Icons.map_outlined,
@@ -232,26 +243,25 @@ class HomeScreen extends StatelessWidget {
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(SizeConfig.height * 2,),
-        
-        
+        borderRadius: BorderRadius.circular(
+          SizeConfig.height * 2,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        
         children: [
           Container(
-            height: SizeConfig.height * 17,
+            height: SizeConfig.height * 18,
             width: SizeConfig.height * 100,
             child: ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(
-                SizeConfig.height * 2,
-              ),
+                  SizeConfig.height * 2,
+                ),
                 topRight: Radius.circular(
-                SizeConfig.height * 2,
+                  SizeConfig.height * 2,
+                ),
               ),
-        ),
               child: hotel.hotelImage == imageOfHotel
                   ? Image.network(
                       imageOfHotel,
@@ -272,13 +282,11 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                hotelName,
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                
+                  hotelName,
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -291,27 +299,31 @@ class HomeScreen extends StatelessWidget {
                         ),
                         Text(
                           hotelAddress,
-                          style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                                color: Colors.black38,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Colors.black38,
+                                  ),
                         ),
                         Text(", "),
                         Text(
                           hotelCity,
-                          style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                                color: Colors.black38,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Colors.black38,
+                                  ),
                         ),
                       ],
                     ),
-                    IconButton(
-                    onPressed: () async {
-                      await GeneralAlertDialog().customDeleteDialog(context, hotel);
-                    },
-                    icon: Icon(
-                      Icons.delete_outlined,
-                    ),
-                ),
+                    if (Provider.of<UserProvider>(context).user.isAdmin)
+                      IconButton(
+                        onPressed: () async {
+                          await GeneralAlertDialog()
+                              .customDeleteDialog(context, hotel);
+                        },
+                        icon: Icon(
+                          Icons.delete_outlined,
+                        ),
+                      ),
                   ],
                 ),
               ],
@@ -319,7 +331,6 @@ class HomeScreen extends StatelessWidget {
           ),
 
           //delete hotel
-          
         ],
       ),
     );
