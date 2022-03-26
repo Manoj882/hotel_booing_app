@@ -13,7 +13,9 @@ class Room {
     required this.roomPrice,
     required this.roomImage,
     required this.hotelId,
+    this.id,
     this.isBooked = false,
+    
   });
 
   Room.fromJson(
@@ -35,6 +37,7 @@ class Room {
     map["roomImage"] = roomImage;
     map["hotelId"] = hotelId;
     map["isBooked"] = isBooked;
+    map["id"] = id;
     
     
 

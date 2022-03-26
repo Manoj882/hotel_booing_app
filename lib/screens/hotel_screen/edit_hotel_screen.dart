@@ -196,15 +196,10 @@ class EditHotelScreen extends StatelessWidget {
           id: model.id,
         );
        
-        log(model.id ?? "");
-        print(hotelAmnetiesController.text);
+        // log(model.id ?? "");
+        // print(hotelAmnetiesController.text);
 
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
-
-        // await FirebaseHelper().addData(context, map: map, collectionId: HotelConstant.hotelCollection);
-        //add hotel data from HotelProvider
+       
 
         await Provider.of<HotelProvider>(context, listen: false)
             .updateHotelData(
@@ -212,6 +207,9 @@ class EditHotelScreen extends StatelessWidget {
           docId: model.id!,
           hotel: hotel,
         );
+         Navigator.pop(context);
+         Navigator.pop(context);
+         Navigator.pop(context);
       } catch (ex) {
         print(ex.toString());
       }

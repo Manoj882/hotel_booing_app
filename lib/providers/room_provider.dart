@@ -90,4 +90,34 @@ class RoomProvider extends ChangeNotifier {
       throw ex.toString();
     }
   }
+
+
+  //update room data
+  updateRoomData(
+    BuildContext context, {
+    required String docId,
+    required Room room,
+    
+  
+  }) async {
+    await FirebaseHelper().updateData(
+      context,
+      collectionId: RoomConstants.roomCollection,
+      docId: docId,
+       map: room.toJson(),
+
+    );
+    
+
+    
+    _listOfRoom.clear();
+    notifyListeners();
+    
+
+    
+  }
+
+
+
+
 }

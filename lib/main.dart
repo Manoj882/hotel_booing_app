@@ -54,7 +54,9 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'hotel booking app',
           theme: ligthTheme(context),
+          debugShowCheckedModeBanner: false,
           home: seenOnBoard == true ? LoginScreen() : OnBoardingScreen(),
+          
           // home: SignUpScreen(),
         );
       }),
