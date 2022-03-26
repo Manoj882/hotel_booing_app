@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/screens/book_room/book_room_screen.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
+import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/hotel_model.dart';
@@ -67,7 +68,7 @@ class RoomDetailsScreen extends StatelessWidget {
         widget: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [buildRoomDetails(context, roomImage: room.roomImage!)],
+            children: [buildRoomDetails(context, roomImage: room.roomImage??imageOfRoom)],
           ),
         ),
       ),
@@ -174,7 +175,10 @@ class RoomDetailsScreen extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.pushReplacement(
+              room.isBooked ?
+              GeneralAlertDialog().customMessageDialog(context)
+                                 
+              : Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (_) => BookRoomscreen(

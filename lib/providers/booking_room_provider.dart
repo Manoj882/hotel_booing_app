@@ -110,12 +110,13 @@ class BookingRoomProvider extends ChangeNotifier {
       throw ex.toString();
     }
   }
-
+  
   deleteBooking(
     BuildContext context, {
     required String docId,
     required String roomId,
   }) async {
+    try{
     FirebaseHelper().deleteData(
       context,
       collectionId: BookingRoomConstants.bookingCollection,
@@ -126,4 +127,9 @@ class BookingRoomProvider extends ChangeNotifier {
         .updateRoomStatus(context, roomId: roomId, isBooked: false);
     notifyListeners();
   }
+  catch(ex){
+    print(ex.toString());
+  }
+  } 
+  
 }

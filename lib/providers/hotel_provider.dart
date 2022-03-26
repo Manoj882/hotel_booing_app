@@ -146,7 +146,7 @@ class HotelProvider extends ChangeNotifier {
   }
 
 
-//update image
+//update hotel image
   updateHotelImage(
     BuildContext context, {
     required String image,
@@ -168,6 +168,26 @@ class HotelProvider extends ChangeNotifier {
 
     // notifyListeners();
   }
+
+  deleteHotelData(
+    BuildContext context, {
+    required String docId,
+    required String hotelId,
+  }) async {
+    try{
+    FirebaseHelper().deleteData(
+      context,
+      collectionId: HotelConstant.hotelCollection,
+      docId: docId,
+    );
+    notifyListeners();
+
+    
+  }
+  catch(ex){
+    print(ex.toString());
+  }
+  } 
 
   
 }

@@ -9,6 +9,7 @@ import 'package:hotel_booking_app/screens/book_room/all_user_booked_room.dart';
 import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 import 'package:hotel_booking_app/utils/google_map.dart';
+import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 import '../models/hotel_model.dart';
 import '../models/room.dart';
 import '/providers/user_provider.dart';
@@ -28,13 +29,8 @@ class HomeScreen extends StatelessWidget {
   final String imageOfHotel =
       "https://www.nepal-travel-guide.com/wp-content/uploads/2020/05/image-156.png";
 
-  
-
-    
-
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         title: Text("Welcome Hotel"),
@@ -55,11 +51,9 @@ class HomeScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (_) => AddHotelsScreen(
                               hotelImageUrl: imageOfHotel,
-                             
                             ),
                           ),
                         );
-                        
                       },
                       child: Text(
                         "Add Hotel",
@@ -110,24 +104,22 @@ class HomeScreen extends StatelessWidget {
                 widget: ProfileScreen(imageUrl: image),
               ),
 
-              Provider.of<UserProvider>(context).user.isAdmin ?
+              Provider.of<UserProvider>(context).user.isAdmin
+                  ? buildListTile(
+                      context,
+                      iconData: Icons.book_online_outlined,
+                      label: "Reservations",
+                      widget: AllUserBookedRoom(),
+                    )
+                  : buildListTile(
+                      context,
+                      iconData: Icons.book_online_outlined,
+                      label: "Reservation",
+                      widget: ListOfBookingRoom(),
+                    ),
               buildListTile(
                 context,
-                iconData: Icons.book_online_outlined, 
-                label: "Reservations",
-                widget: AllUserBookedRoom(),
-              )
-
-
-              : buildListTile(
-                context,
-                iconData: Icons.book_online_outlined, 
-                label: "Reservation",
-                widget: ListOfBookingRoom(),
-              ),
-              buildListTile(
-                context,
-                iconData: Icons.logout_outlined, 
+                iconData: Icons.logout_outlined,
                 label: "Log Out",
                 widget: LoginScreen(),
               ),
@@ -142,7 +134,6 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: CurvedBodyWidget(
-        
         widget: FutureBuilder(
           future: Provider.of<HotelProvider>(context, listen: true)
               .fetchHotelData(context),
@@ -154,7 +145,6 @@ class HomeScreen extends StatelessWidget {
             }
             final listOfHotel = Provider.of<HotelProvider>(context).listOfHotel;
             final user = Provider.of<UserProvider>(context).user;
-            
 
             return listOfHotel.isEmpty
                 ? Center(
@@ -181,22 +171,18 @@ class HomeScreen extends StatelessWidget {
                           itemCount: listOfHotel.length,
                           itemBuilder: (context, index) {
                             return InkWell(
-                              
                               onTap: () => navigate(
                                 context,
                                 HotelDetailsScreen(
                                   hotel: listOfHotel[index],
                                   user: user,
-                                  
                                 ),
                               ),
                               child: hotelCard(
-                                
                                 context,
                                 hotelName: listOfHotel[index].hotelName,
                                 hotelAddress: listOfHotel[index].hotelAddress,
                                 hotelCity: listOfHotel[index].hotelCity,
-                                
                                 hotel: listOfHotel[index],
                               ),
                             );
@@ -219,13 +205,11 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget buildListTile(
-    
     BuildContext context, {
     required IconData iconData,
     required String label,
     required Widget widget,
   }) {
-    
     return ListTile(
       leading: Icon(
         iconData,
@@ -239,92 +223,104 @@ class HomeScreen extends StatelessWidget {
   }
 
   hotelCard(
-  
-    
     BuildContext context, {
     required String hotelName,
     required String hotelAddress,
     required String hotelCity,
-    
     required Hotel hotel,
   }) {
     return Card(
-      
       elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          SizeConfig.height * 2,
-        ),
+        borderRadius: BorderRadius.circular(SizeConfig.height * 2,),
+        
+        
       ),
-      child: Padding(
-        padding: EdgeInsets.all(
-          SizeConfig.height,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: SizeConfig.height * 12,
-              width: SizeConfig.height * 12,
-              
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  SizeConfig.height * 2,
-                ),
-                child: hotel.hotelImage == imageOfHotel
-                ?Image.network(
-                  imageOfHotel,
-                fit: BoxFit.cover,)
-                :Image.memory(
-                        base64Decode(
-                          hotel.hotelImage!,
-                          
-                        ),
-                        fit: BoxFit.cover,
-                      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        
+        children: [
+          Container(
+            height: SizeConfig.height * 17,
+            width: SizeConfig.height * 100,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(
+                SizeConfig.height * 2,
               ),
+                topRight: Radius.circular(
+                SizeConfig.height * 2,
+              ),
+        ),
+              child: hotel.hotelImage == imageOfHotel
+                  ? Image.network(
+                      imageOfHotel,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.memory(
+                      base64Decode(
+                        hotel.hotelImage!,
+                      ),
+                      fit: BoxFit.cover,
+                    ),
             ),
-            SizedBox(
-              width: SizeConfig.width * 4,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+          ),
+
+          Padding(
+            padding: basePadding,
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  hotelName,
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: SizeConfig.height),
+                hotelName,
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.place_outlined,
-                      color: Colors.black38,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.place_outlined,
+                          color: Colors.black38,
+                        ),
+                        Text(
+                          hotelAddress,
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                color: Colors.black38,
+                              ),
+                        ),
+                        Text(", "),
+                        Text(
+                          hotelCity,
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                color: Colors.black38,
+                              ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      hotelAddress,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            color: Colors.black38,
-                          ),
+                    IconButton(
+                    onPressed: () async {
+                      await GeneralAlertDialog().customDeleteDialog(context, hotel);
+                    },
+                    icon: Icon(
+                      Icons.delete_outlined,
                     ),
-                    Text(", "),
-                    Text(
-                      hotelCity,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            color: Colors.black38,
-                          ),
-                    ),
+                ),
                   ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+
+          //delete hotel
+          
+        ],
       ),
     );
   }

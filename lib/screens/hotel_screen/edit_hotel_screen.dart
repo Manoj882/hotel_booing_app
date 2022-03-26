@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/models/hotel_model.dart';
@@ -15,8 +14,11 @@ import 'package:provider/provider.dart';
 import '/widgets/general_alert_dialog.dart';
 
 class EditHotelScreen extends StatelessWidget {
-  EditHotelScreen({required this.model, required this.hotelImageUrl, Key? key})
-      : super(key: key);
+  EditHotelScreen({
+    required this.model,
+    required this.hotelImageUrl,
+    Key? key,
+  }) : super(key: key);
 
   final hotelNameController = TextEditingController();
   final hotelAddressController = TextEditingController();
@@ -29,7 +31,6 @@ class EditHotelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     // final future = Provider.of<HotelProvider>(context, listen: false)
     //     .fetchIndiviudalHotelData(
     //   hotelId: model.id!,
@@ -110,7 +111,7 @@ class EditHotelScreen extends StatelessWidget {
               InputTextField(
                 title: "City",
                 textInputType: TextInputType.text,
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.next,
                 controller: hotelCityController,
                 validate: (value) => ValidationMixin().validate(value!, "city"),
                 onFieldSubmitted: (_) {},
@@ -147,7 +148,7 @@ class EditHotelScreen extends StatelessWidget {
               InputTextField(
                 title: "Amneties",
                 textInputType: TextInputType.text,
-                textInputAction: TextInputAction.next,
+                textInputAction: TextInputAction.done,
                 controller: hotelAmnetiesController,
                 validate: (value) =>
                     ValidationMixin().validate(value!, "amneties"),
@@ -195,11 +196,9 @@ class EditHotelScreen extends StatelessWidget {
           hotelImage: model.hotelImage,
           id: model.id,
         );
-       
+
         // log(model.id ?? "");
         // print(hotelAmnetiesController.text);
-
-       
 
         await Provider.of<HotelProvider>(context, listen: false)
             .updateHotelData(
@@ -207,9 +206,9 @@ class EditHotelScreen extends StatelessWidget {
           docId: model.id!,
           hotel: hotel,
         );
-         Navigator.pop(context);
-         Navigator.pop(context);
-         Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
       } catch (ex) {
         print(ex.toString());
       }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/models/hotel_model.dart';
+import 'package:hotel_booking_app/providers/hotel_provider.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
+import 'package:provider/provider.dart';
 
 class GeneralAlertDialog {
   customAlertDialog(BuildContext context, String message) {
@@ -37,12 +40,12 @@ class GeneralAlertDialog {
     );
   }
 
-  Future<void>customMessageDialog(BuildContext context) async{
+  Future<void> customMessageDialog(BuildContext context) async {
     return await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Sorry, room is already booked!!!",
-        
+        title: Text(
+          "Sorry, room is already booked!!!",
         ),
         actions: [
           TextButton(
@@ -50,6 +53,37 @@ class GeneralAlertDialog {
               Navigator.of(context).pop();
             },
             child: Text("Ok"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> customDeleteDialog(BuildContext context, Hotel hotel) async {
+    return await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(
+          "Do you want to delete?",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await Provider.of<HotelProvider>(context, listen: false)
+                  .deleteHotelData(
+                context,
+                docId: hotel.id!,
+                hotelId: hotel.id!,
+              );
+              Navigator.pop(context);
+            },
+            child: Text("Yes"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text("No"),
           ),
         ],
       ),

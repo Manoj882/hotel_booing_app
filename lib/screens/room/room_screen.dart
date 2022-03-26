@@ -97,11 +97,8 @@ class ChooseRoomScreen extends StatelessWidget {
                               print(listOfRoom[index].roomName);
                               return InkWell(
                                 onTap: () {
-                                  // print("Booking status: ${listOfRoom[index].isBooked}");
-                                  listOfRoom[index].isBooked
-                                      ? GeneralAlertDialog()
-                                          .customMessageDialog(context)
-                                      : navigate(
+                                  
+                                  navigate(
                                           context,
                                           RoomDetailsScreen(
                                             room: listOfRoom[index],
@@ -159,32 +156,23 @@ class ChooseRoomScreen extends StatelessWidget {
             height: SizeConfig.height * 15,
             width: double.infinity,
 
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                  imageOfRoom,
-                
-                ),
-                fit: BoxFit.cover,
+          
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                SizeConfig.height * 2,
               ),
+              child: room.roomImage == imageOfRoom
+              ?Image.network(
+                imageOfRoom,
+              fit: BoxFit.cover,)
+              :Image.memory(
+                      base64Decode(
+                        room.roomImage!,
+
+                      ),
+                      fit: BoxFit.cover,
+                    ),
             ),
-
-            // child: ClipRRect(
-            //   borderRadius: BorderRadius.circular(
-            //     SizeConfig.height * 2,
-            //   ),
-            //   child: room.roomImage == imageOfRoom
-            //   ?Image.network(
-            //     imageOfRoom,
-            //   fit: BoxFit.cover,)
-            //   :Image.memory(
-            //           base64Decode(
-            //             hotel.hotelImage!,
-
-            //           ),
-            //           fit: BoxFit.cover,
-            //         ),
-            // ),
           ),
           
           Padding(

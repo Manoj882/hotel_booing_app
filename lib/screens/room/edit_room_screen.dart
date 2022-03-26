@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/models/room.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/constant.dart';
 import '../../providers/room_provider.dart';
 import '../../utils/curved_body_widget.dart';
 import '../../utils/size_config.dart';
@@ -102,6 +106,17 @@ class EditRoomScreen extends StatelessWidget {
                   height: SizeConfig.height * 2,
                 ),
                 Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await showBottomSheet(context);
+                  },
+                  child: Text("Upload Image"),
+                ),
+              ),
+              SizedBox(
+                height: SizeConfig.height * 2,
+              ),
+                Center(
                   child: ElevatedButton(
                     onPressed:() => submit(context),
                     
@@ -125,7 +140,7 @@ class EditRoomScreen extends StatelessWidget {
           roomName: roomNameController.text,
           roomInformation: roomInformationController.text,
           roomPrice: double.parse(roomPriceController.text),
-          roomImage: roomImageUrl,
+          roomImage: model.roomImage,
           hotelId: hotelId,
           id: model.id,
           
@@ -147,5 +162,92 @@ class EditRoomScreen extends StatelessWidget {
         print(ex.toString());
       }
     }
+  }
+
+  Future<void> showBottomSheet(BuildContext context) async {
+    final imagePicker = ImagePicker();
+
+    await showModalBottomSheet(
+        context: context,
+        builder: (_) => Padding(
+              padding: basePadding,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Choose a source",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  SizedBox(
+                    height: SizeConfig.height * 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      buildPhotoChooseOption(
+                        context,
+                        function: () async {
+                          final xFile = await imagePicker.pickImage(
+                            source: ImageSource.camera,
+                            maxWidth: 480,
+                            maxHeight: 640,
+                          );
+                          if (xFile != null) {
+                            final uint8List = await xFile.readAsBytes();
+
+                            Provider.of<RoomProvider>(context, listen: false)
+                                .updateRoomImage(context,
+                                    image: base64Encode(uint8List),
+                                    model: model);
+                          }
+                        },
+                        iconData: Icons.photo_camera_outlined,
+                        label: "Camera",
+                      ),
+                      buildPhotoChooseOption(
+                        context,
+                        function: () async {
+                          final xFile = await imagePicker.pickImage(
+                              source: ImageSource.gallery);
+                          if (xFile != null) {
+                            final uint8List = await xFile.readAsBytes();
+                            // print(model.id ?? "Xaina");
+                            Provider.of<RoomProvider>(context, listen: false)
+                                .updateRoomImage(
+                              context,
+                              image: base64Encode(uint8List),
+                              model: model,
+                            );
+                          }
+                        },
+                        iconData: Icons.collections_outlined,
+                        label: "Gallery",
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+  }
+
+  Column buildPhotoChooseOption(
+    BuildContext context, {
+    required Function function,
+    required IconData iconData,
+    required String label,
+  }) {
+    return Column(
+      children: [
+        IconButton(
+          onPressed: () => function(),
+          color: Theme.of(context).primaryColor,
+          icon: Icon(iconData),
+          iconSize: SizeConfig.height * 5,
+        ),
+        Text(
+          label,
+        ),
+      ],
+    );
   }
 }

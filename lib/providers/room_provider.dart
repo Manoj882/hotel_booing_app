@@ -117,6 +117,28 @@ class RoomProvider extends ChangeNotifier {
     
   }
 
+  updateRoomImage(
+    BuildContext context, {
+    required String image,
+    required Room model,
+  }) async {
+    // print("object");
+    final index = _listOfRoom.indexOf(model);
+    _listOfRoom[index].roomImage = image;
+    notifyListeners();
+    // print(image);
+    await FirebaseHelper().updateData(
+      context,
+      collectionId: RoomConstants.roomCollection,
+      docId: model.id!,
+      map: {
+        "roomImage": image,
+      },
+    );
+
+    // notifyListeners();
+  }
+
 
 
 
