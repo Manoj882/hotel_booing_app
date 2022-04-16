@@ -21,6 +21,8 @@ class AddHotelsScreen extends StatelessWidget {
   final hotelNameController = TextEditingController();
   final hotelAddressController = TextEditingController();
   final hotelCityController = TextEditingController();
+  final latitudeController = TextEditingController();
+  final longitudeController = TextEditingController();
   final hotelDescriptionController = TextEditingController();
   final hotelAmnetiesController = TextEditingController();
   final String hotelImageUrl;
@@ -115,17 +117,54 @@ class AddHotelsScreen extends StatelessWidget {
                       InputTextField(
                         title: "City",
                         textInputType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
+                        textInputAction: TextInputAction.next,
                         controller: hotelCityController,
                         validate: (value) =>
                             ValidationMixin().validate(value!, "city"),
-                        onFieldSubmitted: (_) {
-                          submit(context);
-                        },
+                        onFieldSubmitted: (_) {},
                       ),
                       SizedBox(
                         height: SizeConfig.height * 2,
                       ),
+                      Text(
+                        "Latitude",
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                      SizedBox(
+                        height: SizeConfig.height,
+                      ),
+                      InputTextField(
+                        title: "Latitude",
+                        textInputType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        controller: latitudeController,
+                        validate: (value) =>
+                            ValidationMixin().validate(value!, "latitude"),
+                        onFieldSubmitted: (_) {},
+                      ),
+                      SizedBox(
+                        height: SizeConfig.height * 2,
+                      ),
+                      Text(
+                        "Longitude",
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                      SizedBox(
+                        height: SizeConfig.height,
+                      ),
+                      InputTextField(
+                        title: "longitude",
+                        textInputType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        controller: longitudeController,
+                        validate: (value) =>
+                            ValidationMixin().validate(value!, "longitude"),
+                        onFieldSubmitted: (_) {},
+                      ),
+                      SizedBox(
+                        height: SizeConfig.height * 2,
+                      ),
+
                      
                       
                       Text(
@@ -161,7 +200,9 @@ class AddHotelsScreen extends StatelessWidget {
                         controller: hotelAmnetiesController,
                         validate: (value) =>
                             ValidationMixin().validate(value!, "amneties"),
-                        onFieldSubmitted: (_) {},
+                        onFieldSubmitted: (_) {
+                          submit(context);
+                        },
                       ),
                        SizedBox(
                         height: SizeConfig.height * 2,
@@ -200,6 +241,8 @@ class AddHotelsScreen extends StatelessWidget {
           hotelName: hotelNameController.text,
           hotelCity: hotelCityController.text,
           hotelAddress: hotelAddressController.text,
+          latitude: double.parse(latitudeController.text),
+          longitude: double.parse(longitudeController.text),
           hotelDescription: hotelDescriptionController.text,
           hotelAmneties: hotelAmnetiesController.text,
           hotelImage: hotelImageUrl, 
@@ -213,6 +256,8 @@ class AddHotelsScreen extends StatelessWidget {
             hotelNameController.text,
             hotelCityController.text,
             hotelAddressController.text,
+            double.parse(latitudeController.text),
+            double.parse(longitudeController.text),
             hotelDescriptionController.text,
             hotelAmnetiesController.text,
             hotelImageUrl,

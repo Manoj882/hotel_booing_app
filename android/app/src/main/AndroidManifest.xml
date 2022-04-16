@@ -11,8 +11,7 @@
         android:label="hotel_booking_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyBXt2bGk4j8YnOYbpVtZN2T8fsAwX3N2ew"/>
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -39,5 +38,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyBXt2bGk4j8YnOYbpVtZN2T8fsAwX3N2ew"/>
     </application>
 </manifest>

@@ -11,7 +11,7 @@ import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
 import 'package:hotel_booking_app/screens/finger_print_screen.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 
-import 'package:hotel_booking_app/utils/google_map.dart';
+import 'package:hotel_booking_app/utils/google_map/google_map.dart';
 import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 import '../models/hotel_model.dart';
 import '../models/room.dart';

@@ -6,7 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotel_booking_app/models/firebase_user.dart';
 import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/screens/finger_print_screen.dart';
-import 'package:hotel_booking_app/screens/hotel_screen/view_hotels_screen.dart.dart';
+
 import 'package:hotel_booking_app/utils/validation_mixin.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:lottie/lottie.dart';

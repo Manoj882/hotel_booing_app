@@ -162,12 +162,12 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   GeneralChooseAccountPage(
                     onPressed: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (_) => LoginScreen(),
-                      //   ),
-                      // );
-                      Navigator.pop(context);
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => LoginScreen(),
+                        ),
+                      );
+                      
                     },
                     text: "Already have an account?",
                     accountTitle: "Login",

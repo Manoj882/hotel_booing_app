@@ -22,34 +22,38 @@ class SocialMediaLoginButton extends StatefulWidget {
 class _SocialMediaLoginButtonState extends State<SocialMediaLoginButton> {
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      color: Colors.grey.shade300,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(SizeConfig.height * 2),
+    return TextButton(
+      // color: Colors.grey.shade300,
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.circular(SizeConfig.height * 2),
+      // ),
+      style: TextButton.styleFrom(
+        
+        backgroundColor: Colors.grey.shade300,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(SizeConfig.height * 2),
+        ),
       ),
       onPressed: widget.onPressed,
-      child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CachedNetworkImage(
-              imageUrl: widget.imageUrl,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CachedNetworkImage(
+            imageUrl: widget.imageUrl,
+            width: SizeConfig.width * 8,
+            placeholder: (_, __) => SizedBox(
               width: SizeConfig.width * 8,
-              placeholder: (_, __) => SizedBox(
-                width: SizeConfig.width * 8,
-                height: SizeConfig.height * 4,
-              ),
+              height: SizeConfig.height * 4,
             ),
-            SizedBox(
-              width: SizeConfig.width * 3,
-            ),
-            Text(
-              widget.socialMediaName,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(
+            width: SizeConfig.width * 3,
+          ),
+          Text(
+            widget.socialMediaName,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ],
       ),
     );
   }

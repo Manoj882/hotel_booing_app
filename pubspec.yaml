@@ -48,6 +48,12 @@ dependencies:
   google_maps_flutter: ^2.1.2
   flutter_secure_storage: ^5.0.2
   local_auth: ^1.1.11
+  dio: ^4.0.6
+  flutter_polyline_points: ^1.0.0
+  location: ^4.3.0
+  geoflutterfire: ^3.0.3
+  
+  
 
   
   

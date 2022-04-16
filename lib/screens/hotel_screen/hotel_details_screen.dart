@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/screens/room/room_screen.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
+import 'package:hotel_booking_app/utils/google_map/google_map.dart';
 import 'package:hotel_booking_app/utils/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -127,6 +128,24 @@ class HotelDetailsScreen extends StatelessWidget {
         SizedBox(
           height: SizeConfig.height,
         ),
+
+        Text(
+          "Location",
+          style: Theme.of(context).textTheme.headline6,
+        ),
+         SizedBox(
+          height: SizeConfig.height,
+        ),
+        Container(
+          width: double.infinity,
+          height: 200,
+          child: GoogleMapScreen(hotelId: hotel.id!,),
+          
+        ),
+         SizedBox(
+          height: SizeConfig.height,
+        ),
+
         Text(
           "Amneties",
           style: Theme.of(context).textTheme.headline6,

@@ -23,6 +23,8 @@ class EditHotelScreen extends StatelessWidget {
   final hotelNameController = TextEditingController();
   final hotelAddressController = TextEditingController();
   final hotelCityController = TextEditingController();
+  final latitudeController = TextEditingController();
+  final longitudeController = TextEditingController();
   final hotelDescriptionController = TextEditingController();
   final hotelAmnetiesController = TextEditingController();
   String hotelImageUrl;
@@ -41,6 +43,10 @@ class EditHotelScreen extends StatelessWidget {
     hotelNameController.text = model.hotelName;
     hotelCityController.text = model.hotelCity;
     hotelAddressController.text = model.hotelAddress;
+    latitudeController.text = model.latitude.toString();
+    longitudeController.text = model.longitude.toString();
+
+
     hotelDescriptionController.text = model.hotelDescription;
     hotelAmnetiesController.text = model.hotelAmneties;
     hotelImageUrl = model.hotelImage.toString();
@@ -120,6 +126,46 @@ class EditHotelScreen extends StatelessWidget {
                 height: SizeConfig.height * 2,
               ),
               Text(
+                "Latitude",
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              SizedBox(
+                height: SizeConfig.height,
+              ),
+              InputTextField(
+                title: "Latitude",
+                textInputType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                controller: latitudeController,
+                validate: (value) =>
+                    ValidationMixin().validate(value!, "latitude"),
+                onFieldSubmitted: (_) {},
+              ),
+              SizedBox(
+                height: SizeConfig.height * 2,
+              ),
+
+              Text(
+                "Longitude",
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              SizedBox(
+                height: SizeConfig.height,
+              ),
+              InputTextField(
+                title: "Longitude",
+                textInputType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                controller: longitudeController,
+                validate: (value) =>
+                    ValidationMixin().validate(value!, "longitude"),
+                onFieldSubmitted: (_) {},
+              ),
+              SizedBox(
+                height: SizeConfig.height * 2,
+              ),
+
+              Text(
                 "Description",
                 style: Theme.of(context).textTheme.bodyText2,
               ),
@@ -191,6 +237,8 @@ class EditHotelScreen extends StatelessWidget {
           hotelName: hotelNameController.text,
           hotelCity: hotelCityController.text,
           hotelAddress: hotelAddressController.text,
+          latitude: double.parse(latitudeController.text),
+          longitude: double.parse(longitudeController.text),
           hotelDescription: hotelDescriptionController.text,
           hotelAmneties: hotelAmnetiesController.text,
           hotelImage: model.hotelImage,
