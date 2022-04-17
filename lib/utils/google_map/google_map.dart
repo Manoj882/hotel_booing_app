@@ -26,7 +26,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:hotel_booking_app/constants/constant.dart';
 import 'package:hotel_booking_app/screens/room/room_screen.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/google_map/google_map.dart';
@@ -25,12 +26,14 @@ class HotelDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+
       appBar: AppBar(
         title: Text(hotel.hotelName),
         actions: [
           Provider.of<UserProvider>(context).user.isAdmin
               ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.red,
@@ -60,53 +63,53 @@ class HotelDetailsScreen extends StatelessWidget {
               : SizedBox.shrink(),
         ],
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.4,
-              width: MediaQuery.of(context).size.width,
-              child: ClipRRect(
-                child: hotel.hotelImage == imageOfHotel
-                    ? Image.network(
-                        imageOfHotel,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.memory(
-                        base64Decode(
-                          hotel.hotelImage!,
+      body: Padding(
+        padding: basePadding,
+        
+        child: SingleChildScrollView(
+          child: Column(
+        
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.35,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(SizeConfig.height * 3)),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(SizeConfig.height * 3)),
+                  child: hotel.hotelImage == imageOfHotel
+                      ? Image.network(
+                          imageOfHotel,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.memory(
+                          base64Decode(
+                            hotel.hotelImage!,
+                          ),
+                          fit: BoxFit.cover,
                         ),
-                        fit: BoxFit.cover,
-                      ),
-              ),
-            ),
-            SizedBox(
-              height: SizeConfig.height * 2,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: SizeConfig.height * 35),
-              child: CurvedBodyWidget(
-                widget: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      buildHotelDetails(context,
-                          imageUrl: hotel.hotelImage ?? imageOfHotel),
-                    ],
-                  ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: SizeConfig.height * 2,
+              ),
+        
+              Container(
+                child: buildHotelDetails(context),
+                
+              ),  
+                  
+              
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget buildHotelDetails(
-    BuildContext context, {
-    required String imageUrl,
-  }) {
+    BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
