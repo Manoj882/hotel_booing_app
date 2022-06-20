@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +9,6 @@ import 'package:hotel_booking_app/utils/firebase_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../models/hotel_model.dart';
-
 
 class HotelProvider extends ChangeNotifier {
   List<Hotel> _listOfHotel = [];
@@ -32,7 +32,6 @@ class HotelProvider extends ChangeNotifier {
 
   fetchHotelData(BuildContext context) async {
     try {
-    
       final data = await FirebaseHelper().getAllData(
         context,
         collectionId: HotelConstant.hotelCollection,
@@ -84,7 +83,6 @@ class HotelProvider extends ChangeNotifier {
     String hotelDescription,
     String hotelAmneties,
     String hotelImage,
-    
   ) async {
     try {
       // final uuid = Provider.of<UserProvider>(context, listen: false).user.uuid;
@@ -97,7 +95,7 @@ class HotelProvider extends ChangeNotifier {
         hotelDescription: hotelDescription,
         hotelAmneties: hotelAmneties,
         hotelImage: hotelImage,
-       
+
         // uuid: uuid,
       );
       final map = hotel.toJson();
@@ -119,22 +117,17 @@ class HotelProvider extends ChangeNotifier {
     BuildContext context, {
     required String docId,
     required Hotel hotel,
-    
-  
   }) async {
     await FirebaseHelper().updateData(
       context,
       collectionId: HotelConstant.hotelCollection,
       docId: docId,
-       map: hotel.toJson(),
-
+      map: hotel.toJson(),
     );
-    
 
     // log("message");
     _listOfHotel.clear();
     notifyListeners();
-    
 
     // final oldHotel = listOfHotel.firstWhere((element) => element.id! == docId);
     // // notifyListeners();
@@ -142,13 +135,12 @@ class HotelProvider extends ChangeNotifier {
     // // log(oldHotel.toJson().toString());
 
     // final index = _listOfHotel.indexOf(oldHotel);
-    
+
     // _listOfHotel.removeAt(index);
     // notifyListeners();
     // _listOfHotel.insert(index, hotel);
     // notifyListeners();
   }
-
 
 //update hotel image
   updateHotelImage(
@@ -178,20 +170,39 @@ class HotelProvider extends ChangeNotifier {
     required String docId,
     required String hotelId,
   }) async {
-    try{
-    FirebaseHelper().deleteData(
-      context,
-      collectionId: HotelConstant.hotelCollection,
-      docId: docId,
-    );
-    notifyListeners();
-
-    
+    try {
+      FirebaseHelper().deleteData(
+        context,
+        collectionId: HotelConstant.hotelCollection,
+        docId: docId,
+      );
+      notifyListeners();
+    } catch (ex) {
+      print(ex.toString());
+    }
   }
-  catch(ex){
-    print(ex.toString());
-  }
-  } 
 
+
+  // List<Hotel> filterHotelList = [];
+
+  // getHotelSearch(String search) async {
+  //   if (search.isEmpty) {
+  //     return [];
+  //   }
+  //   listOfHotel.forEach((hotel) {
+  //     if (hotel.hotelName.toLowerCase().contains(search.toLowerCase()) ||
+  //         hotel.hotelCity.toLowerCase().contains(search.toLowerCase())){
+  //         filterHotelList.add(hotel);
+  //         notifyListeners();
+  //         }
+          
+  //   });
+  //   return filterHotelList;
+   
+  // }
+
+  
+ 
+  
   
 }

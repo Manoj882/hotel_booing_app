@@ -30,6 +30,7 @@ class HotelDetailsScreen extends StatelessWidget {
 
       appBar: AppBar(
         title: Text(hotel.hotelName),
+        centerTitle: false,
         actions: [
           Provider.of<UserProvider>(context).user.isAdmin
               ? Padding(

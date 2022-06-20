@@ -37,7 +37,10 @@ class UserProvider extends ChangeNotifier {
 
   updateUserImage(String image) {
     _user.image = image;
+    print(image);
     notifyListeners();
+    
+  
     
   }
 }

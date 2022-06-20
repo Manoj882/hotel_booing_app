@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/providers/booking_room_provider.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
 import 'package:hotel_booking_app/providers/user_provider.dart';
+import 'package:hotel_booking_app/screens/home_screen.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 
 import 'package:hotel_booking_app/utils/size_config.dart';
@@ -15,7 +16,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '/screens/onboarding_screen.dart';
 import 'providers/room_provider.dart';
 
+
 bool? seenOnBoard;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,20 +27,32 @@ void main() async {
 
   //to load splash screen for the first time only
   SharedPreferences preferences = await SharedPreferences.getInstance();
+
+
+
+ 
   seenOnBoard = preferences.getBool("seenOnBoard") ?? false;
+
+  // preferences.setBool("isLoggedIn", true);
+
+
   await Firebase.initializeApp();
-  final localAuth = LocalAuthentication();
+//   final localAuth = LocalAuthentication();
   
- final canCheckBiometric = await localAuth.canCheckBiometrics;
+//  final canCheckBiometric = await localAuth.canCheckBiometrics;
+
   runApp(
-    MyApp(canCheckBiometric),
+    // MyApp(canCheckBiometric),
+    MyApp(),
   );
 }
 
 class MyApp extends StatelessWidget {
-  MyApp(this.cancheckBioMetric,{Key? key}) : super(key: key);
+  MyApp({ Key? key}) : super(key: key);
 
-  final cancheckBioMetric;
+
+
+  // final cancheckBioMetric;
 
   // This widget is the root of your application.
   @override
@@ -64,10 +79,17 @@ class MyApp extends StatelessWidget {
           theme: ligthTheme(context),
           debugShowCheckedModeBanner: false,
           // home: seenOnBoard == true ? LoginScreen(cancheckBioMetric) : OnBoardingScreen(),
-          home: seenOnBoard == true ? LoginScreen() : OnBoardingScreen(),
+
+          home: 
+          (seenOnBoard == true ? LoginScreen() : const OnBoardingScreen()),
+
+         
+          
+          
 
           // home: SignUpScreen(),
         );
+       
       }),
     );
   }

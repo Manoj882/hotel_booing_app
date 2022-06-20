@@ -10,9 +10,11 @@ import 'package:hotel_booking_app/screens/book_room/booking_history.dart';
 import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
 import 'package:hotel_booking_app/screens/finger_print_screen.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
+import 'package:hotel_booking_app/screens/search_screen.dart';
 
 import 'package:hotel_booking_app/utils/google_map/google_map.dart';
 import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
+
 import '../models/hotel_model.dart';
 import '../models/room.dart';
 import '/providers/user_provider.dart';
@@ -36,38 +38,19 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome Hotel"),
-        centerTitle: false,
         actions: [
-          Provider.of<UserProvider>(context).user.isAdmin
-              ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => AddHotelsScreen(
-                              hotelImageUrl: imageOfHotel,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Add Hotel",
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              color: Colors.white,
-                            ),
-                      ),
-                    ),
-                  ),
-                )
-              : SizedBox.shrink(),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => SearchScreen(),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.search_outlined,
+            ),
+          ),
         ],
       ),
       drawer: Drawer(
@@ -106,40 +89,32 @@ class HomeScreen extends StatelessWidget {
                 label: "Profile",
                 widget: ProfileScreen(imageUrl: image),
               ),
-
               Provider.of<UserProvider>(context).user.isAdmin
                   ? buildListTile(
                       context,
                       iconData: Icons.book_online_outlined,
                       label: "Reservations",
-                      widget: AllUserBookedRoom(),
+                      widget: const AllUserBookedRoom(),
                     )
                   : buildListTile(
                       context,
                       iconData: Icons.book_online_outlined,
                       label: "Reservation",
-                      widget: ListOfBookingRoom(),
+                      widget: const ListOfBookingRoom(),
                     ),
-                    if(!Provider.of<UserProvider>(context).user.isAdmin)
-                    buildListTile(
-                    context,
-                    iconData: Icons.history_outlined,
-                    label: "Booking History",
-                    widget: BookingHistoryScreen(),
-                  ),
+              if (!Provider.of<UserProvider>(context).user.isAdmin)
+                buildListTile(
+                  context,
+                  iconData: Icons.history_outlined,
+                  label: "Booking History",
+                  widget: BookingHistoryScreen(),
+                ),
               buildListTile(
                 context,
                 iconData: Icons.logout_outlined,
                 label: "Log Out",
                 widget: LoginScreen(),
               ),
-              
-              //  buildListTile(
-              //   context,
-              //   iconData: Icons.map_outlined,
-              //   label: "Map",
-              //   widget: GoogleMapScreen(),
-              // ),
             ],
           ),
         ),
@@ -150,7 +125,7 @@ class HomeScreen extends StatelessWidget {
               .fetchHotelData(context),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -158,21 +133,58 @@ class HomeScreen extends StatelessWidget {
             final user = Provider.of<UserProvider>(context).user;
 
             return listOfHotel.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text("Any hotel is not available for booking"),
                   )
                 : SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: SizeConfig.width * 3,
-                          ),
-                          child: Text(
-                            "Available Hotels",
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: SizeConfig.width * 3,
+                              ),
+                              child: Text(
+                                "Available Hotels",
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                            ),
+                            Provider.of<UserProvider>(context).user.isAdmin
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => AddHotelsScreen(
+                                              hotelImageUrl: imageOfHotel,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        "Add Hotel",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                              color: Colors.white,
+                                            ),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                          ],
+                        ),
+                        SizedBox(
+                          height: SizeConfig.height * 1.5,
                         ),
                         SizedBox(
                           height: SizeConfig.height * 1.5,
@@ -293,7 +305,7 @@ class HomeScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.place_outlined,
                           color: Colors.black38,
                         ),
@@ -304,7 +316,7 @@ class HomeScreen extends StatelessWidget {
                                     color: Colors.black38,
                                   ),
                         ),
-                        Text(", "),
+                        const Text(", "),
                         Text(
                           hotelCity,
                           style:
@@ -320,7 +332,7 @@ class HomeScreen extends StatelessWidget {
                           await GeneralAlertDialog()
                               .customDeleteDialog(context, hotel);
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delete_outlined,
                         ),
                       ),

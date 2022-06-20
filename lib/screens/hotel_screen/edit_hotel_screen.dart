@@ -307,7 +307,10 @@ class EditHotelScreen extends StatelessWidget {
                         context,
                         function: () async {
                           final xFile = await imagePicker.pickImage(
-                              source: ImageSource.gallery);
+                              source: ImageSource.gallery,
+                              maxWidth: 480,
+                              maxHeight: 640,
+                              );
                           if (xFile != null) {
                             final uint8List = await xFile.readAsBytes();
                             // print(model.id ?? "Xaina");

@@ -37,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: const Text("Profile"),
       ),
       body: CurvedBodyWidget(
         widget: SingleChildScrollView(
@@ -73,8 +73,8 @@ class ProfileScreen extends StatelessWidget {
                           right: -20,
                           child: RawMaterialButton(
                             elevation: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
                               child: Icon(
                                 Icons.add_a_photo_outlined,
                                 color: Colors.black38,
@@ -82,8 +82,8 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             fillColor: Colors.grey.shade200,
-                            shape: CircleBorder(),
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             onPressed: () async {
                               await showBottomSheet(context);
                             },
@@ -149,6 +149,7 @@ class ProfileScreen extends StatelessWidget {
                             address: addressController.text,
                             age: int.parse(ageController.text),
                             isAdmin: _isAdmin,
+                            
    
                           );
                           
@@ -169,7 +170,7 @@ class ProfileScreen extends StatelessWidget {
                       
                       }
                     },
-                    child: Text("Save"),
+                    child: const Text("Save"),
                   ),
                 ],
               ),
@@ -204,7 +205,12 @@ class ProfileScreen extends StatelessWidget {
                         context,
                         function: () async {
                           final xFile = await imagePicker.pickImage(
-                              source: ImageSource.camera);
+                              source: ImageSource.camera,
+                              maxHeight: 700,
+                              maxWidth: 700,
+                              imageQuality: 100,
+
+                              ); 
                           if (xFile != null) {
                             final uint8List = await xFile.readAsBytes();
                             final map = Provider.of<UserProvider>(context,
@@ -219,7 +225,11 @@ class ProfileScreen extends StatelessWidget {
                         context,
                         function: () async {
                           final xFile = await imagePicker.pickImage(
-                              source: ImageSource.gallery);
+                              source: ImageSource.gallery,
+                              maxHeight: 700,
+                              maxWidth: 700,
+                              imageQuality: 100,
+                              );
                           if (xFile != null) {
                             final uint8List = await xFile.readAsBytes();
                             Provider.of<UserProvider>(context, listen: false)

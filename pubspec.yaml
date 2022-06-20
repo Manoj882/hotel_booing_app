@@ -52,6 +52,7 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   location: ^4.3.0
   geoflutterfire: ^3.0.3
+  material_floating_search_bar: ^0.3.7
   
   
 
