@@ -11,48 +11,52 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.grey.shade300,
-                      foregroundColor:
-                          Theme.of(context).textTheme.headline6!.color,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          Icons.chevron_left_outlined,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10,),
-                    Expanded(
-                      child: SearchField(
-                        value: value ?? '',
-                        autoFocus: autoFocus,
-                        isSearchScreen: false,
-                      ),
-                    ),
-                  ],
-                ),
+      backgroundColor: Colors.white,
+     
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
               ),
-            ],
-          ),
+              child: Row(
+                // backgroundColor: Colors.grey.shade300,
+                //     foregroundColor: Theme.of(context).textTheme.headline6!.color,
+                
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.chevron_left_outlined,
+                        color: Colors.black54,
+                        size: 26,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: SearchField(
+                      value: value ?? '',
+                      autoFocus: autoFocus,
+                      isSearchScreen: false,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

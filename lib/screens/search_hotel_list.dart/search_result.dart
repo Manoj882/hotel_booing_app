@@ -15,6 +15,8 @@ class SearchResultScreen extends StatefulWidget {
 }
 
 class _SearchResultScreenState extends State<SearchResultScreen> {
+  RangeValues values = const RangeValues(1, 100);
+  RangeLabels labels = const RangeLabels("1", "100");
   @override
   Widget build(BuildContext context) {
     Provider.of<HotelProvider>(context, listen: false)
@@ -35,59 +37,63 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.grey.shade300,
-                          foregroundColor:
-                              Theme.of(context).textTheme.headline6!.color,
-                          // radius: 15.r * 3,
-                          child: IconButton(
-                            icon: const Icon(Icons.chevron_left),
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (_) => SearchScreen(
-                                    autoFocus: true,
-                                    value: widget.searchValue,
-                                  ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.chevron_left_outlined,
+                            color: Colors.black54,
+                            size: 26,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => SearchScreen(
+                                  autoFocus: true,
+                                  value: widget.searchValue,
                                 ),
-                              );
-                            },
-                          ),
+                              ),
+                            );
+                          },
                         ),
-                        SizedBox(
-                          width: 8,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: SearchField(
+                          value: widget.searchValue,
+                          autoFocus: false,
                         ),
-                        Expanded(
-                          child: SearchField(
-                            value: widget.searchValue,
-                            autoFocus: false,
-                          ),
-                        ),
-                      ],
-                    ),
-                ),
-                
-
-                
-                SizedBox(
-                  height: 20,
-                ),
-                getSearchHotels(
-                  context,
-                  widget.searchValue,
-                ),
-              ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  getSearchHotels(
+                    context,
+                    widget.searchValue,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -101,16 +107,23 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
       children: [
         Text(
           'Search results for $name',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.black),
         ),
         SizedBox(
-          height: 15,
+          height: 10,
         ),
         Consumer<HotelProvider>(builder: (_, data, __) {
           return ListView.builder(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
             itemCount: data.listOfSearchedHotel.length,
             itemBuilder: (context, index) {
-              return HotelCard(hotel: data.listOfSearchedHotel[index]);
+              return HotelCard(
+                hotel: data.listOfSearchedHotel[index],
+              );
             },
           );
         }),

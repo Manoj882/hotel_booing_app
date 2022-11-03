@@ -29,7 +29,8 @@ class SearchField extends StatelessWidget {
         return Scaffold(
           backgroundColor: Colors.white,
           body: Container(
-            width: double.infinity,
+            width: MediaQuery.of(context).size.width - 80,
+            margin: EdgeInsets.zero,
             child: ListView.separated(
               shrinkWrap: true,
               primary: false,
@@ -49,10 +50,8 @@ class SearchField extends StatelessWidget {
                 );
               },
               separatorBuilder: (ctx, index) {
-                return Divider(
-                  height: 1,
-                  color: Colors.grey,
-                  endIndent: 100,
+                return const SizedBox(
+                  height: 10,
                 );
               },
             ),
@@ -79,25 +78,35 @@ class SearchField extends StatelessWidget {
             }
           },
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 0,
-              horizontal: 8,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 16,
             ),
             border: OutlineInputBorder(
               borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(12),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(12),
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(12),
             ),
             fillColor: Colors.grey.shade200,
             filled: true,
-            hintText: 'Search hotel',
+            hintText: 'Search hotel...',
+            suffixIcon: IconButton(
+              onPressed: () {
+                searchController.clear();
+              },
+              icon: const Icon(
+                Icons.clear_outlined,
+                size: 24,
+                color: Colors.black45,
+              ),
+            ),
           ),
           textInputAction: TextInputAction.search,
           onFieldSubmitted: (newValue) {
