@@ -1,31 +1,21 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hotel_booking_app/constants/constant.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotel_booking_app/providers/hotel_provider.dart';
-import 'package:hotel_booking_app/providers/room_provider.dart';
 import 'package:hotel_booking_app/screens/book_room/all_user_booked_room.dart';
 import 'package:hotel_booking_app/screens/book_room/booking_history.dart';
 import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
-import 'package:hotel_booking_app/screens/finger_print_screen.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 import 'package:hotel_booking_app/screens/search_hotel_list.dart/search_screen.dart';
-import 'package:hotel_booking_app/screens/search_screen.dart';
-
-import 'package:hotel_booking_app/utils/google_map/google_map.dart';
 import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 import 'package:hotel_booking_app/widgets/hotel_card.dart';
-
-import '../models/hotel_model.dart';
-import '../models/room.dart';
 import '/providers/user_provider.dart';
 import '/screens/hotel_screen/add_hotels_screen.dart';
 import '/utils/curved_body_widget.dart';
 import '/utils/navigate.dart';
 import '/utils/size_config.dart';
 import 'package:provider/provider.dart';
-
 import '../profile/profile_screen.dart';
 import 'hotel_screen/hotel_details_screen.dart';
 
@@ -111,11 +101,39 @@ class HomeScreen extends StatelessWidget {
                   label: "Booking History",
                   widget: BookingHistoryScreen(),
                 ),
-              buildListTile(
-                context,
-                iconData: Icons.logout_outlined,
-                label: "Log Out",
-                widget: LoginScreen(),
+              ListTile(
+                leading: const Icon(
+                  Icons.logout_outlined,
+                  color: Colors.red,
+                ),
+                title: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+                onTap: () async {
+                  try {
+                    GeneralAlertDialog().customLoadingDialog(context);
+                    await FirebaseAuth.instance.signOut();
+                    await GoogleSignIn().signOut();
+
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => LoginScreen(),
+                      ),
+                    );
+                  } on FirebaseAuthException catch (ex) {
+                    Navigator.of(context).pop();
+                    await GeneralAlertDialog().customAlertDialog(context, ex.toString());
+
+                  } catch(ex){
+                    Navigator.of(context).pop();
+                    await GeneralAlertDialog().customAlertDialog(context, ex.toString());
+
+                  }
+                },
               ),
             ],
           ),
@@ -242,6 +260,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  
 }

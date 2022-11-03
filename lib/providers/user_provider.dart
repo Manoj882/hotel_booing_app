@@ -1,7 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/models/user.dart';
 
 class UserProvider extends ChangeNotifier {
+  
+ 
   //initialize User class
   late User _user;
 
@@ -43,4 +46,6 @@ class UserProvider extends ChangeNotifier {
   
     
   }
+
+ 
 }
