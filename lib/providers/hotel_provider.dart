@@ -14,9 +14,12 @@ class HotelProvider extends ChangeNotifier {
   List<Hotel> _listOfHotel = [];
   late Hotel _currentHotel;
 
+  List<Hotel> listOfSearchedHotel = [];
+
   //getter
   List<Hotel> get listOfHotel => _listOfHotel;
   Hotel get currentHotel => _currentHotel;
+  
 
   //setter
   set hotelList(List<Hotel> listOfHotel) {
@@ -182,7 +185,6 @@ class HotelProvider extends ChangeNotifier {
     }
   }
 
-
   // List<Hotel> filterHotelList = [];
 
   // getHotelSearch(String search) async {
@@ -195,14 +197,18 @@ class HotelProvider extends ChangeNotifier {
   //         filterHotelList.add(hotel);
   //         notifyListeners();
   //         }
-          
+
   //   });
   //   return filterHotelList;
-   
+
   // }
 
-  
- 
-  
-  
+  //search hotel
+  searchHotels(String hotelName) {
+    final hotelList = [...listOfHotel];
+    listOfSearchedHotel = hotelList
+        .where((element) =>
+            element.hotelName.toLowerCase().contains(hotelName.toLowerCase()))
+        .toList();
+  }
 }

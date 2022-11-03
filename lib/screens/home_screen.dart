@@ -10,10 +10,12 @@ import 'package:hotel_booking_app/screens/book_room/booking_history.dart';
 import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
 import 'package:hotel_booking_app/screens/finger_print_screen.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
+import 'package:hotel_booking_app/screens/search_hotel_list.dart/search_screen.dart';
 import 'package:hotel_booking_app/screens/search_screen.dart';
 
 import 'package:hotel_booking_app/utils/google_map/google_map.dart';
 import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
+import 'package:hotel_booking_app/widgets/hotel_card.dart';
 
 import '../models/hotel_model.dart';
 import '../models/room.dart';
@@ -201,11 +203,7 @@ class HomeScreen extends StatelessWidget {
                                   user: user,
                                 ),
                               ),
-                              child: hotelCard(
-                                context,
-                                hotelName: listOfHotel[index].hotelName,
-                                hotelAddress: listOfHotel[index].hotelAddress,
-                                hotelCity: listOfHotel[index].hotelCity,
+                              child: HotelCard(
                                 hotel: listOfHotel[index],
                               ),
                             );
@@ -245,106 +243,5 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  hotelCard(
-    BuildContext context, {
-    required String hotelName,
-    required String hotelAddress,
-    required String hotelCity,
-    required Hotel hotel,
-  }) {
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          SizeConfig.height * 2,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: SizeConfig.height * 18,
-            width: SizeConfig.height * 100,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(
-                  SizeConfig.height * 2,
-                ),
-                topRight: Radius.circular(
-                  SizeConfig.height * 2,
-                ),
-              ),
-              child: hotel.hotelImage == imageOfHotel
-                  ? Image.network(
-                      imageOfHotel,
-                      fit: BoxFit.cover,
-                    )
-                  : Image.memory(
-                      base64Decode(
-                        hotel.hotelImage!,
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-            ),
-          ),
-
-          Padding(
-            padding: basePadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  hotelName,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Icon(
-                          Icons.place_outlined,
-                          color: Colors.black38,
-                        ),
-                        Text(
-                          hotelAddress,
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    color: Colors.black38,
-                                  ),
-                        ),
-                        const Text(", "),
-                        Text(
-                          hotelCity,
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    color: Colors.black38,
-                                  ),
-                        ),
-                      ],
-                    ),
-                    if (Provider.of<UserProvider>(context).user.isAdmin)
-                      IconButton(
-                        onPressed: () async {
-                          await GeneralAlertDialog()
-                              .customDeleteDialog(context, hotel);
-                        },
-                        icon: const Icon(
-                          Icons.delete_outlined,
-                        ),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          //delete hotel
-        ],
-      ),
-    );
-  }
+  
 }
