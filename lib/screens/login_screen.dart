@@ -6,6 +6,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotel_booking_app/models/firebase_user.dart';
 import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/screens/finger_print_screen.dart';
+import 'package:hotel_booking_app/screens/forgot_password/forgot_password_screen.dart';
+import 'package:hotel_booking_app/utils/navigate.dart';
 
 import 'package:hotel_booking_app/utils/validation_mixin.dart';
 import 'package:local_auth/local_auth.dart';
@@ -115,9 +117,21 @@ class LoginScreen extends StatelessWidget {
                         //             color: Color(0xff087f23),
                         //           ),
                         // ),
-                        SizedBox(
-                          height: SizeConfig.height * 2,
+
+                        TextButton(
+                          onPressed: () {
+                            navigate(context, ForgotPasswordScreen());
+                          },
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                             color: Color(0xff4caf50),
+                              fontWeight: FontWeight.w500,
+
+                            ),
+                          ),
                         ),
+
                         GeneralSubmitButton(
                           bottonTitle: "Login",
                           onPressed: () async {
@@ -260,11 +274,11 @@ class LoginScreen extends StatelessWidget {
         }
         Navigator.pop(context);
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => HomeScreen(),
-              // builder: (_) => ViewHotelScreen(),
-            ),
-          );
+          MaterialPageRoute(
+            builder: (_) => HomeScreen(),
+            // builder: (_) => ViewHotelScreen(),
+          ),
+        );
 
         // if (isAuthenticated) {
         //   Navigator.of(context).pushReplacement(
