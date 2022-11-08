@@ -38,8 +38,20 @@ class HotelCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            
             height: SizeConfig.height * 18,
             width: SizeConfig.height * 100,
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(
+                  SizeConfig.height * 2,
+                ),
+                topRight: Radius.circular(
+                  SizeConfig.height * 2,
+                ),
+              ),
+            ),
             child: ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(
@@ -64,7 +76,7 @@ class HotelCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: basePadding,
+            padding: EdgeInsets.only(left: SizeConfig.width * 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -75,32 +87,32 @@ class HotelCard extends StatelessWidget {
                       ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Icon(
-                          Icons.place_outlined,
-                          color: Colors.black38,
-                        ),
-                        Text(
-                          hotel.hotelAddress,
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    color: Colors.black38,
-                                  ),
-                        ),
-                        const Text(", "),
-                        Text(
-                          hotel.hotelCity,
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    color: Colors.black38,
-                                  ),
-                        ),
-                      ],
+                    const Icon(
+                      Icons.place_outlined,
+                      color: Colors.black38,
                     ),
+                    Text(
+                      hotel.hotelAddress,
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          Theme.of(context).textTheme.bodyText2!.copyWith(
+                                color: Colors.black38,
+                              ),
+                    ),
+                    const Text(", "),
+                    Text(
+                      hotel.hotelCity,
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          Theme.of(context).textTheme.bodyText2!.copyWith(
+                                color: Colors.black38,
+                              ),
+                    ),
+                    Spacer(),
                     if (Provider.of<UserProvider>(context).user.isAdmin)
                       IconButton(
                         onPressed: () async {

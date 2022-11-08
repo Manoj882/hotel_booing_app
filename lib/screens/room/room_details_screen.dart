@@ -157,7 +157,6 @@ class RoomDetailsScreen extends StatelessWidget {
           height: SizeConfig.height * 2,
         ),
 
-        if(!Provider.of<UserProvider>(context).user.isAdmin)
         Center(
           child: ElevatedButton(
             style: ButtonStyle(
@@ -191,7 +190,7 @@ class RoomDetailsScreen extends StatelessWidget {
                 ),
               );
             },
-            child: Text("Book Room"),
+            child: const Text("Book Room"),
           ),
         ),
       ],

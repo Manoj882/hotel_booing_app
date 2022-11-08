@@ -177,9 +177,9 @@ class ChooseRoomScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: basePadding,
+            padding: EdgeInsets.symmetric(vertical: SizeConfig.height * 1, horizontal: SizeConfig.width * 4),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
