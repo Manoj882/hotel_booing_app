@@ -7,6 +7,8 @@ import 'package:hotel_booking_app/screens/home_screen.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 
 import 'package:hotel_booking_app/utils/size_config.dart';
+import 'package:hotel_booking_app/utils/themeMode/setting_controller.dart';
+import 'package:hotel_booking_app/utils/themeMode/setting_service.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import '/Theme/theme_data.dart';
@@ -16,9 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '/screens/onboarding_screen.dart';
 import 'providers/room_provider.dart';
 
-
 bool? seenOnBoard;
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,17 +28,16 @@ void main() async {
   //to load splash screen for the first time only
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
-
-
- 
   seenOnBoard = preferences.getBool("seenOnBoard") ?? false;
 
   // preferences.setBool("isLoggedIn", true);
 
+  //for light or dark mode
+  SettingService.sharedPreferences = await SharedPreferences.getInstance();
 
   await Firebase.initializeApp();
 //   final localAuth = LocalAuthentication();
-  
+
 //  final canCheckBiometric = await localAuth.canCheckBiometrics;
 
   runApp(
@@ -48,9 +47,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({ Key? key}) : super(key: key);
-
-
+  MyApp({Key? key}) : super(key: key);
 
   // final cancheckBioMetric;
 
@@ -71,25 +68,32 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => BookingRoomProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => SettingController(),
+        ),
       ],
       child: LayoutBuilder(builder: (context, boxConstraint) {
+        final controller = Provider.of<SettingController>(context, listen: false,);
         SizeConfig().init(boxConstraint);
-        return MaterialApp(
-          title: 'hotel booking app',
-          theme: ligthTheme(context),
-          debugShowCheckedModeBanner: false,
-          // home: seenOnBoard == true ? LoginScreen(cancheckBioMetric) : OnBoardingScreen(),
+        return AnimatedBuilder(
+          animation: controller,
+          builder: (context, __) {
+            controller.loadSetting();
+            return MaterialApp(
+              title: 'hotel booking app',
+              theme: lightTheme(context),
+              darkTheme: darkTheme(context),
+              themeMode: controller.themeMode,
+              debugShowCheckedModeBanner: false,
+              // home: seenOnBoard == true ? LoginScreen(cancheckBioMetric) : OnBoardingScreen(),
 
-          home: 
-          (seenOnBoard == true ? LoginScreen() : const OnBoardingScreen()),
+              home:
+                  (seenOnBoard == true ? LoginScreen() : const OnBoardingScreen()),
 
-         
-          
-          
-
-          // home: SignUpScreen(),
+              // home: SignUpScreen(),
+            );
+          }
         );
-       
       }),
     );
   }

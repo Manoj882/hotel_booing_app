@@ -1,16 +1,18 @@
 import 'dart:collection';
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hotel_booking_app/constants/constant.dart';
 import 'package:hotel_booking_app/providers/user_provider.dart';
 import 'package:hotel_booking_app/utils/firebase_helper.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
 import '../models/hotel_model.dart';
 
 class HotelProvider extends ChangeNotifier {
+  
   List<Hotel> _listOfHotel = [];
   late Hotel _currentHotel;
 
@@ -211,4 +213,7 @@ class HotelProvider extends ChangeNotifier {
             element.hotelName.toLowerCase().contains(hotelName.toLowerCase()))
         .toList();
   }
+
+
+
 }

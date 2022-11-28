@@ -20,8 +20,9 @@ class SearchResultScreen extends StatefulWidget {
 }
 
 class _SearchResultScreenState extends State<SearchResultScreen> {
-  RangeValues values = const RangeValues(1, 100);
-  RangeLabels labels = const RangeLabels("1", "100");
+  // RangeValues values = const RangeValues(1, 100);
+  // RangeLabels labels = const RangeLabels("1", "100");
+  
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
@@ -40,7 +41,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
         return Future.value(true);
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(

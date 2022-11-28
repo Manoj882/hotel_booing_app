@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_app/constants/constant.dart';
+
 import 'package:hotel_booking_app/screens/room/room_screen.dart';
 import 'package:hotel_booking_app/utils/curved_body_widget.dart';
 import 'package:hotel_booking_app/utils/google_map/google_map.dart';
@@ -26,7 +27,7 @@ class HotelDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
 
       appBar: AppBar(
         title: Text(hotel.hotelName),
@@ -144,6 +145,7 @@ class HotelDetailsScreen extends StatelessWidget {
           width: double.infinity,
           height: 200,
           child: GoogleMapScreen(hotelId: hotel.id!,),
+        
           
         ),
          SizedBox(

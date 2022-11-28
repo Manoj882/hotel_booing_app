@@ -156,7 +156,7 @@ class RoomDetailsScreen extends StatelessWidget {
         SizedBox(
           height: SizeConfig.height * 2,
         ),
-
+ 
         Center(
           child: ElevatedButton(
             style: ButtonStyle(

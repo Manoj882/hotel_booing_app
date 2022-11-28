@@ -16,7 +16,7 @@ class BookingHistoryScreen extends StatelessWidget {
     final userId = Provider.of<UserProvider>(context).user.uuid;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your Booking Histories"),
+        title: const Text("Your Booking Histories"),
       ),
       body: CurvedBodyWidget(
         widget: FutureBuilder(
@@ -27,14 +27,14 @@ class BookingHistoryScreen extends StatelessWidget {
           ),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
             final listOfBooking =
                 Provider.of<BookingRoomProvider>(context).listOfBookingRoom;
             return listOfBooking.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text("You don't have any room booking history"),
                   )
                 : ListView.separated(

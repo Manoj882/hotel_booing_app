@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF7F7F7),
+      // backgroundColor: Color(0xFFF7F7F7),
       body: SafeArea(
         child: Padding(
           padding: basePadding,
@@ -82,7 +82,6 @@ class LoginScreen extends StatelessWidget {
                           controller: emailController,
                           prefixIcon: const Icon(
                             Icons.email_outlined,
-                            color: Colors.black,
                           ),
                           validate: (value) =>
                               ValidationMixin().validateEmail(value!),
@@ -99,7 +98,7 @@ class LoginScreen extends StatelessWidget {
                           isObscure: true,
                           prefixIcon: const Icon(
                             Icons.lock_outlined,
-                            color: Colors.black,
+                           
                           ),
                           validate: (value) =>
                               ValidationMixin().validatePassword(value!),

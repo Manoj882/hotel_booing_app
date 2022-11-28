@@ -29,6 +29,8 @@
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
 		<key>UISupportedInterfaceOrientations</key>
+		<key>UIBackgroundModes</key>
+		<string>location</string>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
 			<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -47,5 +49,9 @@
 		<true/>
 		<key>NSLOcationAlwaysUsageDescription</key>
 		<string>This app needs access to location when in the backgrund.</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Please allow location</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>Please allow location to see the available cinema halls</string>
 	</dict>
 </plist>

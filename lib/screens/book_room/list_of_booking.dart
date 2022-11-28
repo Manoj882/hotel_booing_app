@@ -23,7 +23,7 @@ class ListOfBookingRoom extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your All Reservation"),
+        title: const Text("Your All Reservation"),
       ),
       body: CurvedBodyWidget(
         widget: FutureBuilder(
@@ -35,7 +35,7 @@ class ListOfBookingRoom extends StatelessWidget {
             ),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
@@ -44,7 +44,7 @@ class ListOfBookingRoom extends StatelessWidget {
                       .listOfBookingRoom;
 
               return listOfBooking.isEmpty
-                  ? Center(
+                  ? const Center(
                       child: Text(
                         "You don't book any room",
                       ),
@@ -103,7 +103,7 @@ class ListOfBookingRoom extends StatelessWidget {
               roomId: booking.roomId,
             );
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.delete_outlined,
           ),
         ),

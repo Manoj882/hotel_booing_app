@@ -27,7 +27,7 @@ class SearchField extends StatelessWidget {
     return Autocomplete<Hotel>(
       optionsViewBuilder: (context, function, hotels) {
         return Scaffold(
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           body: Container(
             width: MediaQuery.of(context).size.width - 80,
             margin: EdgeInsets.zero,

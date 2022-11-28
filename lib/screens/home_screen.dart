@@ -8,6 +8,7 @@ import 'package:hotel_booking_app/screens/book_room/booking_history.dart';
 import 'package:hotel_booking_app/screens/book_room/list_of_booking.dart';
 import 'package:hotel_booking_app/screens/login_screen.dart';
 import 'package:hotel_booking_app/screens/search_hotel_list.dart/search_screen.dart';
+import 'package:hotel_booking_app/widgets/custom_switch.dart';
 import 'package:hotel_booking_app/widgets/general_alert_dialog.dart';
 import 'package:hotel_booking_app/widgets/hotel_card.dart';
 import '/providers/user_provider.dart';
@@ -46,6 +47,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       drawer: Drawer(
+        
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -101,6 +103,8 @@ class HomeScreen extends StatelessWidget {
                   label: "Booking History",
                   widget: BookingHistoryScreen(),
                 ),
+              CustomSwitch(),
+              Divider(thickness: 1,),
               ListTile(
                 leading: const Icon(
                   Icons.logout_outlined,
@@ -126,12 +130,12 @@ class HomeScreen extends StatelessWidget {
                     );
                   } on FirebaseAuthException catch (ex) {
                     Navigator.of(context).pop();
-                    await GeneralAlertDialog().customAlertDialog(context, ex.toString());
-
-                  } catch(ex){
+                    await GeneralAlertDialog()
+                        .customAlertDialog(context, ex.toString());
+                  } catch (ex) {
                     Navigator.of(context).pop();
-                    await GeneralAlertDialog().customAlertDialog(context, ex.toString());
-
+                    await GeneralAlertDialog()
+                        .customAlertDialog(context, ex.toString());
                   }
                 },
               ),
@@ -153,8 +157,11 @@ class HomeScreen extends StatelessWidget {
             final user = Provider.of<UserProvider>(context).user;
 
             return listOfHotel.isEmpty
-                ? const Center(
-                    child: Text("Any hotel is not available for booking"),
+                ? Center(
+                    child: Text(
+                      "Any hotel is not available for booking",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
                   )
                 : SingleChildScrollView(
                     child: Column(
@@ -245,7 +252,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget buildListTile(
     BuildContext context, {
-    required IconData iconData,
+    IconData? iconData,
     required String label,
     required Widget widget,
   }) {

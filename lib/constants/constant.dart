@@ -53,5 +53,9 @@ class GoogleAPIKeyConstant{
   static const googleAPIKey = 'AIzaSyBXt2bGk4j8YnOYbpVtZN2T8fsAwX3N2ew';
 }
 
+class ThemeConstants{
+  static const darkMode = 'isDarkMode';
+}
+
 
 
